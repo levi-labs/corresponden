@@ -144,9 +144,9 @@
         </li><!-- End Contact Page Nav -->
 
         <li class="nav-item">
-            <a class="nav-link collapsed" href="pages-register.html">
+            <a class="nav-link collapsed" href="{{ route('letter-type.index') }}">
                 <i class="bi bi-card-list"></i>
-                <span>Register</span>
+                <span>Letter Type</span>
             </a>
         </li><!-- End Register Page Nav -->
 
