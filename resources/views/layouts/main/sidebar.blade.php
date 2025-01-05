@@ -123,9 +123,9 @@
         <li class="nav-heading">Pages</li>
 
         <li class="nav-item">
-            <a class="nav-link collapsed" href="users-profile.html">
+            <a class="nav-link collapsed" href="{{ route('user.index') }}">
                 <i class="bi bi-person"></i>
-                <span>Profile</span>
+                <span>Users</span>
             </a>
         </li><!-- End Profile Page Nav -->
 
