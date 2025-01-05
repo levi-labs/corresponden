@@ -53,7 +53,7 @@
                             </div>
 
                             <!-- End Quill Editor Default -->
-                            <div class="text-center">
+                            <div class="text-end">
                                 <button type="submit" id="submit" class="btn btn-primary">Submit</button>
                             </div>
                         </form>
