@@ -3,16 +3,23 @@
 namespace app\services;
 
 use App\Models\User;
+use App\services\LectureService;
 use App\services\StudentService;
 use Illuminate\Support\Facades\DB;
 
 class UserService
 {
     protected $studentService;
+    protected $lectureService;
+    protected $staffService;
 
-    public function __construct(StudentService $studentService)
-    {
+    public function __construct(
+        StudentService $studentService,
+        LectureService $lectureService,
+
+    ) {
         $this->studentService = $studentService;
+        $this->lectureService = $lectureService;
     }
 
 
@@ -33,6 +40,8 @@ class UserService
             $data['user_id'] = $user->id;
             if ($data['role'] == 'student') {
                 $this->studentService->createStudentFromUser($data);
+            } elseif ($data['role'] == 'lecturer') {
+                $this->lectureService->createLectureFromUser($data);
             }
         });
     }
