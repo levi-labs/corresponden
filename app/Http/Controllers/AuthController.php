@@ -18,9 +18,11 @@ class AuthController extends Controller
             'username' => 'required',
             'password' => 'required',
         ]);
+        $remember = $request->has('remember');
 
-        if (auth('web')->attempt(['username' => $request->username, 'password' => $request->password])) {
-            return redirect()->route('dashboard');
+
+        if (auth('web')->attempt(['username' => $request->username, 'password' => $request->password], $remember)) {
+            return redirect()->route('dashboard.index')->with('success', 'Login successful');
         }
 
         return redirect()->route('login')->with('error', 'Invalid username or password');
