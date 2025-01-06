@@ -13,7 +13,7 @@ Route::get('/dashboard', [App\Http\Controllers\DashboardController::class, 'inde
 
 Route::controller(App\Http\Controllers\LetterTypeController::class)
     ->prefix('letter-type')
-    ->middleware(['auth', 'role:admin'])
+    ->middleware(['auth', 'roles:admin'])
     ->group(function () {
         Route::get('/', 'index')->name('letter-type.index');
         Route::get('/create', 'create')->name('letter-type.create');
@@ -25,7 +25,7 @@ Route::controller(App\Http\Controllers\LetterTypeController::class)
     });
 Route::controller(App\Http\Controllers\UserController::class)
     ->prefix('user')
-    ->middleware(['auth', 'role:admin'])
+    ->middleware(['auth', 'roles:admin'])
     ->group(function () {
         Route::get('/', 'index')->name('user.index');
         Route::get('/create', 'create')->name('user.create');
@@ -37,7 +37,7 @@ Route::controller(App\Http\Controllers\UserController::class)
     });
 Route::controller(App\Http\Controllers\OutgoingLetterController::class)
     ->prefix('outgoing-letter')
-    ->middleware(['auth', 'role:admin,staff,student'])
+    ->middleware(['auth', 'roles:admin,staff,student'])
     ->group(function () {
         Route::get('/', 'index')->name('outgoing-letter.index');
         Route::get('/create', 'create')->name('outgoing-letter.create');

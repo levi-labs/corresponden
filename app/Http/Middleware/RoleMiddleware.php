@@ -15,7 +15,7 @@ class RoleMiddleware
      */
     public function handle(Request $request, Closure $next, ...$roles): Response
     {
-        if (!in_array($request->user()->role, $roles)) {
+        if (!in_array(Auth('web')->user()->role, $roles)) {
             return redirect('/login')->with('error', 'You do not have permission to access this page.');
         }
         return $next($request);
