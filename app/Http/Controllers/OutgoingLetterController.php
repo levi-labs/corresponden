@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\OutgoingLetter;
+use App\Models\User;
 use App\services\LetterTypeService;
 use App\Services\OutgoingLetterService;
 use Illuminate\Http\Request;
@@ -33,8 +34,9 @@ class OutgoingLetterController extends Controller
     public function create()
     {
         $title = 'Create Outgoing Letter';
-        $letterTypes = $this->letterTypeService->getAllLetterTypes();
-        return view('pages.message.outgoing.create', compact('title', 'letterTypes'));
+        $letterTypes = $this->letterTypeService->getLetterTypeAsRole();
+        $lectures = User::where('role', 'lecturer')->get();
+        return view('pages.message.outgoing.create', compact('title', 'letterTypes', 'lectures'));
     }
 
     /**
@@ -42,7 +44,7 @@ class OutgoingLetterController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        dd($request->all());
     }
 
     /**
