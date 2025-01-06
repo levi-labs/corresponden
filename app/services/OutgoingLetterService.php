@@ -6,6 +6,10 @@ use App\Models\OutgoingLetter;
 
 class OutgoingLetterService
 {
+    public function getAllOutgoingLetters()
+    {
+        return OutgoingLetter::all();
+    }
 
     public function getAllOutgoingLettersByUser() {}
 

@@ -42,7 +42,7 @@
                                     <th scope="col">Username</th>
                                     <th scope="col">Email</th>
                                     <th scope="col">Role</th>
-                                    <th scope="col">Action</th>
+                                    <th class="text-center" scope="col">Action</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -53,7 +53,7 @@
                                         <td>{{ $item->username }}</td>
                                         <td>{{ $item->email }}</td>
                                         <td>{{ $item->role }}</td>
-                                        <td>
+                                        <td class="text-center">
                                             <a href="{{ route('user.edit', $item->id) }}"
                                                 class="btn btn-warning btn-sm">Edit</a>
                                             <form action="{{ route('user.destroy', $item->id) }}" method="POST"

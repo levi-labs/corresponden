@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\OutgoingLetter;
+use App\services\LetterTypeService;
 use App\Services\OutgoingLetterService;
 use Illuminate\Http\Request;
 
@@ -10,9 +11,11 @@ class OutgoingLetterController extends Controller
 {
 
     protected $outgoingLetterService;
-    public function __construct(OutgoingLetterService $outgoingLetterService)
+    protected $letterTypeService;
+    public function __construct(OutgoingLetterService $outgoingLetterService, LetterTypeService $letterTypeService)
     {
         $this->outgoingLetterService = $outgoingLetterService;
+        $this->letterTypeService = $letterTypeService;
     }
     /**
      * Display a listing of the resource.
@@ -20,8 +23,8 @@ class OutgoingLetterController extends Controller
     public function index()
     {
         $title = 'Outgoing Letter List';
-
-        return view('pages.message.outgoing.index', compact('title'));
+        $data = $this->outgoingLetterService->getAllOutgoingLetters();
+        return view('pages.message.outgoing.index', compact('title', 'data'));
     }
 
     /**
@@ -29,7 +32,9 @@ class OutgoingLetterController extends Controller
      */
     public function create()
     {
-        //
+        $title = 'Create Outgoing Letter';
+        $letterTypes = $this->letterTypeService->getAllLetterTypes();
+        return view('pages.message.outgoing.create', compact('title', 'letterTypes'));
     }
 
     /**
