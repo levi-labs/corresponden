@@ -37,26 +37,34 @@
                         <table class="table table-hover">
                             <thead>
                                 <tr>
-                                    <th scope="col">#</th>
-                                    <th scope="col">Name</th>
-                                    <th scope="col">Description</th>
-                                    <th scope="col">Action</th>
+                                    <th scope="col">Letter Type</th>
+                                    <th scope="col">Content</th>
+                                    <th scope="col"></th>
                                 </tr>
                             </thead>
                             <tbody>
                                 @foreach ($data as $item)
                                     <tr>
-                                        <th scope="row">1</th>
-                                        <td>{{ $item->name }}</td>
-                                        <td>{!! $item->description !!}</td>
                                         <td>
-                                            <a href="{{ route('letter-type.edit', $item->id) }}"
-                                                class="btn btn-warning btn-sm">Edit</a>
+                                            <div class="badge bg-info text-dark">{{ $item->letter_type }}</div>
+                                        </td>
+                                        <td>
+
+                                            <a class="text-decoration-none text-dark"
+                                                href="{{ route('outgoing-letter.show', $item->id) }}">
+                                                <h6 class="card-title">{{ $item->subject }}</h6>
+                                            </a>
+                                            <span class="small text-muted"> {!! Str::limit(strip_tags($item->body), 40) !!}</span>
+                                        </td>
+                                        <td class="text-center align-middle">
+                                            {{-- <a href="{{ route('letter-type.edit', $item->id) }}"
+                                                class="btn btn-warning btn-sm">Edit</a> --}}
                                             <form action="{{ route('letter-type.destroy', $item->id) }}" method="POST"
                                                 style="display:inline">
                                                 @csrf
                                                 @method('DELETE')
-                                                <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                                                <button type="submit" class="btn btn-light btn-sm"><i
+                                                        class="bi bi-trash"></i></button>
                                             </form>
                                         </td>
                                     </tr>

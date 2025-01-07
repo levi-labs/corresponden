@@ -18,7 +18,6 @@ return new class extends Migration
             $table->bigInteger('receiver_id')->unsigned();
             $table->string('letter_number');
             $table->string('date');
-            $table->string('title');
             $table->string('subject');
             $table->text('body');
             $table->string('attachment')->nullable();

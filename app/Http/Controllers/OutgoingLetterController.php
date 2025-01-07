@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\OutgoingLetterRequest;
 use App\Models\OutgoingLetter;
 use App\Models\User;
 use App\services\LetterTypeService;
@@ -42,9 +43,29 @@ class OutgoingLetterController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(OutgoingLetterRequest $request)
     {
-        dd($request->all());
+        $data = $request->validated();
+        try {
+            $sender = auth('web')->user()->id;
+            $letter_number = date('Y') . '/' . 'USNI' . '/' . str_pad($sender, 3, '0', STR_PAD_LEFT) . rand(0, 999);
+            $data = [
+                'subject' => $data['subject'],
+                'body' => $data['body'],
+                'letter_type_id' => $data['letter_type'],
+                'sender_id' => auth('web')->user()->id,
+                'receiver_id' => $data['lecture'],
+                'letter_number' => $letter_number,
+                'date' => date('Y-m-d'),
+                'status' => 'unread',
+                'attachment' => $data['attachment'] ?? null,
+            ];
+
+            $this->outgoingLetterService->create($data);
+            return redirect()->route('outgoing-letter.index')->with('success', 'Sent letter successfully');
+        } catch (\Throwable $th) {
+            return redirect()->back()->with('error', $th->getMessage());
+        }
     }
 
     /**
@@ -52,7 +73,9 @@ class OutgoingLetterController extends Controller
      */
     public function show(OutgoingLetter $outgoingLetter)
     {
-        //
+        $title = 'Letter Details';
+        $outgoingLetter = $this->outgoingLetterService->getOutgoingLetterById($outgoingLetter->id);
+        return view('pages.message.outgoing.detail', compact('title', 'outgoingLetter'));
     }
 
     /**

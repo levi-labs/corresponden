@@ -54,13 +54,15 @@
             <li class="breadcrumb-item active">Dashboard</li>
         </ol>
     </nav> --}}
-    </div><!-- End Page Title -->
+    </div>
+    <!-- End Page Title -->
 
     <section class="section">
         <div class="row justify-content-center">
             <div class="col-lg-6">
                 <div class="card">
                     <div class="card-header">
+                        <h5 class="card-title">{{ __('Form Letter') }}</h5>
                         @if (session('success'))
                             <div class="alert alert-danger" role="alert">
                                 <h4 class="alert-heading">Success!</h4>
@@ -74,22 +76,23 @@
                         @endif
                     </div>
                     <div class="card-body">
-                        <h5 class="card-title">{{ __('Form Letter') }}</h5>
-
                         <form action="{{ route('outgoing-letter.store') }}" method="post">
                             @csrf
                             <!-- Quill Editor Default -->
                             <div class="form-group mb-3">
-                                <label class="form-label" for="name">Name</label>
+                                <label class="form-label" for="name">Name<span class="text-danger">*</span></label>
                                 <input type="text" class="form-control" name="name" id="name"
-                                    value="{{ old('name') ?? auth('web')->user()->name }}">
+                                    value="{{ old('name') ?? auth('web')->user()->name }}"
+                                    @if (auth('web')->user()->role !== 'admin' || auth('web')->user()->role !== 'staff') readonly @endif>
                                 @error('name')
                                     <span class="text-danger">{{ $message }}</span>
                                 @enderror
                             </div>
                             <div class="form-group mb-3">
-                                <label class="form-label" for="letter_type">Letter Type</label>
+                                <label class="form-label" for="letter_type">Letter Type<span
+                                        class="text-danger">*</span></label>
                                 <select class="form-control" name="letter_type" id="letter_type">
+                                    <option selected disabled>Select Letter Type</option>
                                     @foreach ($letterTypes as $letterType)
                                         <option value="{{ $letterType->id }}">{{ $letterType->name }}</option>
                                     @endforeach
@@ -99,9 +102,9 @@
                                 @enderror
                             </div>
                             <div class="form-group mb-3">
-                                <label class="form-label" for="lecture">Lecture</label>
+                                <label class="form-label" for="lecture">Lecture<span class="text-danger">*</span></label>
                                 <select class="form-control js-example-basic-single" name="lecture">
-                                    <option selected disabled>Select lecture</option>
+                                    <option selected disabled>Select Lecture</option>
                                     @foreach ($lectures as $item)
                                         <option value="{{ $item->id }}">{{ $item->name }}</option>
                                     @endforeach
@@ -111,17 +114,25 @@
                                 @enderror
                             </div>
                             <div class="form-group mb-3">
-                                <label class="form-label" for="description">Description</label>
-                                <div id="editor" style="height: 200px"></div>
-                                <textarea rows="3" class="mb-3 d-none" name="description" id="quill-editor-area-description"></textarea>
-                                @error('description')
+                                <label class="form-label" for="subject">Subject</label>
+                                <input type="text" class="form-control" name="subject" id="subject"
+                                    value="{{ old('subject') }}">
+                                @error('subject')
                                     <span class="text-danger">{{ $message }}</span>
                                 @enderror
                             </div>
                             <div class="form-group mb-3">
-                                <label class="form-label" for="file">File : (optional)</label>
-                                <input type="file" class="form-control" name="file" id="file">
-                                @error('file')
+                                <label class="form-label" for="body">Body</label>
+                                <div id="editor" style="height: 200px"></div>
+                                <textarea rows="3" class="mb-3 d-none" name="body" id="quill-editor-area-description"></textarea>
+                                @error('body')
+                                    <span class="text-danger">{{ $message }}</span>
+                                @enderror
+                            </div>
+                            <div class="form-group mb-3">
+                                <label class="form-label" for="attachment">File : (optional)</label>
+                                <input type="file" class="form-control" name="attachment" id="attachment">
+                                @error('attachment')
                                     <span class="text-danger">{{ $message }}</span>
                                 @enderror
                             </div>
@@ -164,7 +175,6 @@
         // In your Javascript (external .js resource or <script> tag)
         $j(document).ready(function() {
             $j('.js-example-basic-single').select2({
-                placeholder: 'Select Lecture',
                 allowClear: true,
             });
         });
