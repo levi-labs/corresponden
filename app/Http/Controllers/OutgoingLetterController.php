@@ -25,7 +25,7 @@ class OutgoingLetterController extends Controller
     public function index()
     {
         $title = 'Outgoing Letter List';
-        $data = $this->outgoingLetterService->getAllOutgoingLetters();
+        $data = $this->outgoingLetterService->getAllOutgoingLettersByUser();
         return view('pages.message.outgoing.index', compact('title', 'data'));
     }
 

@@ -20,7 +20,7 @@
             </a>
             <ul id="components-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
                 <li>
-                    <a href="components-alerts.html">
+                    <a href="{{ route('incoming-letter.index') }}">
                         <i class="bi bi-circle"></i><span>Inbox</span>
                     </a>
                 </li>
@@ -58,7 +58,7 @@
         <!-- End Users Page Nav -->
 
 
-        <li class="nav-item">
+        {{-- <li class="nav-item">
             <a class="nav-link collapsed" data-bs-target="#tables-nav" data-bs-toggle="collapse" href="#">
                 <i class="bi bi-layout-text-window-reverse"></i><span>Tables</span><i
                     class="bi bi-chevron-down ms-auto"></i>
@@ -121,9 +121,9 @@
                     </a>
                 </li>
             </ul>
-        </li><!-- End Icons Nav -->
+        </li><!-- End Icons Nav --> --}}
 
-        <li class="nav-heading">Pages</li>
+        {{-- <li class="nav-heading">Pages</li>
 
         <li class="nav-item">
             <a class="nav-link collapsed" href="pages-faq.html">
@@ -160,7 +160,7 @@
                 <i class="bi bi-file-earmark"></i>
                 <span>Blank</span>
             </a>
-        </li><!-- End Blank Page Nav -->
+        </li><!-- End Blank Page Nav --> --}}
 
     </ul>
 

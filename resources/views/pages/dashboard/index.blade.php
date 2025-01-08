@@ -147,7 +147,7 @@
                             </div>
 
                             <div class="card-body">
-                                <h5 class="card-title">Reports <span>/Today</span></h5>
+                                <h5 class="card-title">Reports <span>/System Activity</span></h5>
 
                                 <!-- Line Chart -->
                                 <div id="reportsChart"></div>
@@ -156,13 +156,13 @@
                                     document.addEventListener("DOMContentLoaded", () => {
                                         new ApexCharts(document.querySelector("#reportsChart"), {
                                             series: [{
-                                                name: 'Sales',
+                                                name: 'Activity',
                                                 data: [31, 40, 28, 51, 42, 82, 56],
                                             }, {
-                                                name: 'Revenue',
+                                                name: 'Internal',
                                                 data: [11, 32, 45, 32, 34, 52, 41]
                                             }, {
-                                                name: 'Customers',
+                                                name: 'External',
                                                 data: [15, 11, 32, 18, 9, 24, 11]
                                             }],
                                             chart: {

@@ -45,7 +45,7 @@
                             </div>
                             <div class="form-group mb-3">
                                 <label class="form-label" for="description">Description</label>
-                                <div id="editor" style="height: 200px"></div>
+                                <div id="editor" style="height: 100px"></div>
                                 <textarea rows="3" class="mb-3 d-none" name="description" id="quill-editor-area-description">{{ $letterType->description }}</textarea>
                                 @error('description')
                                     <span class="text-danger">{{ $message }}</span>
@@ -70,13 +70,11 @@
             let decs = document.getElementById('quill-editor-area-description');
 
             quill.root.innerHTML = decs.value;
-
             quill.on('text-change', function(delta, oldDelta, source) {
                 decs.value = quill.root.innerHTML;
             });
-
-            desc.addEventListener('input', function() {
-                quill.root.innerHTML = desc.value
+            decs.addEventListener('input', function() {
+                quill.root.innerHTML = decs.value
             });
         })
     </script>

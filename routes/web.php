@@ -37,7 +37,7 @@ Route::controller(App\Http\Controllers\UserController::class)
     });
 Route::controller(App\Http\Controllers\OutgoingLetterController::class)
     ->prefix('outgoing-letter')
-    ->middleware(['auth', 'roles:admin,staff,student'])
+    ->middleware(['auth', 'roles:admin,staff,student,lecturer'])
     ->group(function () {
         Route::get('/', 'index')->name('outgoing-letter.index');
         Route::get('/create', 'create')->name('outgoing-letter.create');
@@ -46,4 +46,16 @@ Route::controller(App\Http\Controllers\OutgoingLetterController::class)
         Route::get('/{outgoingLetter}/edit', 'edit')->name('outgoing-letter.edit');
         Route::put('/{outgoingLetter}', 'update')->name('outgoing-letter.update');
         Route::delete('/{outgoingLetter}', 'destroy')->name('outgoing-letter.destroy');
+    });
+Route::controller(App\Http\Controllers\IncomingLetterController::class)
+    ->prefix('incoming-letter')
+    ->middleware(['auth', 'roles:admin,staff,student,lecturer'])
+    ->group(function () {
+        Route::get('/', 'index')->name('incoming-letter.index');
+        Route::get('/create', 'create')->name('incoming-letter.create');
+        Route::post('/approve', 'approve')->name('incoming-letter.approve');
+        Route::get('/{incomingLetter}', 'show')->name('incoming-letter.show');
+        Route::get('/{incomingLetter}/edit', 'edit')->name('incoming-letter.edit');
+        Route::put('/{incomingLetter}', 'update')->name('incoming-letter.update');
+        Route::delete('/{incomingLetter}', 'destroy')->name('incoming-letter.destroy');
     });
