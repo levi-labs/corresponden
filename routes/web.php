@@ -58,4 +58,6 @@ Route::controller(App\Http\Controllers\IncomingLetterController::class)
         Route::get('/{incomingLetter}/edit', 'edit')->name('incoming-letter.edit');
         Route::put('/{incomingLetter}', 'update')->name('incoming-letter.update');
         Route::delete('/{incomingLetter}', 'destroy')->name('incoming-letter.destroy');
+        Route::get('/download/{idLetter}/reply', 'downloadReply')->name('reply-letter.download');
+        Route::get('/reply-destroy/{idReply}', 'destroyReply')->name('reply-letter.destroy');
     });

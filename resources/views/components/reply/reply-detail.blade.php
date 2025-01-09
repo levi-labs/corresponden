@@ -1,0 +1,63 @@
+<div class="row justify-content-center">
+    <div class="col-md-10">
+
+        <div class="card p-2">
+            <div class="card-header">
+                <div class="float-start">
+                    <div class="badge bg-info">{{ $incomingLetter->letter_type }} || Replied
+                    </div>
+                    |{{ $incomingLetter->letter_number }}
+                    <h6 class="card-title">Replied</h6>
+                </div>
+                <div class="float-end">
+                    <h4> <i class="bi bi-reply-fill text-primary"></i></h4>
+                </div>
+
+            </div>
+            <div class="card-body text-start">
+                @php
+                    $reply = \App\Models\Reply::where('id_letter', $incomingLetter->id)->first();
+                    $file = \App\Models\Reply::where('id_letter', $incomingLetter->id)
+                        ->where('file', '!=', '')
+                        ->first();
+                    //get extension file
+                    $extension = pathinfo($file->file, PATHINFO_EXTENSION);
+                    $extensionIs;
+                    if ($extension == 'doc' || $extension == 'docx') {
+                        $extensionIs = 'doc';
+                    } else {
+                        $extensionIs = 'pdf';
+                    }
+                @endphp
+                @if (\App\Models\Reply::where('id_letter', $incomingLetter->id)->where('file', '!=', '')->first())
+                    <a class="d-flex flex-column align-items-center justify-content-start"
+                        href="{{ asset('storage/' . $file->file) }}" download>
+                        @if ($extensionIs == 'doc')
+                            <img width="10%" src="{{ asset('assets/word-svgrepo-com.svg') }}" alt="">
+                        @elseif ($extensionIs == 'pdf')
+                            <img width="10%" src="{{ asset('assets/pdf-svgrepo-com.svg') }}" alt="">
+                        @endif
+
+                        <i class="bi bi-download"></i> Download
+                    </a>
+                    <h6 class="fw-bold text-sm">Silahkah download lampiran berikut ini: </h6>
+                @endif
+                @if ($reply->file === null)
+                    {{-- <p class="small text-sm">{!! $incomingLetter->greeting !!}</p>
+                    <br>
+                    <p>Nama : </p> --}}
+                    <p class="small">Print | Download:&nbsp;<a class="ms-2 btn btn-secondary btn-sm" href="#"><i
+                                class="bi bi-download"></i>
+                            Download</a>
+                    </p>
+                @endif
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row justify-content-center">
+    <div class="col-md-10 text-end">
+        <a href="{{ route('reply-letter.destroy', $reply->id) }}" class="btn btn-danger btn-sm"
+            onclick="return confirm('Are you sure?')">Delete</a>
+    </div>
+</div>

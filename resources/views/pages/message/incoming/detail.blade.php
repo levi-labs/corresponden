@@ -86,21 +86,32 @@
                         <hr>
 
                         <!-- Action Button -->
-                        <div class="row justify-content-center">
-                            <div class="col-md-10 text-end">
-                                <button type="button" class="btn btn-dark btn-sm" data-bs-toggle="modal"
-                                    data-bs-target="#largeModal">
-                                    Approve
-                                </button>
-                                <div class="btn btn-light btn-sm">Reject</div>
+                        @if (\App\Models\Reply::where('id_letter', $incomingLetter->id)->doesntExist())
+                            <div class="row justify-content-center">
+                                <div class="col-md-10 text-end">
+                                    <button type="button" class="btn btn-dark btn-sm" data-bs-toggle="modal"
+                                        data-bs-target="#largeModal">
+                                        Approve
+                                    </button>
+                                    <div class="btn btn-light btn-sm">Reject</div>
+                                </div>
                             </div>
-                        </div>
-                        <!-- End Action Button -->
+                        @endif
 
+                        <!-- End Action Button -->
+                        <!-- Reply Detail -->
+                        @if (\App\Models\Reply::where('id_letter', $incomingLetter->id)->exists())
+                            @include('components.reply.reply-detail', [
+                                'incomingLetter' => $incomingLetter,
+                            ])
+                        @endif
+
+                        <!-- End Reply Detail -->
                     </div>
                 </div>
             </div>
         </div>
+
     </section>
     @include('components.modal.approve', ['incomingLetter' => $incomingLetter])
 @endsection

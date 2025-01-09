@@ -2,10 +2,11 @@
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Large Modal</h5>
+                <h5 class="modal-title">Form Approve</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
+                <div class="my-alert"></div>
                 <form id="form_approve" action="{{ route('incoming-letter.approve') }}" enctype="multipart/form-data"
                     method="POST">
                     @csrf
@@ -85,7 +86,7 @@
         let source = document.getElementById('source');
         let upload = document.querySelector('.upload-file');
         let form_approve = document.getElementById('form_approve');
-        let xhr = new XMLHttpRequest();
+
         create.style.display = 'none';
         upload.style.display = 'none';
 
@@ -126,25 +127,30 @@
         clos.addEventListener('input', function() {
             closing.root.innerHTML = clos.value
         });
+        const attachmentInput = document.getElementById('attachment');
+        attachmentInput.addEventListener('change', function() {
+            console.log('oke change');
+
+            if (attachmentInput.files.length > 0) {
+                const fileName = this.files[0].name;
+                const fileExtension = fileName.split('.').pop().toLowerCase();
+                const allowedExtensions = ['doc', 'docx', 'pdf'];
+                if (!allowedExtensions.includes(fileExtension)) {
+                    alert('File harus berekstensi .doc, .docx, atau .pdf');
+                }
+            }
+        });
         if (form_approve) {
             form_approve.addEventListener('submit', function(e) {
                 e.preventDefault();
-                const attachmentInput = document.getElementById('attachment');
-
                 const formData = new FormData(form_approve);
-                attachmentInput.addEventListener('change', function() {
-                    if (attachmentInput.files.length > 0) {
-                        const fileName = this.files[0].name;
-                        console.log('oke');
+                console.log(attachmentInput.files[0]);
 
-                        const fileExtension = fileName.split('.').pop().toLowerCase();
-                        const allowedExtensions = ['doc', 'docx', 'pdf'];
-                        if (!allowedExtensions.includes(fileExtension)) {
-                            alert('File harus berekstensi .doc, .docx, atau .pdf');
-                        }
-                        formData.append('attachment', attachmentInput.files[0]);
-                    }
-                });
+                if (attachmentInput.files.length > 0) {
+                    formData.set('attachment', attachmentInput.files[
+                        0]); // Tambahkan file ke FormData
+                }
+                // console.log([...formData.entries()]); // O
                 const xhr = new XMLHttpRequest();
                 xhr.open('POST', form_approve.action);
                 xhr.setRequestHeader('X-CSRF-TOKEN', document.querySelector('meta[name="csrf-token"]')
@@ -155,20 +161,27 @@
 
                 xhr.onreadystatechange = function() {
                     if (xhr.readyState == 4) {
+                        console.log('ini status', xhr.status);
+
                         if (xhr.status == 200 && xhr.status < 300) {
-                            let modal = document.getElementById('largeModal');
-                            modal.style.display = 'none';
-
-                            console.log(xhr.responseText);
-
+                            window.location.reload();
+                        } else if (xhr.status == 202) {
+                            window.location.reload();
                         } else if (xhr.status == 422) {
                             const response = JSON.parse(xhr.responseText);
-                            // console.log(response.errors);
-
                             handleErrors(response.error);
                             let modal = document.getElementById('largeModal');
-                            modal.classList.add('show');
                             modal.style.display = 'block';
+
+                        } else if (xhr.status == 413) {
+                            let alert = document.querySelector('.my-alert');
+                            alert.innerHTML = `<div class="alert alert-danger" role="alert">File size
+                            melebihi 5MB</div>`;
+
+                        } else if (xhr.status == 500) {
+                            let alert = document.querySelector('.my-alert');
+                            alert.innerHTML = `<div class="alert alert-danger" role="alert">Something
+                            went wrong</div>`;
 
                         }
                     }
