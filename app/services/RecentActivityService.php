@@ -15,7 +15,7 @@ class RecentActivityService
     {
         RecentActivity::create([
             'user_id' => $userId,
-            'type' => $type
+            'activity_type' => $type
         ]);
     }
 }
