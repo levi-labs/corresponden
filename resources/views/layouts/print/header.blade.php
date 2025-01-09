@@ -1,22 +1,16 @@
-{{-- <img class="my-logo" width="90" height="90" src="') }}" alt=""> --}}
-<center>
-
-    <table class="my-kop" width="500">
-        <tr class="text-center">
-            <center>
-                <td class="text-center">
-                    <font class='text-kop' size="4"><b>PT FIST RESOURCES</b></font><br>
-                    <font class='text-kop' size="2">Wisma 77, 7th Floor, JL. Letjend S. Parman Kav. 77, Slipi,
-                        Jakarta Barat</font><br>
-                    <font class='text-kop' size="2"><b>Kota Jakarta Barat, Daerah Khusus Ibukota Jakarta 11410</b>
-                    </font><br>
-                    <font class='text-kop' size="2"><b>Tel: (021) 53670888</b></font><br>
-                </td>
-            </center>
-        </tr>
-
-    </table>
-    {{-- <hr style="border-top: 2px solid black;">
-    <hr style="border-top: 2px solid black; margin-top:-7px;"> --}}
-    <br>
-</center>
+<div class="kop-surat-container">
+    <img src="{{ asset('assets/img/usni.png') }}" alt="Logo Universitas">
+    <div class="kop-surat-text">
+        <h1>UNIVERSITAS SATYA NEGARA INDONESIA (USNI)</h1>
+        <h2>■ Fakultas Teknik ■ Fakultas Ekonomi</h2>
+        <h2>■ Fakultas Perikanan dan Ilmu Kelautan ■ Fakultas Ilmu Sosial dan Ilmu Politik</h2>
+        <h2>■ Program Pascasarjana (S2)</h2>
+        <p>
+            Kampus A: Jln. Arteri Pondok Indah No. 11, Jakarta Selatan 12240<br>
+            Telp. (021) 739 8393 (Hunting) Fax. (021) 720 0352 Website: <a
+                href="http://www.usni.ac.id">www.usni.ac.id</a><br>
+            Kampus B: Jln. H. Jampang No. 91 Jatimulya, Tambun Selatan, Bekasi<br>
+            Telp. (021) 8260 6803 Fax. (021) 8260 6803
+        </p>
+    </div>
+</div>

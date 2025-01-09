@@ -1,116 +1,161 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    {{-- <!-- CSS only -->
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
-    integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous"> --}}
-    <title>{{ $title }}</title>
+    <title>Surat Permohonan Riset</title>
     <style>
-        @media print {
-            button.btn {
-                display: none;
-                margin: 5px 5px;
-            }
-
-            /*
-            @page {
-                size: F4 landscape;
-                margin: 5%;
-            } */
-        }
-
-        button.btn {
-            margin-bottom: 5px;
-
-        }
-
         body {
             font-family: Arial, sans-serif;
-            width: 100%;
-            -webkit-print-color-adjust: exact;
+            margin: 40px;
         }
 
-        .my-logo {
-            position: absolute;
-            float: right;
-            margin-left: 5%;
-        }
-
-        .the-kop {
+        /* Container Kop Surat */
+        .kop-surat-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            width: 50%;
+            border-bottom: 3px solid black;
+            padding-bottom: 15px;
             margin: auto;
-            width: 100%;
+
         }
 
-        table tr td {
+        /* Logo */
+        .kop-surat-container img {
+            margin-top: -5%;
+            width: 10%;
+            float: right;
+            /* Ukuran logo */
+            margin-right: -10%;
+            /* Kurangi jarak antara logo dan teks */
+        }
+
+        /* Teks Kop Surat */
+        .kop-surat-text {
+            flex: 1;
+        }
+
+        .kop-surat-text h1 {
+            margin: 0;
+            font-size: 20px;
+        }
+
+        .kop-surat-text h2 {
+            margin: 5px 0;
+            font-size: 12px;
+        }
+
+        .kop-surat-text p {
+            margin: 5px 0;
+            font-size: 12px;
+            line-height: 1.6;
+        }
+
+        .content {
+            width: 50%;
             font-size: 14px;
+            line-height: 1.8;
+            margin: auto;
         }
 
-        table tr .text {
+        .content p {
+            margin: 10px 0;
+        }
+
+        .content .ms-4 {
+            margin-left: 40px;
+        }
+
+        .signature {
+            float: right;
+            width: 30%;
+            margin-top: 30px;
+            text-align: left;
+        }
+
+        .signature p {
+            margin: 5px 0;
+        }
+
+        .content .text-end {
             text-align: right;
         }
 
-        table.table,
-        .table th,
-        .table td {
-            border: solid black 1px;
-            border-collapse: collapse;
-        }
+        @media print {
 
-        table.table {
-            width: 100%;
+            /* Container Kop Surat */
+            .kop-surat-container {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                width: 100%;
+                text-align: center;
+                border-bottom: 3px solid black;
+                padding-bottom: 15px;
+                margin-bottom: 30px;
+            }
 
-        }
+            /* Logo */
+            .kop-surat-container img {
+                margin-top: -20%;
+                width: 15%;
+                /* Ukuran logo */
+                margin-right: 10px;
+                /* Kurangi jarak antara logo dan teks */
+            }
 
-        .table-print {
-            margin: auto;
-            width: 65%;
+            /* Teks Kop Surat */
+            .kop-surat-text {
+                flex: 1;
+            }
 
-            padding: 1px;
-        }
+            .kop-surat-text h1 {
+                margin: 0;
+                font-size: 20px;
+            }
 
-        .isi {
-            margin: auto;
-            width: 100%;
-        }
+            .kop-surat-text h2 {
+                margin: 5px 0;
+                font-size: 12px;
+            }
 
-        .isi td {
-            padding: 5px;
-        }
+            .kop-surat-text p {
+                margin: 5px 0;
+                font-size: 12px;
+                line-height: 1.6;
+            }
 
-        .my-kop {
-            text-align: center;
-        }
+            .content {
+                width: 100%;
+                font-size: 14px;
+                line-height: 1.8;
+            }
 
-        .text-center {
-            text-align: center;
-            margin: 0;
-            padding: 0;
-        }
+            .content p {
+                margin: 10px 0;
+            }
 
-        .text-kop {
-            box-sizing: border-box;
+            .signature {
+                margin-top: 40px;
+                text-align: right;
+            }
 
+            .signature p {
+                margin: 5px 0;
+            }
         }
     </style>
 </head>
 
 <body>
+    <!-- Kop Surat -->
     @include('layouts.print.header')
 
-    <div class="isi">
-        @yield('content')
-    </div>
-
-
-
-    <!-- JavaScript Bundle with Popper -->
-    {{-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js"
-    integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2" crossorigin="anonymous">
-</script> --}}
+    @yield('content')
 </body>
 
 </html>

@@ -17,17 +17,21 @@
             <div class="card-body text-start">
                 @php
                     $reply = \App\Models\Reply::where('id_letter', $incomingLetter->id)->first();
-                    $file = \App\Models\Reply::where('id_letter', $incomingLetter->id)
-                        ->where('file', '!=', '')
-                        ->first();
-                    //get extension file
-                    $extension = pathinfo($file->file, PATHINFO_EXTENSION);
-                    $extensionIs;
-                    if ($extension == 'doc' || $extension == 'docx') {
-                        $extensionIs = 'doc';
-                    } else {
-                        $extensionIs = 'pdf';
+                    if ($reply->file !== null) {
+                        $file = \App\Models\Reply::where('id_letter', $incomingLetter->id)
+                            ->where('file', '!=', '')
+                            ->first();
+                        $extension = pathinfo($file->file, PATHINFO_EXTENSION);
+                        $extensionIs;
+                        if ($extension == 'doc' || $extension == 'docx') {
+                            $extensionIs = 'doc';
+                        } else {
+                            $extensionIs = 'pdf';
+                        }
                     }
+
+                    //get extension file
+
                 @endphp
                 @if (\App\Models\Reply::where('id_letter', $incomingLetter->id)->where('file', '!=', '')->first())
                     <a class="d-flex flex-column align-items-center justify-content-start"
@@ -46,9 +50,9 @@
                     {{-- <p class="small text-sm">{!! $incomingLetter->greeting !!}</p>
                     <br>
                     <p>Nama : </p> --}}
-                    <p class="small">Print | Download:&nbsp;<a class="ms-2 btn btn-secondary btn-sm" href="#"><i
-                                class="bi bi-download"></i>
-                            Download</a>
+                    <p class="small">Print | Download:&nbsp;<a target="_blank" class="ms-2 btn btn-secondary btn-sm"
+                            href="{{ route('reply-letter.preview', $reply->id) }}"><i class="bi bi-download"></i>
+                            Preview</a>
                     </p>
                 @endif
             </div>

@@ -60,4 +60,5 @@ Route::controller(App\Http\Controllers\IncomingLetterController::class)
         Route::delete('/{incomingLetter}', 'destroy')->name('incoming-letter.destroy');
         Route::get('/download/{idLetter}/reply', 'downloadReply')->name('reply-letter.download');
         Route::get('/reply-destroy/{idReply}', 'destroyReply')->name('reply-letter.destroy');
+        Route::get('/reply-preview/{idReply}', 'previewReply')->name('reply-letter.preview');
     });

@@ -1,4 +1,4 @@
-<div class="modal fade" id="largeModal" tabindex="-1" aria-hidden="true" style="display: none;">
+<div class="modal fade" id="largeModal" data-bs-backdrop="false" tabindex="-1" aria-hidden="true" style="display: none;">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
@@ -103,7 +103,28 @@
         })
 
         let greeting = new Quill('#greeting', {
-            theme: 'snow'
+            theme: 'snow',
+            modules: {
+                toolbar: [
+                    [{
+                        'header': [1, 2, 3, 4, 5, 6, false]
+                    }],
+                    ['bold', 'italic', 'underline'],
+                    [{
+                        'list': 'ordered'
+                    }, {
+                        'list': 'bullet'
+                    }],
+                    ['link'],
+                    //indent
+                    ['blockquote', 'code-block'],
+                    [{
+                        'indent': '-1'
+                    }, {
+                        'indent': '+1'
+                    }]
+                ]
+            }
         });
 
         let closing = new Quill('#closing', {
@@ -165,6 +186,9 @@
 
                         if (xhr.status == 200 && xhr.status < 300) {
                             window.location.reload();
+                        } else if (xhr.status == 201) {
+                            window.location.reload();
+
                         } else if (xhr.status == 202) {
                             window.location.reload();
                         } else if (xhr.status == 422) {

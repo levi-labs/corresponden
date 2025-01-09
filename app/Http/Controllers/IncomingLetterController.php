@@ -69,12 +69,12 @@ class IncomingLetterController extends Controller
             try {
                 $this->replyService->approve($data);
                 $this->recentActivityService->create(auth('web')->user()->id, 'reply-message');
+                DB::commit();
                 session()->flash('success', 'Letter approved successfully');
                 return response()->json([
                     'success' => true,
                     'message' => 'Letter approved successfully',
                 ], 201);
-                DB::commit();
             } catch (\Throwable $th) {
                 DB::rollBack();
                 return response()->json(['error' => $th->getMessage()], 500);
@@ -149,6 +149,38 @@ class IncomingLetterController extends Controller
                 $reply->delete();
 
                 return redirect()->back()->with('success', 'Reply deleted successfully');
+            } else {
+                return redirect()->back()->with('error', 'Reply not found');
+            }
+        } catch (\Throwable $th) {
+            return redirect()->back()->with('error', $th->getMessage());
+        }
+    }
+
+    public function previewReply($idReply)
+    {
+        try {
+            $title = 'Reply Details';
+            // $reply = Reply::find($idReply);
+            $reply = Reply::join('incoming_letters', 'incoming_letters.id', '=', 'replies.id_letter')
+                ->join('letter_types', 'incoming_letters.letter_type_id', '=', 'letter_types.id')
+                ->join('users as sender', 'incoming_letters.sender_id', '=', 'sender.id')
+                ->join('users as receiver', 'incoming_letters.receiver_id', '=', 'receiver.id')
+                ->join('students', 'incoming_letters.sender_id', '=', 'students.user_id')
+                ->select(
+                    'replies.*',
+                    'incoming_letters.letter_number as letter_number',
+                    'letter_types.name as letter_type',
+                    'sender.name as sender_name',
+                    'receiver.name as receiver_name',
+                    'students.fullname as student_name',
+                    'students.student_id'
+                )
+                ->where('replies.id', $idReply)
+                ->first();
+
+            if ($reply) {
+                return view('components.reply.print', compact('reply', 'title'));
             } else {
                 return redirect()->back()->with('error', 'Reply not found');
             }
