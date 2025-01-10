@@ -6,14 +6,17 @@ use App\Http\Requests\LetterTypeRequest;
 use App\Models\LetterType;
 use Illuminate\Http\Request;
 use App\services\LetterTypeService;
+use App\Services\RecentActivityService;
 
 class LetterTypeController extends Controller
 {
     protected $LetterTypeService;
+    protected $recentActivityService;
 
-    public function __construct(LetterTypeService $LetterTypeService)
+    public function __construct(LetterTypeService $LetterTypeService, RecentActivityService $recentActivityService)
     {
         $this->LetterTypeService = $LetterTypeService;
+        $this->recentActivityService = $recentActivityService;
     }
     /**
      * Display a listing of the resource.
@@ -42,6 +45,7 @@ class LetterTypeController extends Controller
     {
         try {
             $this->LetterTypeService->create($request->all());
+            $this->recentActivityService->create(auth('web')->user()->id, 'send-message');
             return redirect()->route('letter-type.index')->with('success', 'Letter Type Created Successfully');
         } catch (\Throwable $th) {
             //throw $th;

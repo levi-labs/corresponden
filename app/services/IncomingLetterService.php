@@ -3,6 +3,8 @@
 namespace App\Services;
 
 use App\Models\IncomingLetter;
+use App\Models\OutgoingLetter;
+use Illuminate\Support\Facades\DB;
 
 class IncomingLetterService
 {
@@ -111,5 +113,17 @@ class IncomingLetterService
             )
             ->first();
         return $incomingLetter;
+    }
+
+    public function updateStatus($id)
+    {
+        try {
+            DB::transaction(function () use ($id) {
+                IncomingLetter::where('id', $id)->update(['status' => 'read']);
+                OutgoingLetter::where('incoming_letter_id', $id)->update(['status' => 'read']);
+            });
+        } catch (\Throwable $th) {
+            throw $th;
+        }
     }
 }

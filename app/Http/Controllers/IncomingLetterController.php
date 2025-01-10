@@ -46,6 +46,7 @@ class IncomingLetterController extends Controller
     {
         $title = 'Letter Details';
         $incomingLetter = $this->incomingLetterService->getIncomingLetterById($incomingLetter->id);
+        $updateStatus = $this->incomingLetterService->updateStatus($incomingLetter->id);
         return view('pages.message.incoming.detail', compact('title', 'incomingLetter'));
     }
 

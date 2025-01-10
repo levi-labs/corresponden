@@ -38,12 +38,12 @@
             <ul id="forms-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
                 <li>
                     <a href="forms-elements.html">
-                        <i class="bi bi-circle"></i><span>Internal Letters</span>
+                        <i class="bi bi-circle"></i><span>incoming-letter</span>
                     </a>
                 </li>
                 <li>
                     <a href="forms-layouts.html">
-                        <i class="bi bi-circle"></i><span>External Letters</span>
+                        <i class="bi bi-circle"></i><span>outgoing-letter</span>
                     </a>
                 </li>
 
