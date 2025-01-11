@@ -21,4 +21,9 @@ class StudentService
             'student_id' => $student_id,
         ]);
     }
+
+    public function getStudentById($id)
+    {
+        return Student::where('user_id', $id)->first();
+    }
 }
