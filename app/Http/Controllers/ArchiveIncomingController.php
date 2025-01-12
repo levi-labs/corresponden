@@ -41,4 +41,10 @@ class ArchiveIncomingController extends Controller
         $title = 'Edit Incoming Letter';
         return redirect()->back()->with('success', 'Archive Incoming Letter Updated successfully');
     }
+
+    public function destroy()
+    {
+
+        return redirect()->back()->with('success', 'Archive Incoming Letter Deleted successfully');
+    }
 }
