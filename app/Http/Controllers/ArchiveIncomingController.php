@@ -19,7 +19,7 @@ class ArchiveIncomingController extends Controller
         $title = 'Archive Incoming Letters';
         $data = $this->archiveIncomingLetter->getAllArchiveIncomings();
 
-        return view('pages.message.incoming.archive', compact('title', 'data'));
+        return view('pages.archive.incoming-letter.index', compact('title', 'data'));
     }
 
     public function show(ArchiveIncomingLetter $archiveIncomingLetter)
@@ -31,8 +31,9 @@ class ArchiveIncomingController extends Controller
     public function create()
     {
         $title = 'Create Incoming Letter';
+        $letterTypes = ['external', 'internal'];
 
-        return view('pages.message.incoming.create', compact('title'));
+        return view('pages.archive.incoming-letter.create', compact('title', 'letterTypes'));
     }
 
     public function store(Request $request)

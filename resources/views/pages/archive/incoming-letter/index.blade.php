@@ -30,7 +30,7 @@
                     </div>
                     <div class="card-body">
                         <h5 class="card-title">
-                            <a href="{{ route('outgoing-letter.create') }}" class="btn btn-primary btn-sm">Add</a>
+                            <a href="{{ route('archive-incoming-letter.create') }}" class="btn btn-primary btn-sm">Add</a>
                         </h5>
 
                         <!-- Table with hoverable rows -->

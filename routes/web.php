@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ArchiveIncomingController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -62,3 +63,27 @@ Route::controller(App\Http\Controllers\IncomingLetterController::class)
         Route::get('/reply-destroy/{idReply}', 'destroyReply')->name('reply-letter.destroy');
         Route::get('/reply-preview/{idReply}', 'previewReply')->name('reply-letter.preview');
     });
+Route::controller(App\Http\Controllers\ArchiveIncomingController::class)
+    ->prefix('archive-incoming-letter')
+    ->middleware(['auth', 'roles:admin'])
+    ->group(function () {
+        Route::get('/', 'index')->name('archive-incoming-letter.index');
+        Route::get('/create', 'create')->name('archive-incoming-letter.create');
+        Route::post('/', 'store')->name('archive-incoming-letter.store');
+        Route::get('/{archiveIncomingLetter}', 'show')->name('archive-incoming-letter.show');
+        Route::get('/{archiveIncomingLetter}/edit', 'edit')->name('archive-incoming-letter.edit');
+        Route::put('/{archiveIncomingLetter}', 'update')->name('archive-incoming-letter.update');
+        Route::delete('/{archiveIncomingLetter}', 'destroy')->name('archive-incoming-letter.destroy');
+    });
+// Route::controller(App\Http\Controllers\ArchiveOutgoingController::class)
+//     ->prefix('archive-outgoing-letter')
+//     ->middleware(['auth', 'roles:admin'])
+//     ->group(function () {
+//         Route::get('/', 'index')->name('archive-outgoing-letter.index');
+//         Route::get('/create', 'create')->name('archive-outgoing-letter.create');
+//         Route::post('/', 'store')->name('archive-outgoing-letter.store');
+//         Route::get('/{archiveOutgoingLetter}', 'show')->name('archive-outgoing-letter.show');
+//         Route::get('/{archiveOutgoingLetter}/edit', 'edit')->name('archive-outgoing-letter.edit');
+//         Route::put('/{archiveOutgoingLetter}', 'update')->name('archive-outgoing-letter.update');
+//         Route::delete('/{archiveOutgoingLetter}', 'destroy')->name('archive-outgoing-letter.destroy');
+//     });
