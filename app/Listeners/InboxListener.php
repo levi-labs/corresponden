@@ -2,14 +2,14 @@
 
 namespace App\Listeners;
 
-use App\Events\OutgoingLetterCreated;
-use App\Models\IncomingLetter;
+use App\Events\SentCreated;
+use App\Models\Inbox;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
-class CreateIncomingLetter
+class InboxListener
 {
     /**
      * Create the event listener.
@@ -22,12 +22,12 @@ class CreateIncomingLetter
     /**
      * Handle the event.
      */
-    public function handle(OutgoingLetterCreated $event): void
+    public function handle(SentCreated $event): void
     {
         try {
             DB::transaction(function () use ($event) {
-                $outgoingLetter = $event->outgoingLetter;
-                IncomingLetter::create([
+                $outgoingLetter = $event->sent;
+                Inbox::create([
                     'letter_type_id' => $outgoingLetter->letter_type_id,
                     'sender_id' => $outgoingLetter->sender_id,
                     'receiver_id' => $outgoingLetter->receiver_id,
@@ -37,6 +37,7 @@ class CreateIncomingLetter
                     'body' => $outgoingLetter->body,
                     'attachment' => $outgoingLetter->attachment,
                     'status' => 'unread',
+                    'sent_id' => $outgoingLetter->id
                 ]);
             });
             Log::info('Surat masuk telah berhasil dibuat.');

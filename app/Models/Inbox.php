@@ -4,9 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class OutgoingLetter extends Model
+class Inbox extends Model
 {
-    protected $table = 'outgoing_letters';
-
+    protected $table = "inbox";
     protected $guarded = ['id'];
 }

@@ -17,7 +17,7 @@ return new class extends Migration
             $table->text('greeting')->nullable();
             $table->text('closing')->nullable();
             $table->string('file', 60)->nullable();
-            $table->foreign('id_letter')->references('id')->on('incoming_letters')->onDelete('restrict');
+            $table->foreign('id_letter')->references('id')->on('inbox')->onDelete('restrict');
             $table->timestamps();
         });
     }

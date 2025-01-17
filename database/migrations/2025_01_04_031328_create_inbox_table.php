@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('incoming_letters', function (Blueprint $table) {
+        Schema::create('inbox', function (Blueprint $table) {
             $table->id();
             $table->bigInteger('letter_type_id')->unsigned();
             $table->bigInteger('sender_id')->unsigned();
@@ -35,6 +35,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('incoming_letters');
+        Schema::dropIfExists('inbox');
     }
 };

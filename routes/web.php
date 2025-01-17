@@ -36,7 +36,7 @@ Route::controller(App\Http\Controllers\UserController::class)
         Route::put('/{user}', 'update')->name('user.update');
         Route::delete('/{user}', 'destroy')->name('user.destroy');
     });
-Route::controller(App\Http\Controllers\OutgoingLetterController::class)
+Route::controller(App\Http\Controllers\SentController::class)
     ->prefix('outgoing-letter')
     ->middleware(['auth', 'roles:admin,staff,student,lecturer'])
     ->group(function () {
@@ -48,7 +48,7 @@ Route::controller(App\Http\Controllers\OutgoingLetterController::class)
         Route::put('/{outgoingLetter}', 'update')->name('outgoing-letter.update');
         Route::delete('/{outgoingLetter}', 'destroy')->name('outgoing-letter.destroy');
     });
-Route::controller(App\Http\Controllers\IncomingLetterController::class)
+Route::controller(App\Http\Controllers\InboxController::class)
     ->prefix('incoming-letter')
     ->middleware(['auth', 'roles:admin,staff,student,lecturer'])
     ->group(function () {

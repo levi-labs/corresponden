@@ -3,15 +3,17 @@
 namespace App\Providers;
 
 use App\Events\OutgoingLetterCreated;
+use App\Events\SentCreated;
 use App\Listeners\CreateIncomingLetter;
+use App\Listeners\InboxListener;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\ServiceProvider;
 
 class EventServiceProvider extends ServiceProvider
 {
     protected $listen = [
-        OutgoingLetterCreated::class => [
-            CreateIncomingLetter::class,
+        SentCreated::class => [
+            InboxListener::class,
         ],
     ];
 

@@ -3,6 +3,7 @@
 namespace App\services;
 
 use App\Models\ArchiveIncomingLetter;
+use App\Models\Inbox;
 use App\Models\IncomingLetter;
 
 class ArchiveIncomingService
@@ -39,7 +40,7 @@ class ArchiveIncomingService
     public function addToArchieve($incomingLetterId)
     {
         try {
-            $incomingLetter = IncomingLetter::where('id', $incomingLetterId)->first();
+            $incomingLetter = Inbox::where('id', $incomingLetterId)->first();
             ArchiveIncomingLetter::create([
                 'incoming_letter_id' => $incomingLetter->id,
                 'receiver_id' => $incomingLetter->receiver_id,

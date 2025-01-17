@@ -2,23 +2,25 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Inbox;
 use App\Models\IncomingLetter;
 use App\Models\Reply;
 use Illuminate\Http\Request;
 use App\Models\User;
+use App\Services\InboxService;
 use App\Services\IncomingLetterService;
 use App\Services\ReplyService;
 use App\Services\RecentActivityService;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
-class IncomingLetterController extends Controller
+class InboxController extends Controller
 {
     protected $incomingLetterService;
     protected $replyService;
     protected $recentActivityService;
     public function __construct(
-        IncomingLetterService $incomingLetterService,
+        InboxService $incomingLetterService,
         ReplyService $replyService,
         RecentActivityService $recentActivityService
     ) {
@@ -42,7 +44,7 @@ class IncomingLetterController extends Controller
         return view('pages.message.incoming.index', compact('title', 'data'));
     }
 
-    public function show(IncomingLetter $incomingLetter)
+    public function show(Inbox $incomingLetter)
     {
         $title = 'Letter Details';
         $incomingLetter = $this->incomingLetterService->getIncomingLetterById($incomingLetter->id);

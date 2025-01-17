@@ -26,7 +26,7 @@ class OutgoingLetterRequest extends FormRequest
             'lecture' => 'required|exists:users,id',
             'subject' => 'required|string|max:255',
             'body' => 'nullable',
-            'attachment' => 'nullable|file|mimes:jpeg,jpg,png,gif,pdf,doc,docx|max:10240', // Maksimal 10MB
+            'attachment' => 'nullable|max:10240', // Maksimal 10MB
         ];
     }
 }

@@ -4,17 +4,19 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\OutgoingLetterRequest;
 use App\Models\OutgoingLetter;
+use App\Models\Sent;
 use App\Models\User;
 use App\services\LetterTypeService;
 use App\Services\OutgoingLetterService;
+use App\Services\SentService;
 use Illuminate\Http\Request;
 
-class OutgoingLetterController extends Controller
+class SentController extends Controller
 {
 
     protected $outgoingLetterService;
     protected $letterTypeService;
-    public function __construct(OutgoingLetterService $outgoingLetterService, LetterTypeService $letterTypeService)
+    public function __construct(SentService $outgoingLetterService, LetterTypeService $letterTypeService)
     {
         $this->outgoingLetterService = $outgoingLetterService;
         $this->letterTypeService = $letterTypeService;
@@ -71,7 +73,7 @@ class OutgoingLetterController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(OutgoingLetter $outgoingLetter)
+    public function show(Sent $outgoingLetter)
     {
         $title = 'Letter Details';
         $outgoingLetter = $this->outgoingLetterService->getOutgoingLetterById($outgoingLetter->id);
@@ -81,7 +83,7 @@ class OutgoingLetterController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(OutgoingLetter $outgoingLetter)
+    public function edit(Sent $outgoingLetter)
     {
         //
     }
@@ -89,7 +91,7 @@ class OutgoingLetterController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, OutgoingLetter $outgoingLetter)
+    public function update(Request $request, Sent $outgoingLetter)
     {
         //
     }
@@ -97,7 +99,7 @@ class OutgoingLetterController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(OutgoingLetter $outgoingLetter)
+    public function destroy(Sent $outgoingLetter)
     {
         //
     }
