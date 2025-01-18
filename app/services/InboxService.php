@@ -104,33 +104,61 @@ class InboxService
 
     public function getIncomingLetterById($id)
     {
-        $incomingLetter = Inbox::join('users as receiver', 'inbox.receiver_id', '=', 'receiver.id')
-            ->join('users as sender', 'inbox.sender_id', '=', 'sender.id')
-            ->join('letter_types', 'inbox.letter_type_id', '=', 'letter_types.id')
-            ->join('students', 'inbox.sender_id', '=', 'students.user_id')
-            ->where('inbox.id', $id)
-            ->select(
-                'inbox.id',
-                'inbox.date',
-                'inbox.subject',
-                'inbox.body',
-                'letter_types.name as letter_type',
-                'sender.name as sender_name',
-                'sender.username as sender_username',
-                'students.student_id as student_id',
-                'students.fullname as student_name',
-                'receiver.name as receiver_name',
-                'receiver.username as receiver_username',
-                'inbox.status',
-                'inbox.attachment',
-                'inbox.letter_number'
-            )
+        $check_role = Inbox::where('inbox.id', $id)
+            ->join('users as sender', 'sender.id', '=', 'inbox.sender_id')
+            ->select('inbox.*', 'sender.role')
             ->first();
-        return $incomingLetter;
+        if ($check_role->role == 'student') {
+            $incomingLetter = Inbox::join('users as receiver', 'inbox.receiver_id', '=', 'receiver.id')
+                ->join('users as sender', 'inbox.sender_id', '=', 'sender.id')
+                ->join('letter_types', 'inbox.letter_type_id', '=', 'letter_types.id')
+                ->join('students', 'inbox.sender_id', '=', 'students.user_id')
+                ->where('inbox.id', $id)
+                ->select(
+                    'inbox.id',
+                    'inbox.date',
+                    'inbox.subject',
+                    'inbox.body',
+                    'letter_types.name as letter_type',
+                    'sender.name as sender_name',
+                    'sender.username as sender_username',
+                    'students.student_id as student_id',
+                    'students.fullname as student_name',
+                    'receiver.name as receiver_name',
+                    'receiver.username as receiver_username',
+                    'inbox.status',
+                    'inbox.attachment',
+                    'inbox.letter_number'
+                )
+                ->first();
+            return $incomingLetter;
+        } elseif ($check_role->role == 'admin') {
+            $incomingLetter = Inbox::join('users as receiver', 'inbox.receiver_id', '=', 'receiver.id')
+                ->join('users as sender', 'inbox.sender_id', '=', 'sender.id')
+                ->join('letter_types', 'inbox.letter_type_id', '=', 'letter_types.id')
+                ->where('inbox.id', $id)
+                ->select(
+                    'inbox.id',
+                    'inbox.date',
+                    'inbox.subject',
+                    'inbox.body',
+                    'letter_types.name as letter_type',
+                    'sender.name as sender_name',
+                    'sender.username as sender_username',
+                    'receiver.name as receiver_name',
+                    'receiver.username as receiver_username',
+                    'inbox.status',
+                    'inbox.attachment',
+                    'inbox.letter_number'
+                )
+                ->first();
+            return $incomingLetter;
+        }
     }
 
     public function updateStatus($id)
     {
+
         try {
             DB::transaction(function () use ($id) {
                 $inbox = Inbox::where('id', $id)->first();
@@ -141,4 +169,5 @@ class InboxService
             throw $th;
         }
     }
+    public function download($id) {}
 }

@@ -8,6 +8,8 @@ use App\Models\Reply;
 use App\Models\Sent;
 use Illuminate\Support\Facades\DB;
 
+use function Laravel\Prompts\select;
+
 class ReplyService
 {
 
@@ -26,7 +28,13 @@ class ReplyService
 
     public function approve($data, $file = null)
     {
-        $inbox = Inbox::where('id', $data['id_letter'])->first();
+        $inbox = Inbox::join('users as sender', 'inbox.sender_id', '=', 'sender.id')
+            ->select(
+                'inbox.*',
+                'sender.name as sender_name'
+            )
+            ->where('inbox.id', $data['id_letter'])
+            ->first();
         $sender = auth('web')->user()->id;
         $letter_number = date('Y') . '/' . 'USNI' . '/' . str_pad($sender, 3, '0', STR_PAD_LEFT) . rand(0, 999);
         DB::beginTransaction();
@@ -39,22 +47,31 @@ class ReplyService
                     'id_letter' => $data['id_letter'],
                     'file' => $path
                 ]);
-                $data = [
+                $sent_data = [
                     'receiver_id' => $inbox->sender_id,
                     'sender_id' => $sender,
                     'letter_number' => $letter_number,
                     'letter_type_id' => $inbox->letter_type_id,
                     'subject' => $inbox->subject,
-                    'body' => 'Dikembalikan ke ' . $inbox->sender_id,
+                    'body' => 'Dikembalikan ke ' . $inbox->sender_name,
                     'date' => date('Y-m-d'),
                     'sent_id' => $inbox->sent_id,
                     'attachment' => $path
                 ];
 
-                $sent = Sent::create($data);
+                $sent = Sent::create($sent_data);
 
-                event(new SentCreated($sent));
-
+                Inbox::create([
+                    'receiver_id' => $inbox->sender_id,
+                    'sender_id' => $sender,
+                    'letter_number' => $letter_number,
+                    'letter_type_id' => $inbox->letter_type_id,
+                    'subject' => $inbox->subject,
+                    'body' => 'Dikembalikan ke ' . $inbox->sender_name,
+                    'date' => date('Y-m-d'),
+                    'sent_id' => $sent->id,
+                    'attachment' => $path
+                ]);
                 DB::commit();
             } catch (\Throwable $th) {
                 DB::rollBack();
@@ -67,20 +84,32 @@ class ReplyService
                     'greeting' => $data['greeting'],
                     'closing' => $data['closing']
                 ]);
-                $data = [
+                $sent_data = [
                     'receiver_id' => $inbox->sender_id,
                     'sender_id' => $sender,
                     'letter_number' => $letter_number,
                     'letter_type_id' => $inbox->letter_type_id,
                     'subject' => $inbox->subject,
-                    'body' => 'Dikembalikan ke ' . $inbox->sender_id,
+                    'body' => 'Dikembalikan ke ' . $inbox->sender_name,
                     'date' => date('Y-m-d'),
                     'sent_id' => $inbox->sent_id,
+
                 ];
 
-                $sent = Sent::create($data);
+                $sent = Sent::create($sent_data);
 
-                event(new SentCreated($sent));
+                Inbox::create([
+                    'receiver_id' => $inbox->sender_id,
+                    'sender_id' => $sender,
+                    'letter_number' => $letter_number,
+                    'letter_type_id' => $inbox->letter_type_id,
+                    'subject' => $inbox->subject,
+                    'body' => 'Dikembalikan ke ' . $inbox->sender_name,
+                    'date' => date('Y-m-d'),
+                    'sent_id' => $sent->id,
+
+                ]);
+
                 DB::commit();
             } catch (\Throwable $th) {
                 DB::rollBack();

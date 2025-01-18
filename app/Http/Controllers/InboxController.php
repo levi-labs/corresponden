@@ -46,9 +46,11 @@ class InboxController extends Controller
 
     public function show(Inbox $incomingLetter)
     {
+
         $title = 'Letter Details';
+        $this->incomingLetterService->updateStatus($incomingLetter->id);
         $incomingLetter = $this->incomingLetterService->getIncomingLetterById($incomingLetter->id);
-        $updateStatus = $this->incomingLetterService->updateStatus($incomingLetter->id);
+
         return view('pages.message.incoming.detail', compact('title', 'incomingLetter'));
     }
 
@@ -113,7 +115,7 @@ class InboxController extends Controller
                 return response()->json(['error' => 'File not found'], 404);
             }
             $file_path = storage_path('app/' . $file->file);
-            return response()->json($file_path);
+
             if (file_exists($file_path)) {
                 $headers = [
 
@@ -129,6 +131,31 @@ class InboxController extends Controller
 
 
 
+                return response()->download($file_path, $downloadname, $headers);
+            }
+        } catch (\Throwable $th) {
+            return response()->json(['error' => $th->getMessage()], 500);
+        }
+    }
+    public function downloadFileInbox($id)
+    {
+        try {
+            $file =  Inbox::where('id', $id)->first();
+            if (!$file) {
+                return response()->json(['error' => 'File not found'], 404);
+            }
+            $file_path = storage_path('app/' . $file->attachment);
+
+            if (file_exists($file_path)) {
+                $headers = [
+                    'Content-Disposition' => sprintf('attachment; filename="%s"', $file->attachment),
+                    'Content-Length' => filesize($file_path),
+                    'Content-Type' => mime_content_type($file_path),
+                ];
+                $safeFilename = str_replace(['/', '\\'], '_', $file->attachment);
+                $saveFilename = explode('_', $safeFilename);
+                $namedownloaded = array_shift($saveFilename);
+                $downloadname = implode('_', $saveFilename);
                 return response()->download($file_path, $downloadname, $headers);
             }
         } catch (\Throwable $th) {

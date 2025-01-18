@@ -46,7 +46,7 @@
                     </a>
                     <h6 class="fw-bold text-sm">Silahkah download lampiran berikut ini: </h6>
                 @endif
-                @if ($reply->file === null)
+                @if ($reply->file !== null)
                     {{-- <p class="small text-sm">{!! $incomingLetter->greeting !!}</p>
                     <br>
                     <p>Nama : </p> --}}

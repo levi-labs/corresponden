@@ -72,7 +72,7 @@
                                     <div class="card-body">
                                         <p class="small text-sm">{!! $incomingLetter->body !!}</p>
                                         <hr>
-                                        @if ($incomingLetter->attachment === null)
+                                        @if ($incomingLetter->attachment != null)
                                             <p class="small">Attachment:&nbsp;<a class="ms-2 btn btn-secondary btn-sm"
                                                     href="{{ asset('storage/' . $incomingLetter->attachment) }}"><i
                                                         class="bi bi-download"></i> Download</a>
@@ -86,7 +86,7 @@
                         <hr>
 
                         <!-- Action Button -->
-                        @if (\App\Models\Reply::where('id_letter', $incomingLetter->id)->doesntExist())
+                        @if (\App\Models\Reply::where('id_letter', $incomingLetter->id)->doesntExist() && Auth::user()->role === 'admin')
                             <div class="row justify-content-center">
                                 <div class="col-md-10 text-end">
                                     <button type="button" class="btn btn-dark btn-sm" data-bs-toggle="modal"

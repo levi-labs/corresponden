@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ArchiveIncomingController;
+use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -60,6 +61,7 @@ Route::controller(App\Http\Controllers\InboxController::class)
         Route::put('/{incomingLetter}', 'update')->name('incoming-letter.update');
         Route::delete('/{incomingLetter}', 'destroy')->name('incoming-letter.destroy');
         Route::get('/download/{idLetter}/reply', 'downloadReply')->name('reply-letter.download');
+        Route::get('/download-file-inbox/{id}', 'downloadFileInbox')->name('incoming-letter.download');
         Route::get('/reply-destroy/{idReply}', 'destroyReply')->name('reply-letter.destroy');
         Route::get('/reply-preview/{idReply}', 'previewReply')->name('reply-letter.preview');
     });
@@ -75,15 +77,11 @@ Route::controller(App\Http\Controllers\ArchiveIncomingController::class)
         Route::put('/{archiveIncomingLetter}', 'update')->name('archive-incoming-letter.update');
         Route::delete('/{archiveIncomingLetter}', 'destroy')->name('archive-incoming-letter.destroy');
     });
-// Route::controller(App\Http\Controllers\ArchiveOutgoingController::class)
-//     ->prefix('archive-outgoing-letter')
-//     ->middleware(['auth', 'roles:admin'])
-//     ->group(function () {
-//         Route::get('/', 'index')->name('archive-outgoing-letter.index');
-//         Route::get('/create', 'create')->name('archive-outgoing-letter.create');
-//         Route::post('/', 'store')->name('archive-outgoing-letter.store');
-//         Route::get('/{archiveOutgoingLetter}', 'show')->name('archive-outgoing-letter.show');
-//         Route::get('/{archiveOutgoingLetter}/edit', 'edit')->name('archive-outgoing-letter.edit');
-//         Route::put('/{archiveOutgoingLetter}', 'update')->name('archive-outgoing-letter.update');
-//         Route::delete('/{archiveOutgoingLetter}', 'destroy')->name('archive-outgoing-letter.destroy');
-//     });
+Route::controller(ProfileController::class)
+    ->prefix('profile')
+    ->middleware(['auth', 'roles:admin,staff,student,lecturer'])
+    ->group(function () {
+        Route::get('/', 'showProfile')->name('profile.index');
+        Route::get('/edit', 'editProfile')->name('profile.edit');
+        Route::put('/update-profile', 'update')->name('profile.update');
+    });

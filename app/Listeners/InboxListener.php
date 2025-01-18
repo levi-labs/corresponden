@@ -42,7 +42,7 @@ class InboxListener
             });
             Log::info('Surat masuk telah berhasil dibuat.');
         } catch (\Throwable $th) {
-            Log::info('Surat masuk telah berhasil dibuat.');
+            Log::error('Surat masuk gagal dibuat.' . $th->getMessage());
             throw $th;
         }
     }
