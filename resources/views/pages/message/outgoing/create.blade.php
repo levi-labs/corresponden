@@ -76,7 +76,7 @@
                         @endif
                     </div>
                     <div class="card-body">
-                        <form action="{{ route('outgoing-letter.store') }}" method="post">
+                        <form action="{{ route('outgoing-letter.store') }}" method="post" enctype="multipart/form-data">
                             @csrf
                             <!-- Quill Editor Default -->
                             <div class="form-group mb-3">

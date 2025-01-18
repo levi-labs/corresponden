@@ -24,7 +24,11 @@
                                 height: 100px !important;
                             }
                         </style>
-                        <img src="{{ asset('storage/' . $data->image) }}" alt="Profile" class="rounded-circle my-img">
+                        @if ($data->image == null)
+                            <img src="{{ asset('assets/default-avatar.jpeg') }}" alt="Profile" class="rounded-circle my-img">
+                        @elseif ($data->image != null)
+                            <img src="{{ asset('storage/' . $data->image) }}" alt="Profile" class="rounded-circle my-img">
+                        @endif
                         <h2>{{ $data->fullname }}</h2>
                         <h3>{{ Auth()->user()->role }}</h3>
                         <div class="social-links mt-2">

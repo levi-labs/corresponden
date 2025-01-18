@@ -37,6 +37,7 @@
                                 <p class="text-sm ms-5">From:&nbsp;
                                     {{ $incomingLetter->sender_name }} <span
                                         class="small">{{ '<username: ' . $incomingLetter->sender_username . '>' }}</span>
+                                    <span>| NIM:{{ $incomingLetter->student_id }}</span>
                                 </p>
                             </div>
                             <div class="col-md-3">

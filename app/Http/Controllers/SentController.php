@@ -60,8 +60,14 @@ class SentController extends Controller
                 'letter_number' => $letter_number,
                 'date' => date('Y-m-d'),
                 'status' => 'unread',
-                'attachment' => $data['attachment'] ?? null,
             ];
+            if ($request->hasFile('attachment')) {
+                $file = $request->file('attachment');
+                $name = $file->getClientOriginalName();
+                $path = $file->storeAs('outgoing_letters', $name, 'public');
+                $data['attachment'] = $path;
+            }
+
 
             $this->outgoingLetterService->create($data);
             return redirect()->route('outgoing-letter.index')->with('success', 'Sent letter successfully');

@@ -104,9 +104,33 @@
 
 
             <li class="nav-item dropdown pe-3">
+                @php
+                    $check = Auth::user()->role;
+                    if ($check == 'student') {
+                        $student = App\Models\Student::where('user_id', Auth::user()->id)->first();
+                        $image = $student->image;
+                    } elseif ($check == 'lecturer') {
+                        $lecturer = App\Models\Lecturer::where('user_id', Auth::user()->id)->first();
+                        $image = asset('storage/' . $lecturer->image);
+                    } else {
+                        $image = null;
+                    }
 
+                @endphp
+                <style>
+                    .my-avatar {
+                        width: 40px !important;
+                        height: 40px !important;
+                    }
+                </style>
                 <a class="nav-link nav-profile d-flex align-items-center pe-0" href="#" data-bs-toggle="dropdown">
-                    <img src="{{ asset('assets/img/profile-img.jpg') }}" alt="Profile" class="rounded-circle">
+                    {{-- if $image null then img = placeholder from internet --}}
+                    @if ($image == null)
+                        <img src="{{ asset('assets/default-avatar.jpeg') }}">
+                    @elseif ($image != null)
+                        <img src="{{ asset('storage/' . $image) }}" alt="Profile" class="rounded-circle my-avatar">
+                    @endif
+
                     <span class="d-none d-md-block dropdown-toggle ps-2">{{ Auth::user()->username }}</span>
                 </a><!-- End Profile Iamge Icon -->
 

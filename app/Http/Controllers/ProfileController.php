@@ -23,7 +23,7 @@ class ProfileController extends Controller
             $data = $this->studentService->getStudentById(auth('web')->user()->id);
             return view('pages.profile.student.index', compact('data'));
         } elseif ($authUser->role == 'lecturer') {
-            return view('pages.profile.lecturer');
+            return view('pages.profile.lecturer.index');
         } elseif ($authUser->role == 'staff') {
             return view('pages.profile.staff');
         }

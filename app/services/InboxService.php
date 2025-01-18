@@ -133,9 +133,11 @@ class InboxService
                 ->first();
             return $incomingLetter;
         } elseif ($check_role->role == 'admin') {
+
             $incomingLetter = Inbox::join('users as receiver', 'inbox.receiver_id', '=', 'receiver.id')
                 ->join('users as sender', 'inbox.sender_id', '=', 'sender.id')
                 ->join('letter_types', 'inbox.letter_type_id', '=', 'letter_types.id')
+                ->join('students', 'inbox.receiver_id', '=', 'students.user_id')
                 ->where('inbox.id', $id)
                 ->select(
                     'inbox.id',
@@ -146,6 +148,8 @@ class InboxService
                     'sender.name as sender_name',
                     'sender.username as sender_username',
                     'receiver.name as receiver_name',
+                    'students.student_id as student_id',
+                    'students.fullname as student_name',
                     'receiver.username as receiver_username',
                     'inbox.status',
                     'inbox.attachment',
