@@ -26,84 +26,148 @@
                 </a>
             </li> --}}
             <!-- End Search Icon-->
-
-            <li class="nav-item dropdown">
-                @php
-                    $user = auth('web')->user()->id;
-                    if (auth('web')->user()->role == 'admin' || auth('web')->user()->role == 'staff') {
-                        $count = $count = \App\Models\Notification::join(
-                            'users',
-                            'users.id',
-                            '=',
-                            'notifications.receiver_id',
-                        )
-                            ->where('users.role', '!=', 'student')
-                            ->where('status', 'unread')
-                            ->count();
-                        $unread = \App\Models\Notification::join('users', 'users.id', '=', 'notifications.receiver_id')
-                            ->join('inbox', 'inbox.id', '=', 'notifications.inbox_id')
-                            ->join('users as sender', 'sender.id', '=', 'inbox.sender_id')
-                            ->select(
-                                'notifications.*',
-                                'users.name as receiver_name',
-                                'inbox.id as inbox_id',
-                                'inbox.subject as inbox_subject',
-                                'sender.name as sender_name',
+            @if (auth('web')->user()->role == 'admin' || auth('web')->user()->role == 'staff')
+                <li class="nav-item dropdown">
+                    @php
+                        $user = auth('web')->user()->id;
+                        if (auth('web')->user()->role == 'admin' || auth('web')->user()->role == 'staff') {
+                            $count = $count = \App\Models\Notification::join(
+                                'users',
+                                'users.id',
+                                '=',
+                                'notifications.receiver_id',
                             )
-                            ->where('users.role', '!=', 'student')
-                            ->where('notifications.status', 'unread')
-                            ->get();
-                    }
+                                ->where('users.role', '!=', 'student')
+                                ->where('status', 'unread')
+                                ->count();
+                            $unread = \App\Models\Notification::join(
+                                'users',
+                                'users.id',
+                                '=',
+                                'notifications.receiver_id',
+                            )
+                                ->join('inbox', 'inbox.id', '=', 'notifications.inbox_id')
+                                ->join('users as sender', 'sender.id', '=', 'inbox.sender_id')
+                                ->select(
+                                    'notifications.*',
+                                    'users.name as receiver_name',
+                                    'inbox.id as inbox_id',
+                                    'inbox.subject as inbox_subject',
+                                    'sender.name as sender_name',
+                                )
+                                ->where('users.role', '!=', 'student')
+                                ->where('notifications.status', 'unread')
+                                ->get();
+                        } elseif (auth('web')->user()->role == 'student') {
+                            $count = \App\Models\Notification::join(
+                                'users',
+                                'users.id',
+                                '=',
+                                'notifications.receiver_id',
+                            )
+                                ->where('users.id', $user)
+                                ->where('notifications.status', 'unread')
+                                ->count();
+                            $unread = \App\Models\Notification::join(
+                                'users',
+                                'users.id',
+                                '=',
+                                'notifications.receiver_id',
+                            )
+                                ->join('inbox', 'inbox.id', '=', 'notifications.inbox_id')
+                                ->join('users as sender', 'sender.id', '=', 'inbox.sender_id')
+                                ->select(
+                                    'notifications.*',
+                                    'users.name as receiver_name',
+                                    'inbox.id as inbox_id',
+                                    'inbox.subject as inbox_subject',
+                                    'sender.name as sender_name',
+                                )
+                                ->where('users.id', $user)
+                                ->where('notifications.status', 'unread')
+                                ->get();
+                        } elseif (auth('web')->user()->role == 'lecturer') {
+                            $count = \App\Models\Notification::join(
+                                'users',
+                                'users.id',
+                                '=',
+                                'notifications.receiver_id',
+                            )
+                                ->where('users.id', $user)
+                                ->where('notifications.status', 'unread')
+                                ->count();
+                            $unread = \App\Models\Notification::join(
+                                'users',
+                                'users.id',
+                                '=',
+                                'notifications.receiver_id',
+                            )
+                                ->join('inbox', 'inbox.id', '=', 'notifications.inbox_id')
+                                ->join('users as sender', 'sender.id', '=', 'inbox.sender_id')
+                                ->select(
+                                    'notifications.*',
+                                    'users.name as receiver_name',
+                                    'inbox.id as inbox_id',
+                                    'inbox.subject as inbox_subject',
+                                    'sender.name as sender_name',
+                                )
+                                ->where('users.id', $user)
+                                ->where('notifications.status', 'unread')
+                                ->get();
+                        }
 
-                @endphp
-                <a class="nav-link nav-icon" href="#" data-bs-toggle="dropdown">
-                    <i class="bi bi-bell"></i>
-                    <span class="badge bg-primary badge-number">{{ $count }}</span>
-                </a><!-- End Notification Icon -->
+                    @endphp
+                    <a class="nav-link nav-icon" href="#" data-bs-toggle="dropdown">
+                        <i class="bi bi-bell"></i>
+                        <span class="badge bg-primary badge-number">{{ $count }}</span>
+                    </a><!-- End Notification Icon -->
 
-                <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow notifications">
+                    <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow notifications">
 
-                    <li class="dropdown-header">
-                        @if ($count > 0)
-                            You have {{ $count }} new notifications
-                        @else
-                            You have no new notifications
-                        @endif
-                        {{-- <a href="#"><span class="badge rounded-pill bg-primary p-2 ms-2">View all</span></a> --}}
-                    </li>
-                    <li>
-                        <hr class="dropdown-divider">
-                    </li>
-
-                    @forelse ($unread as $item)
-                        <a href="{{ route('incoming-letter.show', $item->inbox_id) }}">
-                            <li class="notification-item">
-                                <i class="bi bi-exclamation-circle text-warning"></i>
-                                <div>
-                                    <h4>{{ $item->title }}</h4>
-                                    <p>{{ $item->inbox_subject }}</p>
-                                    <p>{{ \Carbon\Carbon::parse($item->created_at)->diffForHumans() }}</p>
-                                    </p>
-                                </div>
-                            </li>
-                        </a>
-
-
+                        <li class="dropdown-header">
+                            @if ($count > 0)
+                                You have {{ $count }} new notifications
+                            @else
+                                You have no new notifications
+                            @endif
+                            {{-- <a href="#"><span class="badge rounded-pill bg-primary p-2 ms-2">View all</span></a> --}}
+                        </li>
                         <li>
                             <hr class="dropdown-divider">
                         </li>
 
-                    @empty
-                    @endforelse
+                        @forelse ($unread as $item)
+                            <a href="{{ route('incoming-letter.show', $item->inbox_id) }}">
+                                <li class="notification-item">
+                                    <i class="bi bi-exclamation-circle text-warning"></i>
+                                    <div>
+                                        <h4>{{ $item->title }}</h4>
+                                        <p>{{ $item->inbox_subject }}</p>
+                                        <p>{{ \Carbon\Carbon::parse($item->created_at)->diffForHumans() }}</p>
+                                        </p>
+                                    </div>
+                                </li>
+                            </a>
+
+
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
+
+                        @empty
+                        @endforelse
 
 
 
 
 
 
-                </ul><!-- End Notification Dropdown Items -->
+                    </ul><!-- End Notification Dropdown Items -->
 
-            </li><!-- End Notification Nav -->
+                </li>
+            @endif
+
+            <!-- End Notification Nav -->
 
 
             <li class="nav-item dropdown pe-3">
