@@ -9,6 +9,12 @@ use Illuminate\Support\Facades\DB;
 
 class SentService
 {
+    protected $recentActivityService;
+
+    public function __construct(RecentActivityService $recentActivityService)
+    {
+        $this->recentActivityService = $recentActivityService;
+    }
     public function getAllOutgoingLetters()
     {
         $data = Sent::join('letter_types', 'sent.letter_type_id', '=', 'letter_types.id')
@@ -85,7 +91,7 @@ class SentService
         // dd($data);
         try {
             DB::transaction(function () use ($data) {
-
+                $this->recentActivityService->create(auth('web')->user()->id, 'send-message');
                 $sent = Sent::create($data);
                 event(new SentCreated($sent));
             });

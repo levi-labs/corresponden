@@ -7,9 +7,11 @@ use App\Models\Staff;
 use App\Models\Student;
 use App\Models\User;
 use App\services\LectureService;
+use App\Services\RecentActivityService;
 use App\services\StaffService;
 use App\services\StudentService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 
 class ProfileController extends Controller
@@ -17,15 +19,18 @@ class ProfileController extends Controller
     protected $studentService;
     protected $lectureService;
     protected $staffService;
+    protected $recentActivityService;
 
     public function __construct(
         StudentService $studentService,
         LectureService $lectureService,
-        StaffService $staffService
+        StaffService $staffService,
+        RecentActivityService $recentActivityService
     ) {
         $this->studentService = $studentService;
         $this->lectureService = $lectureService;
         $this->staffService = $staffService;
+        $this->recentActivityService = $recentActivityService;
     }
     public function showProfile()
     {
@@ -59,6 +64,7 @@ class ProfileController extends Controller
     }
     public function update(Request $request)
     {
+        DB::beginTransaction();
         try {
             $authUser = auth('web')->user()->id;
             $request->validate([
@@ -84,6 +90,8 @@ class ProfileController extends Controller
                     'image' => $path == null ? $student->image : $path,
                     'year_enrolled' => $request->year_enrolled
                 ]);
+                $this->recentActivityService->create($authUser, 'update-profile'); // Log('Profile updated successfully');
+                DB::commit();
                 return redirect()->route('profile.index')->with('success', 'Profile updated successfully');
             } elseif (auth('web')->user()->role == 'lecturer') {
                 $lecturer = Lecture::where('user_id', $authUser)->first();
@@ -98,6 +106,8 @@ class ProfileController extends Controller
                     'address' => $request->address,
                     'image' => $path == null ? $lecturer->image : $path
                 ]);
+                $this->recentActivityService->create($authUser, 'update-profile'); // Log('Profile updated successfully');
+                DB::commit();
                 return redirect()->route('profile.index')->with('success', 'Profile updated successfully');
             } elseif (auth('web')->user()->role == 'staff') {
                 $staff = Staff::where('user_id', $authUser)->first();
@@ -111,9 +121,12 @@ class ProfileController extends Controller
                     'address' => $request->address,
                     'image' => $path == null ? $staff->image : $path
                 ]);
+                $this->recentActivityService->create($authUser, 'update-profile'); // Log('Profile updated successfully');
+                DB::commit();
                 return redirect()->route('profile.index')->with('success', 'Profile updated successfully');
             }
         } catch (\Throwable $th) {
+            DB::rollback();
             return redirect()->back()->with('error', $th->getMessage());
         }
     }

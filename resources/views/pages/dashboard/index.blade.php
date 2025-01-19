@@ -153,11 +153,14 @@
                                 <div id="reportsChart"></div>
 
                                 <script>
+                                    let dates = {!! json_encode($dates) !!};
+                                    let activityCounts = {!! json_encode($activityCounts) !!};
                                     document.addEventListener("DOMContentLoaded", () => {
+
                                         new ApexCharts(document.querySelector("#reportsChart"), {
                                             series: [{
                                                 name: 'Activity',
-                                                data: [31, 40, 28, 51, 42, 82, 56],
+                                                data: activityCounts,
                                             }, {
                                                 name: 'Internal',
                                                 data: [11, 32, 45, 32, 34, 52, 41]

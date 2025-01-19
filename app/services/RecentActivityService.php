@@ -13,9 +13,14 @@ class RecentActivityService
 
     public function create($userId, $type)
     {
-        RecentActivity::create([
-            'user_id' => $userId,
-            'activity_type' => $type
-        ]);
+
+        try {
+            RecentActivity::create([
+                'user_id' => $userId,
+                'activity_type' => $type
+            ]);
+        } catch (\Throwable $th) {
+            throw $th;
+        }
     }
 }
