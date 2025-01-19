@@ -47,21 +47,21 @@
                                     <tr>
                                         <td class="flex-column align-items-center">
                                             <span class="badge border-dark border-1 text-dark text-wrap">From:
-                                                {{ $item->sender_name }}</span>
+                                                {{ $item->sender }}</span>
                                             <div class="badge bg-info text-dark">{{ $item->letter_type }}</div>
                                         </td>
                                         <td>
                                             <a class="text-decoration-none text-dark"
-                                                href="{{ route('incoming-letter.show', $item->id) }}">
-                                                <h6 class="card-title">{{ $item->subject }}</h6>
+                                                href="{{ route('archive-incoming-letter.show', $item->id) }}">
+                                                <h6 class="card-title">{{ $item->letter_number }}</h6>
                                             </a>
-                                            <span class="small text-muted"> {!! Str::limit(strip_tags($item->body), 40) !!}</span>
+                                            <span class="small text-muted"> {!! Str::limit(strip_tags($item->subject), 40) !!}</span>
                                         </td>
                                         <td class="text-center align-middle">
-                                            {{-- <a href="{{ route('letter-type.edit', $item->id) }}"
-                                                class="btn btn-warning btn-sm">Edit</a> --}}
-                                            <form action="{{ route('incoming-letter.destroy', $item->id) }}" method="POST"
-                                                style="display:inline">
+                                            <a href="{{ route('archive-incoming-letter.edit', $item->id) }}"
+                                                class="btn btn-light btn-sm"><i class="bi bi-pencil-square"></i></a>
+                                            <form action="{{ route('archive-incoming-letter.destroy', $item->id) }}"
+                                                method="POST" style="display:inline">
                                                 @csrf
                                                 @method('DELETE')
                                                 <button type="submit" class="btn btn-light btn-sm"><i

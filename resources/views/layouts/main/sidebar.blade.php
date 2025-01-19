@@ -7,13 +7,17 @@
                 <i class="bi bi-grid"></i>
                 <span>Dashboard</span>
             </a>
-        </li><!-- End Dashboard Nav -->
-        <li class="nav-item">
-            <a class="nav-link collapsed" href="{{ route('letter-type.index') }}">
-                <i class="bi bi-card-list"></i>
-                <span>Letter Type</span>
-            </a>
-        </li><!-- End Letter Type Nav -->
+        </li>
+        <!-- End Dashboard Nav -->
+        @if (Auth::user()->role == 'admin' || Auth::user()->role == 'staff')
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="{{ route('letter-type.index') }}">
+                    <i class="bi bi-card-list"></i>
+                    <span>Letter Type</span>
+                </a>
+            </li>
+        @endif
+        <!-- End Letter Type Nav -->
         <li class="nav-item">
             <a class="nav-link collapsed" data-bs-target="#components-nav" data-bs-toggle="collapse" href="#">
                 <i class="bi bi-menu-button-wide"></i><span>Message</span><i class="bi bi-chevron-down ms-auto"></i>
@@ -30,31 +34,38 @@
                     </a>
                 </li>
             </ul>
-        </li><!-- End Components Nav -->
-        <li class="nav-item">
-            <a class="nav-link collapsed" data-bs-target="#forms-nav" data-bs-toggle="collapse" href="#">
-                <i class="bi bi-journal-text"></i><span>Archive </span><i class="bi bi-chevron-down ms-auto"></i>
-            </a>
-            <ul id="forms-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
-                <li>
-                    <a href="{{ route('archive-incoming-letter.index') }}">
-                        <i class="bi bi-circle"></i><span>incoming-letter</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="forms-layouts.html">
-                        <i class="bi bi-circle"></i><span>outgoing-letter</span>
-                    </a>
-                </li>
-
-            </ul>
-        </li><!-- End Forms Nav -->
-        <li class="nav-item">
-            <a class="nav-link collapsed" href="{{ route('user.index') }}">
-                <i class="bi bi-person"></i>
-                <span>Users</span>
-            </a>
         </li>
+        <!-- End Components Nav -->
+        @if (Auth::user()->role == 'admin' || Auth::user()->role == 'staff')
+            <li class="nav-item">
+                <a class="nav-link collapsed" data-bs-target="#forms-nav" data-bs-toggle="collapse" href="#">
+                    <i class="bi bi-journal-text"></i><span>Archive </span><i class="bi bi-chevron-down ms-auto"></i>
+                </a>
+                <ul id="forms-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+                    <li>
+                        <a href="{{ route('archive-incoming-letter.index') }}">
+                            <i class="bi bi-circle"></i><span>incoming-letter</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="forms-layouts.html">
+                            <i class="bi bi-circle"></i><span>outgoing-letter</span>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+        @endif
+
+        <!-- End Forms Nav -->
+        @if (Auth::user()->role == 'admin')
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="{{ route('user.index') }}">
+                    <i class="bi bi-person"></i>
+                    <span>Users</span>
+                </a>
+            </li>
+        @endif
+
         <!-- End Users Page Nav -->
 
 

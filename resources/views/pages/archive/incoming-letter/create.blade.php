@@ -76,22 +76,32 @@
                         @endif
                     </div>
                     <div class="card-body">
-                        <form action="{{ route('outgoing-letter.store') }}" method="post">
+                        <form action="{{ route('archive-incoming-letter.store') }}" enctype="multipart/form-data"
+                            method="post">
                             @csrf
                             <!-- Quill Editor Default -->
                             <div class="form-group mb-3">
+                                <label class="form-label" for="letter_number">Letter Number<span
+                                        class="text-danger">*</span></label>
+                                <input type="text" class="form-control" name="letter_number" id="letter_number"
+                                    value="{{ old('letter_number') ?? $letter_number }}">
+                                @error('letter_number')
+                                    <span class="text-danger">{{ $message }}</span>
+                                @enderror
+                            </div>
+                            <div class="form-group mb-3">
                                 <label class="form-label" for="from">From<span class="text-danger">*</span></label>
                                 <input type="text" class="form-control" name="from" id="from"
-                                    value="{{ old('from') ?? auth('web')->user()->name }}">
+                                    value="{{ old('from') }}">
                                 @error('from')
                                     <span class="text-danger">{{ $message }}</span>
                                 @enderror
                             </div>
                             <div class="form-group mb-3">
-                                <label class="form-label" for="from">To<span class="text-danger">*</span></label>
-                                <input type="text" class="form-control" name="from" id="from"
-                                    value="{{ old('from') ?? auth('web')->user()->name }}">
-                                @error('from')
+                                <label class="form-label" for="to">To<span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" name="to" id="to"
+                                    value="{{ old('to') }}">
+                                @error('to')
                                     <span class="text-danger">{{ $message }}</span>
                                 @enderror
                             </div>
@@ -108,10 +118,22 @@
                                 <select class="form-control" name="letter_type" id="letter_type">
                                     <option selected disabled>Select Letter Type</option>
                                     @foreach ($letterTypes as $letterType)
-                                        <option value="{{ $letterType }}">{{ $letterType }}</option>
+                                        <option value="{{ $letterType->id }}">{{ $letterType->name }}</option>
                                     @endforeach
                                 </select>
                                 @error('letter_type')
+                                    <span class="text-danger">{{ $message }}</span>
+                                @enderror
+                            </div>
+                            <div class="form-group mb-3">
+                                <label class="form-label" for="source_letter">Source Letter<span
+                                        class="text-danger">*</span></label>
+                                <select class="form-control" name="source_letter" id="source_letter">
+                                    <option selected disabled>Select Source Letter</option>
+                                    <option value="internal">internal</option>
+                                    <option value="external">external</option>
+                                </select>
+                                @error('source_letter')
                                     <span class="text-danger">{{ $message }}</span>
                                 @enderror
                             </div>
@@ -125,10 +147,10 @@
                                 @enderror
                             </div>
                             <div class="form-group mb-3">
-                                <label class="form-label" for="body">Body</label>
+                                <label class="form-label" for="description">Description</label>
                                 <div id="editor" style="height: 200px"></div>
-                                <textarea rows="3" class="mb-3 d-none" name="body" id="quill-editor-area-description"></textarea>
-                                @error('body')
+                                <textarea rows="3" class="mb-3 d-none" name="description" id="quill-editor-area-description"></textarea>
+                                @error('description')
                                     <span class="text-danger">{{ $message }}</span>
                                 @enderror
                             </div>

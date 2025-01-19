@@ -15,7 +15,7 @@ Route::get('/dashboard', [App\Http\Controllers\DashboardController::class, 'inde
 
 Route::controller(App\Http\Controllers\LetterTypeController::class)
     ->prefix('letter-type')
-    ->middleware(['auth', 'roles:admin'])
+    ->middleware(['auth', 'roles:admin,staff'])
     ->group(function () {
         Route::get('/', 'index')->name('letter-type.index');
         Route::get('/create', 'create')->name('letter-type.create');
@@ -67,15 +67,15 @@ Route::controller(App\Http\Controllers\InboxController::class)
     });
 Route::controller(App\Http\Controllers\ArchiveIncomingController::class)
     ->prefix('archive-incoming-letter')
-    ->middleware(['auth', 'roles:admin'])
+    ->middleware(['auth', 'roles:admin,staff'])
     ->group(function () {
         Route::get('/', 'index')->name('archive-incoming-letter.index');
         Route::get('/create', 'create')->name('archive-incoming-letter.create');
         Route::post('/', 'store')->name('archive-incoming-letter.store');
         Route::get('/{archiveIncomingLetter}', 'show')->name('archive-incoming-letter.show');
-        Route::get('/{archiveIncomingLetter}/edit', 'edit')->name('archive-incoming-letter.edit');
-        Route::put('/{archiveIncomingLetter}', 'update')->name('archive-incoming-letter.update');
-        Route::delete('/{archiveIncomingLetter}', 'destroy')->name('archive-incoming-letter.destroy');
+        Route::get('/{id}/edit', 'edit')->name('archive-incoming-letter.edit');
+        Route::put('/{id}', 'update')->name('archive-incoming-letter.update');
+        Route::delete('/{id}', 'destroy')->name('archive-incoming-letter.destroy');
     });
 Route::controller(ProfileController::class)
     ->prefix('profile')

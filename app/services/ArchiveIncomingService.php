@@ -12,28 +12,44 @@ class ArchiveIncomingService
     public function getAllArchiveIncomings()
     {
 
-        return ArchiveIncomingLetter::all();
+        return ArchiveIncomingLetter::join('letter_types', 'archive_incoming_letters.letter_type_id', '=', 'letter_types.id')
+            ->select(
+                'archive_incoming_letters.*',
+                'letter_types.name as letter_type',
+            )
+            ->paginate(25);
     }
 
     public function getArchiveIncomingById($id)
     {
-        return ArchiveIncomingLetter::find($id);
+        // dd(ArchiveIncomingLetter::find($id));
+        return ArchiveIncomingLetter::join('letter_types', 'archive_incoming_letters.letter_type_id', '=', 'letter_types.id')
+            ->select(
+                'archive_incoming_letters.*',
+                'letter_types.name as letter_type',
+            )
+            ->where('archive_incoming_letters.id', $id)
+            ->first();
     }
 
     public function create($data)
     {
-
-        ArchiveIncomingLetter::create($data);
+        try {
+            ArchiveIncomingLetter::create($data);
+        } catch (\Throwable $th) {
+            throw $th;
+        }
     }
 
-    public function update(ArchiveIncomingLetter $archiveIncomingLetter, $data)
+    public function update($id, $data)
     {
-
+        $archiveIncomingLetter = ArchiveIncomingLetter::find($id);
         $archiveIncomingLetter->update($data);
     }
 
-    public function delete(ArchiveIncomingLetter $archiveIncomingLetter)
+    public function delete($id)
     {
+        $archiveIncomingLetter = ArchiveIncomingLetter::find($id);
         $archiveIncomingLetter->delete();
     }
 
@@ -44,8 +60,8 @@ class ArchiveIncomingService
             ArchiveIncomingLetter::create([
                 'incoming_letter_id' => $incomingLetter->id,
                 'receiver_id' => $incomingLetter->receiver_id,
-                'sender_id' => $incomingLetter->sender_id,
-                'sender_name' => $incomingLetter->sender_name,
+                'sender_name' => $incomingLetter->receiver_name,
+                'receiver_name' => $incomingLetter->receiver_name,
                 'receiver_name' => $incomingLetter->receiver_name,
                 'subject' => $incomingLetter->subject,
                 'body' => $incomingLetter->body,
