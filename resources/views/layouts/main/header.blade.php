@@ -110,8 +110,8 @@
                         $student = App\Models\Student::where('user_id', Auth::user()->id)->first();
                         $image = $student->image;
                     } elseif ($check == 'lecturer') {
-                        $lecturer = App\Models\Lecturer::where('user_id', Auth::user()->id)->first();
-                        $image = asset('storage/' . $lecturer->image);
+                        $lecturer = App\Models\Lecture::where('user_id', Auth::user()->id)->first();
+                        $image = $lecturer->image;
                     } else {
                         $image = null;
                     }

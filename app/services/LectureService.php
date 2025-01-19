@@ -12,7 +12,11 @@ class LectureService
         Lecture::create([
             'fullname' => $data['name'],
             'user_id' => $data['user_id'],
-            'lecture_id' => $lecture_id,
+            'lecturer_id' => $lecture_id,
         ]);
+    }
+    public function getLectureByUserId($userId)
+    {
+        return Lecture::where('user_id', $userId)->first();
     }
 }

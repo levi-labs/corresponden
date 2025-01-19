@@ -8,5 +8,5 @@ class Lecture extends Model
 {
     protected $guarded = ['id'];
 
-    protected $table = 'lectures';
+    protected $table = 'lecturers';
 }

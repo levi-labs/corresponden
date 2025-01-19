@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Lecture;
 use App\Models\Student;
 use App\Models\User;
+use App\services\LectureService;
 use App\services\StudentService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -11,10 +13,12 @@ use Illuminate\Support\Facades\Hash;
 class ProfileController extends Controller
 {
     protected $studentService;
+    protected $lectureService;
 
-    public function __construct(StudentService $studentService)
+    public function __construct(StudentService $studentService, LectureService $lectureService)
     {
         $this->studentService = $studentService;
+        $this->lectureService = $lectureService;
     }
     public function showProfile()
     {
@@ -23,7 +27,8 @@ class ProfileController extends Controller
             $data = $this->studentService->getStudentById(auth('web')->user()->id);
             return view('pages.profile.student.index', compact('data'));
         } elseif ($authUser->role == 'lecturer') {
-            return view('pages.profile.lecturer.index');
+            $data = $this->lectureService->getLectureByUserId(auth('web')->user()->id);
+            return view('pages.profile.lecture.index', compact('data'));
         } elseif ($authUser->role == 'staff') {
             return view('pages.profile.staff');
         }
@@ -37,7 +42,8 @@ class ProfileController extends Controller
             $data = $this->studentService->getStudentById(auth('web')->user()->id);
             return view('pages.profile.student.edit', compact('data', 'title'));
         } elseif ($authUser->role == 'lecturer') {
-            return view('pages.profile.lecturer-edit');
+            $data = $this->lectureService->getLectureByUserId(auth('web')->user()->id);
+            return view('pages.profile.lecture.edit', compact('data', 'title'));
         } elseif ($authUser->role == 'staff') {
             return view('pages.profile.staff-edit');
         }
@@ -55,20 +61,35 @@ class ProfileController extends Controller
                 $name = $file->getClientOriginalName();
                 $path = $file->storeAs('images', $name, 'public');
             }
-            $student = Student::where('user_id', $authUser)->first();
-            $student->update([
-                'fullname' => $request->fullname,
-                'phone' => $request->phone,
-                'hobby' => $request->hobby,
-                'gender' => $request->gender,
-                'date_of_birth' => $request->date_of_birth,
-                'address' => $request->address,
-                'faculty' => $request->faculty,
-                'image' => $path == null ? $student->image : $path,
-                'year_enrolled' => $request->year_enrolled
-            ]);
-
-            return redirect()->route('profile.index')->with('success', 'Profile updated successfully');
+            if (auth('web')->user()->role == 'student') {
+                $student = Student::where('user_id', $authUser)->first();
+                $student->update([
+                    'fullname' => $request->fullname,
+                    'phone' => $request->phone,
+                    'hobby' => $request->hobby,
+                    'gender' => $request->gender,
+                    'date_of_birth' => $request->date_of_birth,
+                    'address' => $request->address,
+                    'faculty' => $request->faculty,
+                    'image' => $path == null ? $student->image : $path,
+                    'year_enrolled' => $request->year_enrolled
+                ]);
+                return redirect()->route('profile.index')->with('success', 'Profile updated successfully');
+            } elseif (auth('web')->user()->role == 'lecturer') {
+                $lecturer = Lecture::where('user_id', $authUser)->first();
+                $lecturer->update([
+                    'fullname' => $request->fullname,
+                    'gender' => $request->gender,
+                    'faculty' => $request->faculty,
+                    'degree' => $request->degree,
+                    'date_of_birth' => $request->date_of_birth,
+                    'phone' => $request->phone,
+                    'email' => $request->email,
+                    'address' => $request->address,
+                    'image' => $path == null ? $lecturer->image : $path
+                ]);
+                return redirect()->route('profile.index')->with('success', 'Profile updated successfully');
+            }
         } catch (\Throwable $th) {
             return redirect()->back()->with('error', $th->getMessage());
         }
