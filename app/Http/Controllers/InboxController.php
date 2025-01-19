@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Inbox;
 use App\Models\IncomingLetter;
+use App\Models\Notification;
 use App\Models\Reply;
 use Illuminate\Http\Request;
 use App\Models\User;
@@ -13,6 +14,7 @@ use App\Services\ReplyService;
 use App\Services\RecentActivityService;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
+use Mockery\Matcher\Not;
 
 class InboxController extends Controller
 {
@@ -48,6 +50,8 @@ class InboxController extends Controller
     {
 
         $title = 'Letter Details';
+        $notif = Notification::where('inbox_id', $incomingLetter->id)->first();
+        $notif->update(['status' => 'read']);
         $this->incomingLetterService->updateStatus($incomingLetter->id);
         $incomingLetter = $this->incomingLetterService->getIncomingLetterById($incomingLetter->id);
 
@@ -192,14 +196,14 @@ class InboxController extends Controller
         try {
             $title = 'Reply Details';
             // $reply = Reply::find($idReply);
-            $reply = Reply::join('incoming_letters', 'incoming_letters.id', '=', 'replies.id_letter')
-                ->join('letter_types', 'incoming_letters.letter_type_id', '=', 'letter_types.id')
-                ->join('users as sender', 'incoming_letters.sender_id', '=', 'sender.id')
-                ->join('users as receiver', 'incoming_letters.receiver_id', '=', 'receiver.id')
-                ->join('students', 'incoming_letters.sender_id', '=', 'students.user_id')
+            $reply = Reply::join('inbox', 'inbox.id', '=', 'replies.id_letter')
+                ->join('letter_types', 'inbox.letter_type_id', '=', 'letter_types.id')
+                ->join('users as sender', 'inbox.sender_id', '=', 'sender.id')
+                ->join('users as receiver', 'inbox.receiver_id', '=', 'receiver.id')
+                ->join('students', 'inbox.sender_id', '=', 'students.user_id')
                 ->select(
                     'replies.*',
-                    'incoming_letters.letter_number as letter_number',
+                    'inbox.letter_number as letter_number',
                     'letter_types.name as letter_type',
                     'sender.name as sender_name',
                     'receiver.name as receiver_name',

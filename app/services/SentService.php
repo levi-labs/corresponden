@@ -93,6 +93,7 @@ class SentService
             DB::transaction(function () use ($data) {
                 $this->recentActivityService->create(auth('web')->user()->id, 'send-message');
                 $sent = Sent::create($data);
+
                 event(new SentCreated($sent));
             });
         } catch (\Throwable $th) {

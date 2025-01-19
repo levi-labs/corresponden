@@ -138,6 +138,8 @@ class ProfileController extends Controller
         return view('pages.profile.change-password', compact('title'));
     }
 
+
+
     public function updatePassword(Request $request)
     {
         $request->validate([
@@ -145,14 +147,12 @@ class ProfileController extends Controller
             'new_password' => 'required',
             'confirm_password' => 'required',
         ]);
-
         $old_password = $request->old_password;
         $new_password = $request->new_password;
 
         $confirm_password = $request->confirm_password;
 
         $checkPassword = User::where('id', auth('web')->user()->id)->first();
-
         if (!Hash::check($old_password, $checkPassword->password)) {
             return redirect()->back()->with('error', 'Old password does not match');
         }
@@ -160,11 +160,17 @@ class ProfileController extends Controller
         if ($new_password != $confirm_password) {
             return redirect()->back()->with('error', 'Password does not match');
         }
-
-        User::where('id', auth('web')->user()->id)->update([
-            'password' => Hash::make($new_password)
-        ]);
-
-        return redirect()->back()->with('success', 'Password changed successfully');
+        DB::beginTransaction();
+        try {
+            User::where('id', auth('web')->user()->id)->update([
+                'password' => Hash::make($new_password)
+            ]);
+            $this->recentActivityService->create(auth('web')->user()->id, 'change-password');
+            DB::commit();
+            return redirect()->back()->with('success', 'Password changed successfully');
+        } catch (\Throwable $th) {
+            DB::rollback();
+            return redirect()->back()->with('error', $th->getMessage());
+        }
     }
 }

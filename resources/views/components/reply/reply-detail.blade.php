@@ -16,11 +16,23 @@
             </div>
             <div class="card-body text-start">
                 @php
-                    $reply = \App\Models\Reply::where('id_letter', $incomingLetter->id)->first();
+                    if (auth('web')->user()->role == 'admin' || auth('web')->user()->role == 'staff') {
+                        $reply = \App\Models\Reply::where('id_letter', $incomingLetter->id)->first();
+                    } elseif (auth('web')->user()->role == 'student') {
+                        $reply = \App\Models\Reply::where('inbox_id', $incomingLetter->id)->first();
+                    }
+
                     if ($reply->file !== null) {
-                        $file = \App\Models\Reply::where('id_letter', $incomingLetter->id)
-                            ->where('file', '!=', '')
-                            ->first();
+                        if (auth('web')->user()->role == 'admin' || auth('web')->user()->role == 'staff') {
+                            $file = \App\Models\Reply::where('id_letter', $incomingLetter->id)
+                                ->where('file', '!=', '')
+                                ->first();
+                        } elseif (auth('web')->user()->role == 'student') {
+                            $file = \App\Models\Reply::where('inbox_id', $incomingLetter->id)
+                                ->where('file', '!=', '')
+                                ->first();
+                        }
+
                         $extension = pathinfo($file->file, PATHINFO_EXTENSION);
                         $extensionIs;
                         if ($extension == 'doc' || $extension == 'docx') {
@@ -33,7 +45,9 @@
                     //get extension file
 
                 @endphp
-                @if (\App\Models\Reply::where('id_letter', $incomingLetter->id)->where('file', '!=', '')->first())
+                @if (
+                    \App\Models\Reply::where('id_letter', $incomingLetter->id)->where('file', '!=', '')->first() ||
+                        \App\Models\Reply::where('inbox_id', $incomingLetter->id)->where('file', '!=', '')->first())
                     <a class="d-flex flex-column align-items-center justify-content-start"
                         href="{{ asset('storage/' . $file->file) }}" download>
                         @if ($extensionIs == 'doc')
@@ -46,7 +60,7 @@
                     </a>
                     <h6 class="fw-bold text-sm">Silahkah download lampiran berikut ini: </h6>
                 @endif
-                @if ($reply->file !== null)
+                @if ($reply->file === null)
                     {{-- <p class="small text-sm">{!! $incomingLetter->greeting !!}</p>
                     <br>
                     <p>Nama : </p> --}}
@@ -59,9 +73,11 @@
         </div>
     </div>
 </div>
-<div class="row justify-content-center">
-    <div class="col-md-10 text-end">
-        <a href="{{ route('reply-letter.destroy', $reply->id) }}" class="btn btn-danger btn-sm"
-            onclick="return confirm('Are you sure?')">Delete</a>
+@if (auth('web')->user()->role == 'admin' || auth('web')->user()->role == 'staff')
+    <div class="row justify-content-center">
+        <div class="col-md-10 text-end">
+            <a href="{{ route('reply-letter.destroy', $reply->id) }}" class="btn btn-danger btn-sm"
+                onclick="return confirm('Are you sure?')">Delete</a>
+        </div>
     </div>
-</div>
+@endif

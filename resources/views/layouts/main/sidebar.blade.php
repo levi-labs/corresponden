@@ -48,7 +48,7 @@
                         </a>
                     </li>
                     <li>
-                        <a href="forms-layouts.html">
+                        <a href="{{ route('archive-outgoing-letter.index') }}">
                             <i class="bi bi-circle"></i><span>outgoing-letter</span>
                         </a>
                     </li>

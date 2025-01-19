@@ -35,18 +35,21 @@
         </p>
 
         <p>
+            {!! $reply->closing !!}
+        </p>
+        {{-- <p>
             Mengenai waktu pelaksanaan Riset tersebut kami serahkan pada kebijaksanaan Bapak/Ibu.
         </p>
 
         <p>
             Atas perhatian dan bantuan Bapak/Ibu kami ucapkan terima kasih.
-        </p>
+        </p> --}}
     </div>
 
     <!-- Tanda Tangan -->
     <div class="signature">
         <p>Mengetahui,</p>
-        <p>Koordinator Kampus {{ $reply->campus ?? '-' }}</p>
+        <p>Koordinator Kampus {{ $reply->campus ?? '' }}</p>
         <br><br><br>
         <p><strong>{{ $reply->receiver_name }}</strong></p>
     </div>

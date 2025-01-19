@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\ArchiveIncomingLetter;
+use App\Models\ArchiveOutgoingLetter;
 use App\Models\Inbox;
 use App\Models\RecentActivity;
 use App\Models\Sent;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -28,13 +31,29 @@ class DashboardController extends Controller
                 ->get();
             $dates = $report->pluck('date')->toArray();  // Tanggal yang sudah diproses
             $activityCounts = $report->pluck('activity_count')->toArray();
+            $archive_incoming = ArchiveIncomingLetter::count();
+            $archive_outgoing = ArchiveOutgoingLetter::count();
+            $count_user =  User::count();
             // dd($dates, $activityCounts);
-            return view('pages.dashboard.index', compact('title', 'dates', 'activityCounts', 'recentActivity',));
+            return view(
+                'pages.dashboard.index',
+                compact(
+                    'title',
+                    'dates',
+                    'activityCounts',
+                    'recentActivity',
+                    'archive_incoming',
+                    'archive_outgoing',
+
+                    'count_user'
+                )
+            );
         }
         if (auth('web')->user()->role == 'student' || auth('web')->user()->role == 'lecturer') {
-            $inbox = Inbox::where('receiver_id', auth('web')->user()->id)->get();
-            $sent = Sent::where('sender_id', auth('web')->user()->id)->get();
-            return view('pages.dashboard.index', compact('title', 'recentActivity', 'inbox', 'sent'));
+            $inbox = Inbox::where('receiver_id', auth('web')->user()->id)->count();
+            $sent = Sent::where('sender_id', auth('web')->user()->id)->count();
+            $count_unread = Inbox::where('receiver_id', auth('web')->user()->id)->where('status', 'unread')->count();
+            return view('pages.dashboard.index', compact('title', 'recentActivity', 'inbox', 'sent', 'count_unread'));
         }
 
 

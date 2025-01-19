@@ -132,7 +132,7 @@ class InboxService
                 )
                 ->first();
             return $incomingLetter;
-        } elseif ($check_role->role == 'admin') {
+        } elseif ($check_role->role == 'staff') {
 
             $incomingLetter = Inbox::join('users as receiver', 'inbox.receiver_id', '=', 'receiver.id')
                 ->join('users as sender', 'inbox.sender_id', '=', 'sender.id')
@@ -157,6 +157,8 @@ class InboxService
                 )
                 ->first();
             return $incomingLetter;
+        } elseif ($check_role->role == 'lecturer') {
+            # code...
         }
     }
 

@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('archive_incoming_letters', function (Blueprint $table) {
+        Schema::create('archive_outgoing_letters', function (Blueprint $table) {
             $table->id();
             $table->bigInteger('letter_type_id')->unsigned();
             $table->bigInteger('letter_id')->unsigned()->unsigned()->nullable();
@@ -35,6 +35,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('archive_incoming_letters');
+        Schema::dropIfExists('archive_outgoing_letters');
     }
 };

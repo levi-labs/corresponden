@@ -4,6 +4,7 @@ namespace App\Listeners;
 
 use App\Events\SentCreated;
 use App\Models\Inbox;
+use App\Models\Notification;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Support\Facades\DB;
@@ -27,7 +28,7 @@ class InboxListener
         try {
             DB::transaction(function () use ($event) {
                 $outgoingLetter = $event->sent;
-                Inbox::create([
+                $inbox = Inbox::create([
                     'letter_type_id' => $outgoingLetter->letter_type_id,
                     'sender_id' => $outgoingLetter->sender_id,
                     'receiver_id' => $outgoingLetter->receiver_id,
@@ -38,6 +39,10 @@ class InboxListener
                     'attachment' => $outgoingLetter->attachment,
                     'status' => 'unread',
                     'sent_id' => $outgoingLetter->id
+                ]);
+                Notification::create([
+                    'receiver_id' => $outgoingLetter->receiver_id,
+                    'inbox_id' => $inbox->id
                 ]);
             });
             Log::info('Surat masuk telah berhasil dibuat.');

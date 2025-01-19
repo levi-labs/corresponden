@@ -54,6 +54,12 @@ class ArchiveIncomingController extends Controller
         ]);
 
         try {
+            $path = null;
+            if ($request->has('attachment')) {
+                $file = $request->file('attachment');
+                $filename = $file->getClientOriginalName();
+                $path = $file->storeAs('archive-incoming', $filename, 'public');
+            }
             $data = [
                 'letter_number' => $request->letter_number,
                 'date' => $request->date,
@@ -63,7 +69,7 @@ class ArchiveIncomingController extends Controller
                 'source_letter' => $request->source_letter,
                 'subject' => $request->subject,
                 'body' => $request->description,
-                'attachment' => $request->attachment,
+                'attachment' => $path ?? null,
             ];
 
             $this->archiveIncomingLetter->create($data);
@@ -82,6 +88,7 @@ class ArchiveIncomingController extends Controller
     }
     public function update(Request $request, $id)
     {
+
         $request->validate([
             'date' => 'required',
             'from' => 'required',
@@ -92,19 +99,30 @@ class ArchiveIncomingController extends Controller
             'subject' => 'required',
             'attachment' => 'nullable|max:10240', // Maksimal 10MB
         ]);
-        $data = [
-            'letter_number' => $request->letter_number,
-            'date' => $request->date,
-            'sender' => $request->from,
-            'receiver' => $request->to,
-            'letter_type_id' => $request->letter_type,
-            'source_letter' => $request->source_letter,
-            'subject' => $request->subject,
-            'body' => $request->description,
-            'attachment' => $request->attachment,
-        ];
-        $this->archiveIncomingLetter->update($id, $data);
-        return redirect()->route('archive-incoming.index')->with('success', 'Archive Incoming Letter Updated successfully');
+        try {
+            $check = ArchiveIncomingLetter::find($id);
+            $path = null;
+            if ($request->has('attachment')) {
+                $file = $request->file('attachment');
+                $filename = $file->getClientOriginalName();
+                $path = $file->storeAs('archive-incoming', $filename, 'public');
+            }
+            $data = [
+                'letter_number' => $request->letter_number,
+                'date' => $request->date,
+                'sender' => $request->from,
+                'receiver' => $request->to,
+                'letter_type_id' => $request->letter_type,
+                'source_letter' => $request->source_letter,
+                'subject' => $request->subject,
+                'body' => $request->description,
+                'attachment' => $request->attachment === null ? $check->attachment : $path,
+            ];
+            $this->archiveIncomingLetter->update($id, $data);
+            return redirect()->route('archive-incoming.index')->with('success', 'Archive Incoming Letter Updated successfully');
+        } catch (\Throwable $th) {
+            return redirect()->back()->with('error', $th->getMessage());
+        }
     }
 
     public function destroy($id)

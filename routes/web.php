@@ -11,7 +11,8 @@ Route::get('/login', [App\Http\Controllers\AuthController::class, 'showLoginForm
 Route::post('/login', [App\Http\Controllers\AuthController::class, 'login'])->name('login.post');
 Route::get('/logout', [App\Http\Controllers\AuthController::class, 'logout'])->name('logout');
 
-Route::get('/dashboard', [App\Http\Controllers\DashboardController::class, 'index'])->name('dashboard.index');
+Route::get('/dashboard', [App\Http\Controllers\DashboardController::class, 'index'])->middleware(['auth', 'roles:admin,staff,student'])
+    ->name('dashboard.index');
 
 Route::controller(App\Http\Controllers\LetterTypeController::class)
     ->prefix('letter-type')
@@ -77,6 +78,18 @@ Route::controller(App\Http\Controllers\ArchiveIncomingController::class)
         Route::put('/{id}', 'update')->name('archive-incoming-letter.update');
         Route::delete('/{id}', 'destroy')->name('archive-incoming-letter.destroy');
     });
+Route::controller(App\Http\Controllers\ArchiveOutgoingController::class)
+    ->prefix('archive-outgoing-letter')
+    ->middleware(['auth', 'roles:admin,staff'])
+    ->group(function () {
+        Route::get('/', 'index')->name('archive-outgoing-letter.index');
+        Route::get('/create', 'create')->name('archive-outgoing-letter.create');
+        Route::post('/', 'store')->name('archive-outgoing-letter.store');
+        Route::get('/{archiveOutgoingLetter}', 'show')->name('archive-outgoing-letter.show');
+        Route::get('/{id}/edit', 'edit')->name('archive-outgoing-letter.edit');
+        Route::put('/{id}', 'update')->name('archive-outgoing-letter.update');
+        Route::delete('/{id}', 'destroy')->name('archive-outgoing-letter.destroy');
+    });
 Route::controller(ProfileController::class)
     ->prefix('profile')
     ->middleware(['auth', 'roles:admin,staff,student,lecturer'])
@@ -84,4 +97,6 @@ Route::controller(ProfileController::class)
         Route::get('/', 'showProfile')->name('profile.index');
         Route::get('/edit', 'editProfile')->name('profile.edit');
         Route::put('/update-profile', 'update')->name('profile.update');
+        Route::get('/change-password', 'changePassword')->name('profile.change-password');
+        Route::put('/change-password', 'updatePassword')->name('profile.update-password');
     });

@@ -28,75 +28,78 @@
             <!-- End Search Icon-->
 
             <li class="nav-item dropdown">
+                @php
+                    $user = auth('web')->user()->id;
+                    if (auth('web')->user()->role == 'admin' || auth('web')->user()->role == 'staff') {
+                        $count = $count = \App\Models\Notification::join(
+                            'users',
+                            'users.id',
+                            '=',
+                            'notifications.receiver_id',
+                        )
+                            ->where('users.role', '!=', 'student')
+                            ->where('status', 'unread')
+                            ->count();
+                        $unread = \App\Models\Notification::join('users', 'users.id', '=', 'notifications.receiver_id')
+                            ->join('inbox', 'inbox.id', '=', 'notifications.inbox_id')
+                            ->join('users as sender', 'sender.id', '=', 'inbox.sender_id')
+                            ->select(
+                                'notifications.*',
+                                'users.name as receiver_name',
+                                'inbox.id as inbox_id',
+                                'inbox.subject as inbox_subject',
+                                'sender.name as sender_name',
+                            )
+                            ->where('users.role', '!=', 'student')
+                            ->where('notifications.status', 'unread')
+                            ->get();
+                    }
 
+                @endphp
                 <a class="nav-link nav-icon" href="#" data-bs-toggle="dropdown">
                     <i class="bi bi-bell"></i>
-                    <span class="badge bg-primary badge-number">4</span>
+                    <span class="badge bg-primary badge-number">{{ $count }}</span>
                 </a><!-- End Notification Icon -->
 
                 <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow notifications">
+
                     <li class="dropdown-header">
-                        You have 4 new notifications
-                        <a href="#"><span class="badge rounded-pill bg-primary p-2 ms-2">View all</span></a>
+                        @if ($count > 0)
+                            You have {{ $count }} new notifications
+                        @else
+                            You have no new notifications
+                        @endif
+                        {{-- <a href="#"><span class="badge rounded-pill bg-primary p-2 ms-2">View all</span></a> --}}
                     </li>
                     <li>
                         <hr class="dropdown-divider">
                     </li>
 
-                    <li class="notification-item">
-                        <i class="bi bi-exclamation-circle text-warning"></i>
-                        <div>
-                            <h4>Lorem Ipsum</h4>
-                            <p>Quae dolorem earum veritatis oditseno</p>
-                            <p>30 min. ago</p>
-                        </div>
-                    </li>
+                    @forelse ($unread as $item)
+                        <a href="{{ route('incoming-letter.show', $item->inbox_id) }}">
+                            <li class="notification-item">
+                                <i class="bi bi-exclamation-circle text-warning"></i>
+                                <div>
+                                    <h4>{{ $item->title }}</h4>
+                                    <p>{{ $item->inbox_subject }}</p>
+                                    <p>{{ \Carbon\Carbon::parse($item->created_at)->diffForHumans() }}</p>
+                                    </p>
+                                </div>
+                            </li>
+                        </a>
 
-                    <li>
-                        <hr class="dropdown-divider">
-                    </li>
 
-                    <li class="notification-item">
-                        <i class="bi bi-x-circle text-danger"></i>
-                        <div>
-                            <h4>Atque rerum nesciunt</h4>
-                            <p>Quae dolorem earum veritatis oditseno</p>
-                            <p>1 hr. ago</p>
-                        </div>
-                    </li>
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
 
-                    <li>
-                        <hr class="dropdown-divider">
-                    </li>
+                    @empty
+                    @endforelse
 
-                    <li class="notification-item">
-                        <i class="bi bi-check-circle text-success"></i>
-                        <div>
-                            <h4>Sit rerum fuga</h4>
-                            <p>Quae dolorem earum veritatis oditseno</p>
-                            <p>2 hrs. ago</p>
-                        </div>
-                    </li>
 
-                    <li>
-                        <hr class="dropdown-divider">
-                    </li>
 
-                    <li class="notification-item">
-                        <i class="bi bi-info-circle text-primary"></i>
-                        <div>
-                            <h4>Dicta reprehenderit</h4>
-                            <p>Quae dolorem earum veritatis oditseno</p>
-                            <p>4 hrs. ago</p>
-                        </div>
-                    </li>
 
-                    <li>
-                        <hr class="dropdown-divider">
-                    </li>
-                    <li class="dropdown-footer">
-                        <a href="#">Show all notifications</a>
-                    </li>
+
 
                 </ul><!-- End Notification Dropdown Items -->
 
@@ -159,7 +162,8 @@
                     </li>
 
                     <li>
-                        <a class="dropdown-item d-flex align-items-center" href="users-profile.html">
+                        <a class="dropdown-item d-flex align-items-center"
+                            href="{{ route('profile.change-password') }}">
                             <i class="bi bi-gear"></i>
                             <span>Change Password</span>
                         </a>

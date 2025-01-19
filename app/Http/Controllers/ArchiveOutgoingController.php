@@ -2,16 +2,32 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\ArchiveOutgoingLetter;
+use App\services\ArchiveOutgoingService;
+use App\services\LetterTypeService;
 use Illuminate\Http\Request;
 
 class ArchiveOutgoingController extends Controller
 {
+
+    protected $archiveOutgoingService;
+    protected $letterTypeService;
+
+    public function __construct(
+        ArchiveOutgoingService $archiveOutgoingService,
+        LetterTypeService $letterTypeService
+    ) {
+        $this->archiveOutgoingService = $archiveOutgoingService;
+        $this->letterTypeService = $letterTypeService;
+    }
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        //
+        $title = 'Outgoing Letter List';
+        $data = $this->archiveOutgoingService->getAllOutGoingLetter();
+        return view('pages.archive.outgoing-letter.index', compact('title', 'data'));
     }
 
     /**
@@ -19,7 +35,11 @@ class ArchiveOutgoingController extends Controller
      */
     public function create()
     {
-        //
+        $title = 'Create Outgoing Letter';
+        $letter_number = date('Y') . '/' . 'USNI' . '/' . str_pad(rand(0, 99), 3, '0', STR_PAD_LEFT) . rand(0, 999);
+        $letterTypes = $this->letterTypeService->getAllLetterTypes();
+
+        return view('pages.archive.outgoing-letter.create', compact('title', 'letterTypes', 'letter_number'));
     }
 
     /**
@@ -27,7 +47,40 @@ class ArchiveOutgoingController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'date' => 'required',
+            'from' => 'required',
+            'letter_number' => 'required',
+            'letter_type' => 'required',
+            'source_letter' => 'required',
+            'to' => 'required',
+            'subject' => 'required',
+            'attachment' => 'nullable|max:10240', // Maksimal 10MB
+        ]);
+        try {
+            $path = null;
+            if ($request->has('attachment')) {
+                $file = $request->file('attachment');
+                $filename = $file->getClientOriginalName();
+                $path = $file->storeAs('archive-outgoing', $filename, 'public');
+            }
+            $data = [
+                'letter_number' => $request->letter_number,
+                'date' => $request->date,
+                'sender' => $request->from,
+                'receiver' => $request->to,
+                'letter_type_id' => $request->letter_type,
+                'source_letter' => $request->source_letter,
+                'subject' => $request->subject,
+                'body' => $request->description,
+                'attachment' => $path ?? null,
+            ];
+
+            $this->archiveOutgoingService->create($data);
+            return redirect()->route('archive-outgoing-letter.index')->with('success', 'Archive Outgoing Letter Created Successfully');
+        } catch (\Throwable $th) {
+            return redirect()->back()->with('error', $th->getMessage());
+        }
     }
 
     /**
@@ -35,7 +88,9 @@ class ArchiveOutgoingController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $title = 'Letter Details';
+        $data = $this->archiveOutgoingService->getOutgoingLetterById($id);
+        return view('pages.archive.outgoing-letter.detail', compact('title', 'data'));
     }
 
     /**
@@ -43,7 +98,14 @@ class ArchiveOutgoingController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $title = 'Edit Outgoing Letter';
+        $letterTypes = $this->letterTypeService->getAllLetterTypes();
+        $data = ArchiveOutgoingLetter::find($id);
+        return view('pages.archive.outgoing-letter.edit', compact(
+            'title',
+            'data',
+            'letterTypes'
+        ));
     }
 
     /**
@@ -51,14 +113,49 @@ class ArchiveOutgoingController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $request->validate([
+            'date' => 'required',
+            'from' => 'required',
+            'letter_number' => 'required',
+            'letter_type' => 'required',
+            'source_letter' => 'required',
+            'to' => 'required',
+            'subject' => 'required',
+            'attachment' => 'nullable|max:10240', // Maksimal 10MB
+        ]);
+
+        try {
+            $check = ArchiveOutgoingLetter::find($id);
+            $path = null;
+            if ($request->has('attachment')) {
+                $file = $request->file('attachment');
+                $filename = $file->getClientOriginalName();
+                $path = $file->storeAs('archive-outgoing', $filename, 'public');
+            }
+            $data = [
+                'letter_number' => $request->letter_number,
+                'date' => $request->date,
+                'sender' => $request->from,
+                'receiver' => $request->to,
+                'letter_type_id' => $request->letter_type,
+                'source_letter' => $request->source_letter,
+                'subject' => $request->subject,
+                'body' => $request->description,
+                'attachment' => $request->attachment === null ? $check->attachment : $path,
+            ];
+            $this->archiveOutgoingService->update($id, $data);
+            return redirect()->route('archive-outgoing-letter.index')->with('success', 'Archive Outgoing Letter Updated successfully');
+        } catch (\Throwable $th) {
+            return redirect()->back()->with('error', $th->getMessage());
+        }
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy($id)
     {
-        //
+        $this->archiveOutgoingService->delete($id);
+        return redirect()->back()->with('success', 'Archive Outgoing Letter Deleted successfully');
     }
 }

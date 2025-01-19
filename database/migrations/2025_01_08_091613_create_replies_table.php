@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('replies', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('id_letter');
+            $table->unsignedBigInteger('sender_id');
             $table->text('greeting')->nullable();
             $table->text('closing')->nullable();
             $table->string('file', 60)->nullable();
