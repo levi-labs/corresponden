@@ -18,23 +18,26 @@
             </li>
         @endif
         <!-- End Letter Type Nav -->
-        <li class="nav-item">
-            <a class="nav-link collapsed" data-bs-target="#components-nav" data-bs-toggle="collapse" href="#">
-                <i class="bi bi-menu-button-wide"></i><span>Message</span><i class="bi bi-chevron-down ms-auto"></i>
-            </a>
-            <ul id="components-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
-                <li>
-                    <a href="{{ route('incoming-letter.index') }}">
-                        <i class="bi bi-circle"></i><span>Inbox</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="{{ route('outgoing-letter.index') }}">
-                        <i class="bi bi-circle"></i><span>Sent</span>
-                    </a>
-                </li>
-            </ul>
-        </li>
+        @if (Auth::user()->role !== 'admin')
+            <li class="nav-item">
+                <a class="nav-link collapsed" data-bs-target="#components-nav" data-bs-toggle="collapse" href="#">
+                    <i class="bi bi-menu-button-wide"></i><span>Message</span><i class="bi bi-chevron-down ms-auto"></i>
+                </a>
+                <ul id="components-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+                    <li>
+                        <a href="{{ route('incoming-letter.index') }}">
+                            <i class="bi bi-circle"></i><span>Inbox</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ route('outgoing-letter.index') }}">
+                            <i class="bi bi-circle"></i><span>Sent</span>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+        @endif
+
         <!-- End Components Nav -->
         @if (Auth::user()->role == 'admin' || Auth::user()->role == 'staff')
             <li class="nav-item">
