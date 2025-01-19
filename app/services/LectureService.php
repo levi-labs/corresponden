@@ -12,6 +12,7 @@ class LectureService
         Lecture::create([
             'fullname' => $data['name'],
             'user_id' => $data['user_id'],
+            'email' => $data['email'],
             'lecturer_id' => $lecture_id,
         ]);
     }

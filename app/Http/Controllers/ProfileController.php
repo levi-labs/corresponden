@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Models\Lecture;
+use App\Models\Staff;
 use App\Models\Student;
 use App\Models\User;
 use App\services\LectureService;
+use App\services\StaffService;
 use App\services\StudentService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -14,11 +16,16 @@ class ProfileController extends Controller
 {
     protected $studentService;
     protected $lectureService;
+    protected $staffService;
 
-    public function __construct(StudentService $studentService, LectureService $lectureService)
-    {
+    public function __construct(
+        StudentService $studentService,
+        LectureService $lectureService,
+        StaffService $staffService
+    ) {
         $this->studentService = $studentService;
         $this->lectureService = $lectureService;
+        $this->staffService = $staffService;
     }
     public function showProfile()
     {
@@ -30,7 +37,8 @@ class ProfileController extends Controller
             $data = $this->lectureService->getLectureByUserId(auth('web')->user()->id);
             return view('pages.profile.lecture.index', compact('data'));
         } elseif ($authUser->role == 'staff') {
-            return view('pages.profile.staff');
+            $data = $this->staffService->getStaffByUserId(auth('web')->user()->id);
+            return view('pages.profile.staff.index', compact('data'));
         }
     }
 
@@ -45,7 +53,8 @@ class ProfileController extends Controller
             $data = $this->lectureService->getLectureByUserId(auth('web')->user()->id);
             return view('pages.profile.lecture.edit', compact('data', 'title'));
         } elseif ($authUser->role == 'staff') {
-            return view('pages.profile.staff-edit');
+            $data = $this->staffService->getStaffByUserId(auth('web')->user()->id);
+            return view('pages.profile.staff.edit', compact('data', 'title'))->with('edit');
         }
     }
     public function update(Request $request)
@@ -55,6 +64,7 @@ class ProfileController extends Controller
             $request->validate([
                 'fullname' => 'required',
             ]);
+            $path = null;
 
             if ($request->hasFile('image')) {
                 $file = $request->file('image');
@@ -87,6 +97,19 @@ class ProfileController extends Controller
                     'email' => $request->email,
                     'address' => $request->address,
                     'image' => $path == null ? $lecturer->image : $path
+                ]);
+                return redirect()->route('profile.index')->with('success', 'Profile updated successfully');
+            } elseif (auth('web')->user()->role == 'staff') {
+                $staff = Staff::where('user_id', $authUser)->first();
+                $staff->update([
+                    'fullname' => $request->fullname,
+                    'gender' => $request->gender,
+                    'degree' => $request->degree,
+                    'date_of_birth' => $request->date_of_birth,
+                    'phone' => $request->phone,
+                    'email' => $request->email,
+                    'address' => $request->address,
+                    'image' => $path == null ? $staff->image : $path
                 ]);
                 return redirect()->route('profile.index')->with('success', 'Profile updated successfully');
             }

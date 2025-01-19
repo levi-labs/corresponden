@@ -34,8 +34,12 @@ class UserController extends Controller
     {
         $data = $request->validated();
         $data['password'] = bcrypt('password');
-        $this->userService->create($data);
-        return redirect()->route('user.index')->with('success', 'User created successfully');
+        try {
+            $this->userService->create($data);
+            return redirect()->route('user.index')->with('success', 'User created successfully');
+        } catch (\Throwable $th) {
+            return redirect()->back()->with('error', $th->getMessage());
+        }
     }
 
     public function edit(User $user)

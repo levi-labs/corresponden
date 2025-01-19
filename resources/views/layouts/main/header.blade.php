@@ -112,6 +112,9 @@
                     } elseif ($check == 'lecturer') {
                         $lecturer = App\Models\Lecture::where('user_id', Auth::user()->id)->first();
                         $image = $lecturer->image;
+                    } elseif ($check == 'staff') {
+                        $staff = App\Models\Staff::where('user_id', Auth::user()->id)->first();
+                        $image = $staff->image;
                     } else {
                         $image = null;
                     }
@@ -142,7 +145,7 @@
                     <li>
                         <hr class="dropdown-divider">
                     </li>
-                    @if (Auth::user()->role !== 'admin' && Auth::user()->role !== 'staff')
+                    @if (Auth::user()->role !== 'admin')
                         <li>
                             <a class="dropdown-item d-flex align-items-center" href="{{ route('profile.index') }}">
                                 <i class="bi bi-person"></i>
