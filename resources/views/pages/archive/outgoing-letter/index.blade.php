@@ -46,8 +46,8 @@
                         <table class="table table-hover">
                             <thead>
                                 <tr>
-                                    <th scope="col">Letter Type</th>
-                                    <th scope="col">Message</th>
+                                    <th scope="col">Jenis Surat</th>
+                                    <th scope="col">Nomor Surat</th>
                                     <th scope="col"></th>
                                 </tr>
                             </thead>

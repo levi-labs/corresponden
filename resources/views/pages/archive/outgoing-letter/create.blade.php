@@ -62,7 +62,7 @@
             <div class="col-lg-6">
                 <div class="card">
                     <div class="card-header">
-                        <h5 class="card-title">{{ __('Form Letter') }}</h5>
+
                         @if (session('success'))
                             <div class="alert alert-danger" role="alert">
                                 <h4 class="alert-heading">Success!</h4>
@@ -81,7 +81,7 @@
                             @csrf
                             <!-- Quill Editor Default -->
                             <div class="form-group mb-3">
-                                <label class="form-label" for="letter_number">Letter Number<span
+                                <label class="form-label" for="letter_number">Nomor Surat<span
                                         class="text-danger">*</span></label>
                                 <input type="text" class="form-control" name="letter_number" id="letter_number"
                                     value="{{ old('letter_number') ?? $letter_number }}">
@@ -90,7 +90,7 @@
                                 @enderror
                             </div>
                             <div class="form-group mb-3">
-                                <label class="form-label" for="from">From<span class="text-danger">*</span></label>
+                                <label class="form-label" for="from">Dari<span class="text-danger">*</span></label>
                                 <input type="text" class="form-control" name="from" id="from"
                                     value="{{ old('from') }}">
                                 @error('from')
@@ -98,7 +98,7 @@
                                 @enderror
                             </div>
                             <div class="form-group mb-3">
-                                <label class="form-label" for="to">To<span class="text-danger">*</span></label>
+                                <label class="form-label" for="to">Kepada<span class="text-danger">*</span></label>
                                 <input type="text" class="form-control" name="to" id="to"
                                     value="{{ old('to') }}">
                                 @error('to')
@@ -106,17 +106,17 @@
                                 @enderror
                             </div>
                             <div class="form-group mb-3">
-                                <label class="form-label" for="date">Date<span class="text-danger">*</span></label>
+                                <label class="form-label" for="date">Tanggal<span class="text-danger">*</span></label>
                                 <input type="date" class="form-control" name="date" id="date">
                                 @error('date')
                                     <span class="text-danger">{{ $message }}</span>
                                 @enderror
                             </div>
                             <div class="form-group mb-3">
-                                <label class="form-label" for="letter_type">Letter Type<span
+                                <label class="form-label" for="letter_type">Jenis Surat<span
                                         class="text-danger">*</span></label>
                                 <select class="form-control" name="letter_type" id="letter_type">
-                                    <option selected disabled>Select Letter Type</option>
+                                    <option selected disabled>Pilih Jenis Surat</option>
                                     @foreach ($letterTypes as $letterType)
                                         <option value="{{ $letterType->id }}">{{ $letterType->name }}</option>
                                     @endforeach
@@ -126,10 +126,10 @@
                                 @enderror
                             </div>
                             <div class="form-group mb-3">
-                                <label class="form-label" for="source_letter">Source Letter<span
+                                <label class="form-label" for="source_letter">Sumber Surat<span
                                         class="text-danger">*</span></label>
                                 <select class="form-control" name="source_letter" id="source_letter">
-                                    <option selected disabled>Select Source Letter</option>
+                                    <option selected disabled>Pilih Sumber Surat</option>
                                     <option value="internal">internal</option>
                                     <option value="external">external</option>
                                 </select>
@@ -139,7 +139,7 @@
                             </div>
 
                             <div class="form-group mb-3">
-                                <label class="form-label" for="subject">Subject</label>
+                                <label class="form-label" for="subject">Perihal</label>
                                 <input type="text" class="form-control" name="subject" id="subject"
                                     value="{{ old('subject') }}">
                                 @error('subject')
@@ -147,7 +147,7 @@
                                 @enderror
                             </div>
                             <div class="form-group mb-3">
-                                <label class="form-label" for="description">Description</label>
+                                <label class="form-label" for="description">Deskripsi</label>
                                 <div id="editor" style="height: 200px"></div>
                                 <textarea rows="3" class="mb-3 d-none" name="description" id="quill-editor-area-description"></textarea>
                                 @error('description')
@@ -155,7 +155,7 @@
                                 @enderror
                             </div>
                             <div class="form-group mb-3">
-                                <label class="form-label" for="attachment">File : (optional)</label>
+                                <label class="form-label" for="attachment">Lampiran : (optional)</label>
                                 <input type="file" class="form-control" name="attachment" id="attachment">
                                 @error('attachment')
                                     <span class="text-danger">{{ $message }}</span>

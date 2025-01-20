@@ -62,7 +62,7 @@
             <div class="col-lg-6">
                 <div class="card">
                     <div class="card-header">
-                        <h5 class="card-title">{{ __('Form Letter') }}</h5>
+
                         @if (session('success'))
                             <div class="alert alert-danger" role="alert">
                                 <h4 class="alert-heading">Success!</h4>

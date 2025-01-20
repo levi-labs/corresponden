@@ -58,6 +58,25 @@
             </ul>
             </li>
         @endif
+        @if (Auth::user()->role == 'admin' || Auth::user()->role == 'staff')
+            <li class="nav-item"></li>
+            <a class="nav-link collapsed" data-bs-target="#forms-report" data-bs-toggle="collapse" href="#">
+                <i class="bi bi-file-earmark"></i><span>Report </span><i class="bi bi-chevron-down ms-auto"></i>
+            </a>
+            <ul id="forms-report" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+                <li>
+                    <a href="{{ route('report.archive-incoming') }}">
+                        <i class="bi bi-circle"></i><span>Surat Masuk</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ route('report.archive-outgoing') }}">
+                        <i class="bi bi-circle"></i><span>Surat Keluar</span>
+                    </a>
+                </li>
+            </ul>
+            </li>
+        @endif
 
         <!-- End Forms Nav -->
         @if (Auth::user()->role == 'admin')

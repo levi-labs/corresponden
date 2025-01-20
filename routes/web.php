@@ -102,3 +102,14 @@ Route::controller(ProfileController::class)
         Route::get('/change-password', 'changePassword')->name('profile.change-password');
         Route::put('/change-password', 'updatePassword')->name('profile.update-password');
     });
+
+Route::controller(App\Http\Controllers\ReportController::class)
+    ->prefix('report')
+    ->middleware(['auth', 'roles:admin,staff'])
+    ->group(function () {
+        Route::get('/incoming', 'archiveIncomingForm')->name('report.archive-incoming');
+        Route::post('/incoming', 'incomingPrint')->name('report.print-incoming');
+
+        Route::get('/outgoing', 'archiveOutgoingForm')->name('report.archive-outgoing');
+        Route::post('/outgoing', 'outgoingPrint')->name('report.print-outgoing');
+    });

@@ -34,10 +34,10 @@
                         <!-- Head Detail -->
                         <div class="row justify-content-between">
                             <div class="col-md-9">
-                                <p class="text-sm ms-5">From:&nbsp;
+                                <p class="text-sm ms-5">Dari:&nbsp;
                                     {{ strtoupper($data->sender) }}
                                 </p>
-                                <p class="text-sm ms-5">To:&nbsp; {{ strtoupper($data->receiver) }}</p>
+                                <p class="text-sm ms-5">Kepada:&nbsp; {{ strtoupper($data->receiver) }}</p>
                             </div>
                             <div class="col-md-3">
                                 <p class="text-sm ms-5">
