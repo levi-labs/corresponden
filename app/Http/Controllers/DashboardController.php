@@ -22,15 +22,30 @@ class DashboardController extends Controller
         if (count($countActivity) == 0) {
             $recentActivity = $this->activity = RecentActivity::where('user_id', auth('web')->user()->id)->get();
         } else {
-            $recentActivity = $this->activity = RecentActivity::where('user_id', auth('web')->user()->id)->limit(10)->get();
+            $recentActivity = $this->activity = RecentActivity::where('user_id', auth('web')->user()->id)
+                ->orderBy('created_at', 'desc')
+                ->limit(8)->get();
         }
         if (auth('web')->user()->role == 'admin' || auth('web')->user()->role == 'staff') {
             $report =  $this->activitiesPerDay = RecentActivity::selectRaw('DATE(created_at) as date, COUNT(*) as activity_count')
                 ->groupBy(DB::raw('DATE(created_at)'))  // Mengelompokkan berdasarkan tanggal
                 ->orderBy('date', 'asc')  // Mengurutkan berdasarkan tanggal
                 ->get();
+            $arsip_masuk = ArchiveIncomingLetter::selectRaw('DATE(created_at) as date, COUNT(*) as activity_count')
+                ->groupBy(DB::raw('DATE(created_at)'))  // Mengelompokkan berdasarkan tanggal
+                ->orderBy('date', 'asc')  // Mengurutkan berdasarkan tanggal
+                ->get();
+            $arsip_keluar = ArchiveOutgoingLetter::selectRaw('DATE(created_at) as date, COUNT(*) as activity_count')
+                ->groupBy(DB::raw('DATE(created_at)'))  // Mengelompokkan berdasarkan tanggal
+                ->orderBy('date', 'asc')  // Mengurutkan berdasarkan tanggal
+                ->get();
+
             $dates = $report->pluck('date')->toArray();  // Tanggal yang sudah diproses
             $activityCounts = $report->pluck('activity_count')->toArray();
+            $dates_arsip_masuk = $arsip_masuk->pluck('date')->toArray();  // Tanggal yang sudah diproses
+            $activityCounts_arsip_masuk = $arsip_masuk->pluck('activity_count')->toArray();
+            $dates_arsip_keluar = $arsip_keluar->pluck('date')->toArray();  // Tanggal yang sudah diproses
+            $activityCounts_arsip_keluar = $arsip_keluar->pluck('activity_count')->toArray();
             $archive_incoming = ArchiveIncomingLetter::count();
             $archive_outgoing = ArchiveOutgoingLetter::count();
             $count_user =  User::count();
@@ -44,6 +59,10 @@ class DashboardController extends Controller
                     'recentActivity',
                     'archive_incoming',
                     'archive_outgoing',
+                    'dates_arsip_masuk',
+                    'activityCounts_arsip_masuk',
+                    'dates_arsip_keluar',
+                    'activityCounts_arsip_keluar',
 
                     'count_user'
                 )

@@ -148,6 +148,10 @@
                                     <script>
                                         let dates = {!! json_encode($dates) !!};
                                         let activityCounts = {!! json_encode($activityCounts) !!};
+                                        let dates_arsip_masuk = {!! json_encode($dates_arsip_masuk) !!};
+                                        let activityCounts_arsip_masuk = {!! json_encode($activityCounts_arsip_masuk) !!};
+                                        let dates_arsip_keluar = {!! json_encode($dates_arsip_keluar) !!};
+                                        let activityCounts_arsip_keluar = {!! json_encode($activityCounts_arsip_keluar) !!};
                                         document.addEventListener("DOMContentLoaded", () => {
 
                                             new ApexCharts(document.querySelector("#reportsChart"), {
@@ -155,11 +159,11 @@
                                                     name: 'Activity',
                                                     data: activityCounts,
                                                 }, {
-                                                    name: 'Internal',
-                                                    data: [11, 32, 45, 32, 34, 52, 41]
+                                                    name: 'Arsip Masuk',
+                                                    data: activityCounts_arsip_masuk
                                                 }, {
-                                                    name: 'External',
-                                                    data: [15, 11, 32, 18, 9, 24, 11]
+                                                    name: 'Arsip Keluar',
+                                                    data: activityCounts_arsip_keluar
                                                 }],
                                                 chart: {
                                                     height: 350,
@@ -188,14 +192,10 @@
                                                     curve: 'smooth',
                                                     width: 2
                                                 },
-                                                xaxis: {
-                                                    type: 'datetime',
-                                                    categories: ["2018-09-19T00:00:00.000Z", "2018-09-19T01:30:00.000Z",
-                                                        "2018-09-19T02:30:00.000Z", "2018-09-19T03:30:00.000Z",
-                                                        "2018-09-19T04:30:00.000Z", "2018-09-19T05:30:00.000Z",
-                                                        "2018-09-19T06:30:00.000Z"
-                                                    ]
-                                                },
+                                                // xaxis: {
+                                                //     type: 'datetime',
+                                                //     // categories: [dates, dates_arsip_masuk, dates_arsip_keluar],
+                                                // },
                                                 tooltip: {
                                                     x: {
                                                         format: 'dd/MM/yy HH:mm'
