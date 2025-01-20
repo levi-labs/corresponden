@@ -19,21 +19,28 @@ class ArchiveIncomingController extends Controller
     }
     public function index()
     {
-        $title = 'Archive Incoming Letters';
-        $data = $this->archiveIncomingLetter->getAllArchiveIncomings();
+        $title = 'Arsip Surat Masuk';
+        $serach = request()->search;
 
-        return view('pages.archive.incoming-letter.index', compact('title', 'data'));
+        if ($serach !== null && $serach !== '') {
+            $data = $this->archiveIncomingLetter->search($serach);
+            return view('pages.archive.incoming-letter.index', compact('title', 'data'));
+        } else {
+            $data = $this->archiveIncomingLetter->getAllArchiveIncomings();
+
+            return view('pages.archive.incoming-letter.index', compact('title', 'data'));
+        }
     }
 
     public function show(ArchiveIncomingLetter $archiveIncomingLetter)
     {
-        $title = 'Letter Details';
+        $title = 'Detail Surat Masuk';
         $data = $this->archiveIncomingLetter->getArchiveIncomingById($archiveIncomingLetter->id);
         return view('pages.archive.incoming-letter.detail', compact('title', 'data'));
     }
     public function create()
     {
-        $title = 'Create Incoming Letter';
+        $title = 'Form Surat Masuk';
         $letter_number = date('Y') . '/' . 'USNI' . '/' . str_pad(rand(0, 99), 3, '0', STR_PAD_LEFT) . rand(0, 999);
         $letterTypes = $this->letterTypeService->getAllLetterTypes();
 
@@ -81,7 +88,7 @@ class ArchiveIncomingController extends Controller
 
     public function edit($id)
     {
-        $title = 'Edit Incoming Letter';
+        $title = 'Edit Surat Masuk';
         $letterTypes = $this->letterTypeService->getAllLetterTypes();
         $data = ArchiveIncomingLetter::find($id);
         return view('pages.archive.incoming-letter.edit', compact('title', 'data', 'letterTypes'));

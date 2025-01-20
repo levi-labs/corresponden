@@ -29,14 +29,14 @@
                         @endif
                     </div>
                     <div class="card-body">
-                        <h5 class="card-title">{{ __('Form Letter Type') }}</h5>
+                        <h5 class="card-title">{{ $title }}</h5>
 
                         <form action="{{ route('letter-type.update', $letterType->id) }}" method="post">
                             @csrf
                             @method('PUT')
                             <!-- Quill Editor Default -->
                             <div class="form-group mb-3">
-                                <label class="form-label" for="name">Name</label>
+                                <label class="form-label" for="name">Nama Surat</label>
                                 <input type="text" class="form-control" name="name" id="name"
                                     value="{{ $letterType->name }}">
                                 @error('name')
@@ -44,7 +44,22 @@
                                 @enderror
                             </div>
                             <div class="form-group mb-3">
-                                <label class="form-label" for="description">Description</label>
+                                <label class="form-label" for="type">Digunakan Untuk</label>
+                                <select class="form-control" name="type" id="type">
+                                    <option selected disabled>Pilih</option>
+                                    <option {{ $letterType->type === 'lecture' ? 'selected' : '' }} value="lecture">Dosen
+                                    </option>
+                                    <option {{ $letterType->type === 'student' ? 'selected' : '' }} value="student">
+                                        Mahasiswa</option>
+                                    <option {{ $letterType->type === 'other' ? 'selected' : '' }} value="other">Lainnya
+                                    </option>
+                                </select>
+                                @error('type')
+                                    <span class="text-danger">{{ $message }}</span>
+                                @enderror
+                            </div>
+                            <div class="form-group mb-3">
+                                <label class="form-label" for="description">Deskripsi</label>
                                 <div id="editor" style="height: 100px"></div>
                                 <textarea rows="3" class="mb-3 d-none" name="description" id="quill-editor-area-description">{{ $letterType->description }}</textarea>
                                 @error('description')

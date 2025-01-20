@@ -29,32 +29,32 @@
                         @endif
                     </div>
                     <div class="card-body">
-                        <h5 class="card-title">{{ __('Form Letter Type') }}</h5>
+                        <h5 class="card-title">{{ $title }}</h5>
 
                         <form action="{{ route('letter-type.store') }}" method="post">
                             @csrf
                             <!-- Quill Editor Default -->
                             <div class="form-group mb-3">
-                                <label class="form-label" for="name">Name</label>
+                                <label class="form-label" for="name">Nama Surat</label>
                                 <input type="text" class="form-control" name="name" id="name">
                                 @error('name')
                                     <span class="text-danger">{{ $message }}</span>
                                 @enderror
                             </div>
                             <div class="form-group mb-3">
-                                <label class="form-label" for="type">Type</label>
+                                <label class="form-label" for="type">Digunakan Untuk</label>
                                 <select class="form-control" name="type" id="type">
-                                    <option selected disabled>Choose Type</option>
-                                    <option value="lecture">Lecture</option>
-                                    <option value="student">Student</option>
-                                    <option value="other">Other</option>
+                                    <option selected disabled>Pilih</option>
+                                    <option value="lecture">Dosen</option>
+                                    <option value="student">Mahasiswa</option>
+                                    <option value="other">Lainnya</option>
                                 </select>
                                 @error('type')
                                     <span class="text-danger">{{ $message }}</span>
                                 @enderror
                             </div>
                             <div class="form-group mb-3">
-                                <label class="form-label" for="description">Description</label>
+                                <label class="form-label" for="description">Deskripsi</label>
                                 <div id="editor" style="height: 100px">
                                     <p>Deskripsi jenis surat</p>
                                 </div>

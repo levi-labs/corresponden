@@ -133,7 +133,7 @@ class ProfileController extends Controller
 
     public function changePassword()
     {
-        $title = 'Change Password';
+        $title = 'Ubah Password';
 
         return view('pages.profile.change-password', compact('title'));
     }

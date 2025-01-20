@@ -21,7 +21,7 @@ class LetterTypeController extends Controller
      */
     public function index()
     {
-        $title = 'Letter Type List';
+        $title = 'Jenis Surat';
         $data = $this->LetterTypeService->getAllLetterTypes();
         return view('pages.letter-type.index', compact('data', 'title'));
     }
@@ -31,7 +31,7 @@ class LetterTypeController extends Controller
      */
     public function create()
     {
-        $title = 'Create Letter Type';
+        $title = 'Form Jenis Surat';
 
         return view('pages.letter-type.create', compact('title'));
     }
@@ -63,7 +63,7 @@ class LetterTypeController extends Controller
      */
     public function edit(LetterType $letterType)
     {
-        $title = 'Edit Letter Type';
+        $title = 'Edit Jenis Surat';
         return view('pages.letter-type.edit', compact('letterType', 'title'));
     }
 

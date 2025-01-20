@@ -17,7 +17,7 @@ class DashboardController extends Controller
     public $activitiesPerDay;
     public function index()
     {
-        $title = 'Dashboard';
+        $title = 'Beranda';
         $countActivity = RecentActivity::all();
         if (count($countActivity) == 0) {
             $recentActivity = $this->activity = RecentActivity::where('user_id', auth('web')->user()->id)->get();

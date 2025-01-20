@@ -18,6 +18,25 @@ class ArchiveOutgoingService
             ->paginate(25);
     }
 
+    public function search($query)
+    {
+        try {
+            return ArchiveOutgoingLetter::join('letter_types', 'archive_outgoing_letters.letter_type_id', '=', 'letter_types.id')
+                ->select(
+                    'archive_outgoing_letters.*',
+                    'letter_types.name as letter_type',
+                )
+                ->where(
+                    'archive_outgoing_letters.letter_number',
+                    'like',
+                    '%' . $query . '%'
+                )
+                ->paginate(25);
+        } catch (\Throwable $th) {
+            throw $th;
+        }
+    }
+
     public function getOutGoingLetterById($id)
     {
         return ArchiveOutgoingLetter::join('letter_types', 'archive_outgoing_letters.letter_type_id', '=', 'letter_types.id')

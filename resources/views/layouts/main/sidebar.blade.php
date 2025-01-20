@@ -5,7 +5,7 @@
         <li class="nav-item">
             <a class="nav-link " href="{{ route('dashboard.index') }}">
                 <i class="bi bi-grid"></i>
-                <span>Dashboard</span>
+                <span>Beranda</span>
             </a>
         </li>
         <!-- End Dashboard Nav -->
@@ -13,7 +13,7 @@
             <li class="nav-item">
                 <a class="nav-link collapsed" href="{{ route('letter-type.index') }}">
                     <i class="bi bi-card-list"></i>
-                    <span>Letter Type</span>
+                    <span>Jenis Surat</span>
                 </a>
             </li>
         @endif
@@ -21,17 +21,17 @@
         @if (Auth::user()->role !== 'admin')
             <li class="nav-item">
                 <a class="nav-link collapsed" data-bs-target="#components-nav" data-bs-toggle="collapse" href="#">
-                    <i class="bi bi-menu-button-wide"></i><span>Message</span><i class="bi bi-chevron-down ms-auto"></i>
+                    <i class="bi bi-menu-button-wide"></i><span>Pesan</span><i class="bi bi-chevron-down ms-auto"></i>
                 </a>
                 <ul id="components-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
                     <li>
                         <a href="{{ route('incoming-letter.index') }}">
-                            <i class="bi bi-circle"></i><span>Inbox</span>
+                            <i class="bi bi-circle"></i><span>Masuk</span>
                         </a>
                     </li>
                     <li>
                         <a href="{{ route('outgoing-letter.index') }}">
-                            <i class="bi bi-circle"></i><span>Sent</span>
+                            <i class="bi bi-circle"></i><span>Keluar</span>
                         </a>
                     </li>
                 </ul>
@@ -40,22 +40,22 @@
 
         <!-- End Components Nav -->
         @if (Auth::user()->role == 'admin' || Auth::user()->role == 'staff')
-            <li class="nav-item">
-                <a class="nav-link collapsed" data-bs-target="#forms-nav" data-bs-toggle="collapse" href="#">
-                    <i class="bi bi-journal-text"></i><span>Archive </span><i class="bi bi-chevron-down ms-auto"></i>
-                </a>
-                <ul id="forms-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
-                    <li>
-                        <a href="{{ route('archive-incoming-letter.index') }}">
-                            <i class="bi bi-circle"></i><span>incoming-letter</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="{{ route('archive-outgoing-letter.index') }}">
-                            <i class="bi bi-circle"></i><span>outgoing-letter</span>
-                        </a>
-                    </li>
-                </ul>
+            <li class="nav-item"></li>
+            <a class="nav-link collapsed" data-bs-target="#forms-nav" data-bs-toggle="collapse" href="#">
+                <i class="bi bi-journal-text"></i><span>Arsip </span><i class="bi bi-chevron-down ms-auto"></i>
+            </a>
+            <ul id="forms-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+                <li>
+                    <a href="{{ route('archive-incoming-letter.index') }}">
+                        <i class="bi bi-circle"></i><span>Surat Masuk</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ route('archive-outgoing-letter.index') }}">
+                        <i class="bi bi-circle"></i><span>Surat Keluar</span>
+                    </a>
+                </li>
+            </ul>
             </li>
         @endif
 

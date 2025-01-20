@@ -50,21 +50,28 @@
                 <div class="container">
                     <div class="row justify-content-center">
                         <div class="col-lg-4 col-md-6 d-flex flex-column align-items-center justify-content-center">
+                            <style>
+                                .my-images {
+                                    width: 100px !important;
+                                    height: 100px !important;
+                                }
+                            </style>
+                            <div class="d-flex align-items-center justify-content-center py-4">
 
-                            <div class="d-flex justify-content-center py-4">
-                                <a href="index.html" class="logo d-flex align-items-center w-auto">
-                                    {{-- <img src="assets/img/logo.png" alt=""> --}}
-                                    <span class="d-none d-lg-block">{{ $title ?? 'Login' }}</span>
+                                <a href="/" class="d-flex align-items-center w-auto">
+                                    <img class="my-images" src="assets/img/usni.png" alt="">
+                                    {{-- <span class="d-none d-lg-block">{{ $title ?? 'Login' }}</span> --}}
                                 </a>
                             </div><!-- End Logo -->
+                            <h4 class="text-center">Sistem Informasi Surat Menyurat</h4>
 
                             <div class="card mb-3">
 
                                 <div class="card-body">
 
                                     <div class="pt-4 pb-2">
-                                        <h5 class="card-title text-center pb-0 fs-4">Login to Your Account</h5>
-                                        <p class="text-center small">Enter your username & password to login</p>
+                                        <h5 class="card-title text-center pb-0 fs-4">Login</h5>
+                                        <p class="text-center small">Masukkan username dan password untuk login</p>
                                     </div>
 
                                     <form action="{{ route('login.post') }}" method="POST"

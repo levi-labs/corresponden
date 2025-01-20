@@ -11,7 +11,7 @@ Route::get('/login', [App\Http\Controllers\AuthController::class, 'showLoginForm
 Route::post('/login', [App\Http\Controllers\AuthController::class, 'login'])->name('login.post');
 Route::get('/logout', [App\Http\Controllers\AuthController::class, 'logout'])->name('logout');
 
-Route::get('/dashboard', [App\Http\Controllers\DashboardController::class, 'index'])->middleware(['auth', 'roles:admin,staff,student'])
+Route::get('/dashboard', [App\Http\Controllers\DashboardController::class, 'index'])->middleware(['auth', 'roles:admin,staff,student,lecturer'])
     ->name('dashboard.index');
 
 Route::controller(App\Http\Controllers\LetterTypeController::class)
@@ -71,24 +71,26 @@ Route::controller(App\Http\Controllers\ArchiveIncomingController::class)
     ->middleware(['auth', 'roles:admin,staff'])
     ->group(function () {
         Route::get('/', 'index')->name('archive-incoming-letter.index');
+        Route::post('/search', 'index')->name('archive-incoming-letter.search');
         Route::get('/create', 'create')->name('archive-incoming-letter.create');
-        Route::post('/', 'store')->name('archive-incoming-letter.store');
-        Route::get('/{archiveIncomingLetter}', 'show')->name('archive-incoming-letter.show');
+        Route::post('/store', 'store')->name('archive-incoming-letter.store');
+        Route::get('/detail/{archiveIncomingLetter}', 'show')->name('archive-incoming-letter.show');
         Route::get('/{id}/edit', 'edit')->name('archive-incoming-letter.edit');
-        Route::put('/{id}', 'update')->name('archive-incoming-letter.update');
-        Route::delete('/{id}', 'destroy')->name('archive-incoming-letter.destroy');
+        Route::put('/update/{id}', 'update')->name('archive-incoming-letter.update');
+        Route::delete('/delete/{id}', 'destroy')->name('archive-incoming-letter.destroy');
     });
 Route::controller(App\Http\Controllers\ArchiveOutgoingController::class)
     ->prefix('archive-outgoing-letter')
     ->middleware(['auth', 'roles:admin,staff'])
     ->group(function () {
         Route::get('/', 'index')->name('archive-outgoing-letter.index');
+        Route::post('/search', 'index')->name('archive-outgoing-letter.search');
         Route::get('/create', 'create')->name('archive-outgoing-letter.create');
-        Route::post('/', 'store')->name('archive-outgoing-letter.store');
-        Route::get('/{archiveOutgoingLetter}', 'show')->name('archive-outgoing-letter.show');
+        Route::post('/store', 'store')->name('archive-outgoing-letter.store');
+        Route::get('/detail/{archiveOutgoingLetter}', 'show')->name('archive-outgoing-letter.show');
         Route::get('/{id}/edit', 'edit')->name('archive-outgoing-letter.edit');
-        Route::put('/{id}', 'update')->name('archive-outgoing-letter.update');
-        Route::delete('/{id}', 'destroy')->name('archive-outgoing-letter.destroy');
+        Route::put('/update/{id}', 'update')->name('archive-outgoing-letter.update');
+        Route::delete('/delete/{id}', 'destroy')->name('archive-outgoing-letter.destroy');
     });
 Route::controller(ProfileController::class)
     ->prefix('profile')

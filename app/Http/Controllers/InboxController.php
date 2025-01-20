@@ -33,7 +33,7 @@ class InboxController extends Controller
     }
     public function index()
     {
-        $title = 'Inbox';
+        $title = 'Pesan Masuk';
         $checkRole = auth('web')->user()->role;
         if ($checkRole == 'student') {
             $data = $this->incomingLetterService->getAllIncomingLettersAsStudent();
@@ -49,9 +49,9 @@ class InboxController extends Controller
     public function show(Inbox $incomingLetter)
     {
 
-        $title = 'Letter Details';
-        $notif = Notification::where('inbox_id', $incomingLetter->id)->first();
-        $notif->update(['status' => 'read']);
+        $title = 'Detail Pesan Masuk';
+        $notif = Notification::where('inbox_id', $incomingLetter->id)->update(['status' => 'read']);
+
         $this->incomingLetterService->updateStatus($incomingLetter->id);
         $incomingLetter = $this->incomingLetterService->getIncomingLetterById($incomingLetter->id);
 
@@ -60,7 +60,7 @@ class InboxController extends Controller
 
     public function approve(Request $request)
     {
-        $title = 'Letter Details';
+        $title = 'Approve Pesan Masuk';
 
         $choice_source = $request->source;
         // return response()->json($request->all());
@@ -194,7 +194,7 @@ class InboxController extends Controller
     public function previewReply($idReply)
     {
         try {
-            $title = 'Reply Details';
+            $title = 'Preview Balasan';
             // $reply = Reply::find($idReply);
             $reply = Reply::join('inbox', 'inbox.id', '=', 'replies.id_letter')
                 ->join('letter_types', 'inbox.letter_type_id', '=', 'letter_types.id')

@@ -20,6 +20,25 @@ class ArchiveIncomingService
             ->paginate(25);
     }
 
+    public function search($query)
+    {
+        try {
+            return ArchiveIncomingLetter::join('letter_types', 'archive_incoming_letters.letter_type_id', '=', 'letter_types.id')
+                ->select(
+                    'archive_incoming_letters.*',
+                    'letter_types.name as letter_type',
+                )
+                ->where(
+                    'archive_incoming_letters.letter_number',
+                    'like',
+                    '%' . $query . '%'
+                )
+                ->paginate(25);
+        } catch (\Throwable $th) {
+            throw $th;
+        }
+    }
+
     public function getArchiveIncomingById($id)
     {
         // dd(ArchiveIncomingLetter::find($id));

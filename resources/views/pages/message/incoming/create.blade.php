@@ -80,7 +80,7 @@
                             @csrf
                             <!-- Quill Editor Default -->
                             <div class="form-group mb-3">
-                                <label class="form-label" for="name">Name<span class="text-danger">*</span></label>
+                                <label class="form-label" for="name">Nama<span class="text-danger">*</span></label>
                                 <input type="text" class="form-control" name="name" id="name"
                                     value="{{ old('name') ?? auth('web')->user()->name }}"
                                     @if (auth('web')->user()->role !== 'admin' || auth('web')->user()->role !== 'staff') readonly @endif>
@@ -89,7 +89,7 @@
                                 @enderror
                             </div>
                             <div class="form-group mb-3">
-                                <label class="form-label" for="letter_type">Letter Type<span
+                                <label class="form-label" for="letter_type">Jenis Surat<span
                                         class="text-danger">*</span></label>
                                 <select class="form-control" name="letter_type" id="letter_type">
                                     <option selected disabled>Select Letter Type</option>
@@ -102,9 +102,9 @@
                                 @enderror
                             </div>
                             <div class="form-group mb-3">
-                                <label class="form-label" for="lecture">Lecture<span class="text-danger">*</span></label>
+                                <label class="form-label" for="lecture">Dosen<span class="text-danger">*</span></label>
                                 <select class="form-control js-example-basic-single" name="lecture">
-                                    <option selected disabled>Select Lecture</option>
+                                    <option selected disabled>Select Dosen</option>
                                     @foreach ($lectures as $item)
                                         <option value="{{ $item->id }}">{{ $item->name }}</option>
                                     @endforeach
@@ -114,7 +114,7 @@
                                 @enderror
                             </div>
                             <div class="form-group mb-3">
-                                <label class="form-label" for="subject">Subject</label>
+                                <label class="form-label" for="subject">Perihal</label>
                                 <input type="text" class="form-control" name="subject" id="subject"
                                     value="{{ old('subject') }}">
                                 @error('subject')
@@ -122,7 +122,7 @@
                                 @enderror
                             </div>
                             <div class="form-group mb-3">
-                                <label class="form-label" for="body">Body</label>
+                                <label class="form-label" for="body">Deskripsi</label>
                                 <div id="editor" style="height: 200px"></div>
                                 <textarea rows="3" class="mb-3 d-none" name="body" id="quill-editor-area-description"></textarea>
                                 @error('body')
@@ -130,7 +130,7 @@
                                 @enderror
                             </div>
                             <div class="form-group mb-3">
-                                <label class="form-label" for="attachment">File : (optional)</label>
+                                <label class="form-label" for="attachment">Lampiran : (optional)</label>
                                 <input type="file" class="form-control" name="attachment" id="attachment">
                                 @error('attachment')
                                     <span class="text-danger">{{ $message }}</span>

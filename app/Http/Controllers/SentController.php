@@ -26,7 +26,7 @@ class SentController extends Controller
      */
     public function index()
     {
-        $title = 'Outgoing Letter List';
+        $title = 'Pesan Keluar';
         $data = $this->outgoingLetterService->getAllOutgoingLettersByUser();
         return view('pages.message.outgoing.index', compact('title', 'data'));
     }
@@ -36,7 +36,7 @@ class SentController extends Controller
      */
     public function create()
     {
-        $title = 'Create Outgoing Letter';
+        $title = 'Form Pesan Keluar';
         $letterTypes = $this->letterTypeService->getLetterTypeAsRole();
         $lectures = User::where('role', 'lecturer')->get();
         return view('pages.message.outgoing.create', compact('title', 'letterTypes', 'lectures'));
@@ -81,7 +81,7 @@ class SentController extends Controller
      */
     public function show(Sent $outgoingLetter)
     {
-        $title = 'Letter Details';
+        $title = 'Detail Pesan Keluar';
         $outgoingLetter = $this->outgoingLetterService->getOutgoingLetterById($outgoingLetter->id);
         return view('pages.message.outgoing.detail', compact('title', 'outgoingLetter'));
     }

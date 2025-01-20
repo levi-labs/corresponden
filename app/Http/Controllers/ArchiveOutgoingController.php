@@ -25,9 +25,17 @@ class ArchiveOutgoingController extends Controller
      */
     public function index()
     {
-        $title = 'Outgoing Letter List';
-        $data = $this->archiveOutgoingService->getAllOutGoingLetter();
-        return view('pages.archive.outgoing-letter.index', compact('title', 'data'));
+        $title = 'Arsip Surat Keluar';
+        $search = request()->search;
+
+        if ($search !== null && $search !== '') {
+
+            $data = $this->archiveOutgoingService->search($search);
+            return view('pages.archive.outgoing-letter.index', compact('title', 'data'));
+        } else {
+            $data = $this->archiveOutgoingService->getAllOutGoingLetter();
+            return view('pages.archive.outgoing-letter.index', compact('title', 'data'));
+        }
     }
 
     /**
@@ -35,7 +43,7 @@ class ArchiveOutgoingController extends Controller
      */
     public function create()
     {
-        $title = 'Create Outgoing Letter';
+        $title = 'Form Surat Keluar';
         $letter_number = date('Y') . '/' . 'USNI' . '/' . str_pad(rand(0, 99), 3, '0', STR_PAD_LEFT) . rand(0, 999);
         $letterTypes = $this->letterTypeService->getAllLetterTypes();
 
@@ -88,7 +96,7 @@ class ArchiveOutgoingController extends Controller
      */
     public function show(string $id)
     {
-        $title = 'Letter Details';
+        $title = 'Detail Surat Keluar';
         $data = $this->archiveOutgoingService->getOutgoingLetterById($id);
         return view('pages.archive.outgoing-letter.detail', compact('title', 'data'));
     }
@@ -98,7 +106,7 @@ class ArchiveOutgoingController extends Controller
      */
     public function edit(string $id)
     {
-        $title = 'Edit Outgoing Letter';
+        $title = 'Edit Surat Keluar';
         $letterTypes = $this->letterTypeService->getAllLetterTypes();
         $data = ArchiveOutgoingLetter::find($id);
         return view('pages.archive.outgoing-letter.edit', compact(

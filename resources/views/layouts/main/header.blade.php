@@ -1,21 +1,33 @@
 <header id="header" class="header fixed-top d-flex align-items-center">
-
+    <style>
+        img.my-logos {
+            margin-top: 5px !important;
+            object-fit: cover !important;
+            width: 20% !important;
+            height: 40% !important;
+        }
+    </style>
     <div class="d-flex align-items-center justify-content-between">
-        <a href="/" class="logo d-flex align-items-center">
-            {{-- <img src="{{ asset('assets/img/logo.png') }}" alt=""> --}}
-            <h5>Correspondence System</h5>
-        </a>
+
+        <img class="my-logos" src="{{ asset('assets/img/usni.png') }}" alt="">
+        {{-- <p class="text-sm">Correspondence System</p> --}}
+        <div class="col-5 text-center">
+            <i class="bi bi-list toggle-sidebar-btn"></i>
+        </div>
 
 
-        <i class="bi bi-list toggle-sidebar-btn"></i>
+
+
+
+
     </div><!-- End Logo -->
 
-    <div class="search-bar">
-        {{-- <form class="search-form d-flex align-items-center" method="POST" action="#">
+    {{-- <div class="search-bar">
+        <form class="search-form d-flex align-items-center" method="POST" action="#">
             <input type="text" name="query" placeholder="Search" title="Enter search keyword">
             <button type="submit" title="Search"><i class="bi bi-search"></i></button>
-        </form> --}}
-    </div><!-- End Search Bar -->
+        </form>
+    </div><!-- End Search Bar --> --}}
 
     <nav class="header-nav ms-auto">
         <ul class="d-flex align-items-center">

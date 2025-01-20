@@ -32,6 +32,15 @@
                         <h5 class="card-title">
                             <a href="{{ route('archive-incoming-letter.create') }}" class="btn btn-primary btn-sm">Add</a>
                         </h5>
+                        <div class="float-end">
+                            <form class="search-form d-flex align-items-center" method="POST"
+                                action="{{ route('archive-incoming-letter.search') }}">
+                                @csrf
+                                <input type="text" class="form-control" name="search" placeholder="Nomor Surat">
+                                <button class="btn btn-secondary" type="submit" title="Search"><i
+                                        class="bi bi-search"></i></button>
+                            </form>
+                        </div>
 
                         <!-- Table with hoverable rows -->
                         <table class="table table-hover">

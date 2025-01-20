@@ -18,14 +18,14 @@ class UserController extends Controller
 
     public function index()
     {
-        $title = 'User List';
+        $title = 'Daftar User';
         $data = $this->userService->getAllUsers();
         return view('pages.users.index', compact('data', 'title'));
     }
 
     public function create()
     {
-        $title = 'Create User';
+        $title = 'Form Tambah User';
         $roles = ['admin', 'staff', 'lecturer', 'student'];
         return view('pages.users.create', compact('title', 'roles'));
     }

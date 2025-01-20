@@ -30,8 +30,17 @@
                     </div>
                     <div class="card-body">
                         <h5 class="card-title">
-                            <a href="{{ route('archive-outgoing-letter.create') }}" class="btn btn-primary btn-sm">Add</a>
+                            <a href="{{ route('archive-outgoing-letter.search') }}" class="btn btn-primary btn-sm">Add</a>
                         </h5>
+                        <div class="float-end">
+                            <form class="search-form d-flex align-items-center" method="POST"
+                                action="{{ route('archive-outgoing-letter.search') }}">
+                                @csrf
+                                <input type="text" class="form-control" name="search" placeholder="Nomor Surat">
+                                <button class="btn btn-secondary" type="submit" title="Search"><i
+                                        class="bi bi-search"></i></button>
+                            </form>
+                        </div>
 
                         <!-- Table with hoverable rows -->
                         <table class="table table-hover">
@@ -51,7 +60,8 @@
                                             <div class="badge bg-info text-dark">{{ $item->letter_type }}</div>
                                         </td>
                                         <td>
-                                            <a class="text-decoration-none text-dark"
+
+                                            <a class="text-decoration-none text-dark on-hover"
                                                 href="{{ route('archive-outgoing-letter.show', $item->id) }}">
                                                 <h6 class="card-title">{{ $item->letter_number }}</h6>
                                             </a>

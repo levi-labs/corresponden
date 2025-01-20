@@ -34,7 +34,7 @@
                         <!-- Head Detail -->
                         <div class="row justify-content-between">
                             <div class="col-md-9">
-                                <p class="text-sm ms-5">From:&nbsp;
+                                <p class="text-sm ms-5">Dari:&nbsp;
                                     {{ $incomingLetter->sender_name }} <span
                                         class="small">{{ '<username: ' . $incomingLetter->sender_username . '>' }}</span>
                                     @if (Auth::user()->role === 'admin' || Auth::user()->role === 'staff' || Auth::user()->role === 'lecturer')

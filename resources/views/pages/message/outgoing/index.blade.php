@@ -33,6 +33,7 @@
                             <a href="{{ route('outgoing-letter.create') }}" class="btn btn-primary btn-sm">Add</a>
                         </h5>
 
+
                         <!-- Table with hoverable rows -->
                         <table class="table table-hover">
                             <thead>
