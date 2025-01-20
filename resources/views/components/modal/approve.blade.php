@@ -16,8 +16,8 @@
                         <label class="form-label" for="email">Source</label>
                         <select name="source" id="source" class="form-control" required>
                             <option value="" selected disabled>Select Source</option>
-                            <option value="create">create</option>
-                            <option value="from_computer">from computer</option>
+                            <option value="create">Buat Sendiri</option>
+                            <option value="from_computer">Upload Dari Komputer</option>
                         </select>
                         @error('source')
                             <span class="text-danger">{{ $message }}</span>
@@ -44,22 +44,42 @@
                                 <span class="text-danger">{{ $message }}</span>
                             @enderror
                         </div>
-                        <div class="form-group mb-3">
-                            <label class="form-label" for="student_id">Student ID</label>
-                            <input type="text" class="form-control" name="student_id" id="student_id" readonly
-                                value="{{ $incomingLetter->student_id }}">
-                            @error('student_id')
-                                <span class="text-danger">{{ $message }}</span>
-                            @enderror
-                        </div>
-                        <div class="form-group mb-3">
-                            <label class="form-label" for="student_name">Student Name</label>
-                            <input type="text" class="form-control" name="student_name" id="student_name" readonly
-                                value="{{ $incomingLetter->student_name }}">
-                            @error('student_name')
-                                <span class="text-danger">{{ $message }}</span>
-                            @enderror
-                        </div>
+                        @if ($incomingLetter->sender_role == 'student')
+                            <div class="form-group mb-3">
+                                <label class="form-label" for="student_id">NIM Mahasiswa</label>
+                                <input type="text" class="form-control" name="student_id" id="student_id" readonly
+                                    value="{{ $incomingLetter->student_id }}">
+                                @error('student_id')
+                                    <span class="text-danger">{{ $message }}</span>
+                                @enderror
+                            </div>
+                            <div class="form-group mb-3">
+                                <label class="form-label" for="student_name">Nama Mahasiswa</label>
+                                <input type="text" class="form-control" name="student_name" id="student_name"
+                                    readonly value="{{ $incomingLetter->student_name }}">
+                                @error('student_name')
+                                    <span class="text-danger">{{ $message }}</span>
+                                @enderror
+                            </div>
+                        @else
+                            <div class="form-group mb-3">
+                                <label class="form-label" for="student_id">NIP Dosen</label>
+                                <input type="text" class="form-control" name="student_id" id="student_id" readonly
+                                    value="{{ $incomingLetter->lecturer_id }}">
+                                @error('student_id')
+                                    <span class="text-danger">{{ $message }}</span>
+                                @enderror
+                            </div>
+                            <div class="form-group mb-3">
+                                <label class="form-label" for="student_name">Nama Dosen</label>
+                                <input type="text" class="form-control" name="student_name" id="student_name"
+                                    readonly value="{{ $incomingLetter->lecturer_name }}">
+                                @error('student_name')
+                                    <span class="text-danger">{{ $message }}</span>
+                                @enderror
+                            </div>
+                        @endif
+
                     </div>
                     <div class="upload-file">
                         <div class="form-group mb-3">

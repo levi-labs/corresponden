@@ -101,6 +101,31 @@ class InboxService
         // dd($data);
         return $data;
     }
+    public function getAllIncomingLetterAsStaff()
+    {
+
+        // $data = Inbox::where('is_staff', 0)->get();
+        // dd($data);
+        $data = Inbox::join('letter_types', 'inbox.letter_type_id', '=', 'letter_types.id')
+            ->join('users as receiver', 'receiver.id', '=', 'inbox.receiver_id')
+            ->join('users as sender', 'inbox.sender_id', '=', 'sender.id')
+            ->select(
+                'inbox.id',
+                'inbox.date',
+                'inbox.subject',
+                'letter_types.type',
+                'inbox.body',
+                'letter_types.name as letter_type',
+                'receiver.name as receiver_name',
+                'sender.name as sender_name'
+            )
+
+            ->where('inbox.is_staff', 1)
+            ->where('receiver.role', '!=', 'student')
+            ->paginate(25);
+
+        return $data;
+    }
 
     public function getIncomingLetterById($id)
     {
@@ -121,6 +146,7 @@ class InboxService
                     'inbox.body',
                     'letter_types.name as letter_type',
                     'sender.name as sender_name',
+                    'sender.role as sender_role',
                     'sender.username as sender_username',
                     'students.student_id as student_id',
                     'students.fullname as student_name',
@@ -133,11 +159,61 @@ class InboxService
                 ->first();
             return $incomingLetter;
         } elseif ($check_role->role == 'staff') {
+            if (auth('web')->user()->role == 'student') {
+                $incomingLetter = Inbox::join('users as receiver', 'inbox.receiver_id', '=', 'receiver.id')
+                    ->join('users as sender', 'inbox.sender_id', '=', 'sender.id')
+                    ->join('letter_types', 'inbox.letter_type_id', '=', 'letter_types.id')
+                    ->join('staff', 'inbox.sender_id', '=', 'staff.user_id')
+                    ->where('inbox.id', $id)
+                    ->select(
+                        'inbox.id',
+                        'inbox.date',
+                        'inbox.subject',
+                        'inbox.body',
+                        'letter_types.name as letter_type',
+                        'sender.name as sender_name',
+                        'sender.role as sender_role',
+                        'sender.username as sender_username',
+                        'receiver.name as receiver_name',
+                        'staff.staff_id as staff_id',
+                        'staff.fullname as staff_name',
+                        'receiver.username as receiver_username',
+                        'inbox.status',
+                        'inbox.attachment',
+                        'inbox.letter_number'
+                    )
+                    ->first();
+            } else {
+                $incomingLetter = Inbox::join('users as receiver', 'inbox.receiver_id', '=', 'receiver.id')
+                    ->join('users as sender', 'inbox.sender_id', '=', 'sender.id')
+                    ->join('letter_types', 'inbox.letter_type_id', '=', 'letter_types.id')
+                    ->join('staff', 'inbox.sender_id', '=', 'staff.user_id')
+                    ->where('inbox.id', $id)
+                    ->select(
+                        'inbox.id',
+                        'inbox.date',
+                        'inbox.subject',
+                        'inbox.body',
+                        'letter_types.name as letter_type',
+                        'sender.name as sender_name',
+                        'sender.role as sender_role',
+                        'staff.staff_id as staff_id',
+                        'sender.username as sender_username',
+                        'receiver.name as receiver_name',
+                        'receiver.username as receiver_username',
+                        'inbox.status',
+                        'inbox.attachment',
+                        'inbox.letter_number'
+                    )
+                    ->first();
+            }
+            return $incomingLetter;
+        } elseif ($check_role->role == 'lecturer') {
 
             $incomingLetter = Inbox::join('users as receiver', 'inbox.receiver_id', '=', 'receiver.id')
                 ->join('users as sender', 'inbox.sender_id', '=', 'sender.id')
+                ->join('lecturers', 'sender.id', '=', 'lecturers.user_id')
                 ->join('letter_types', 'inbox.letter_type_id', '=', 'letter_types.id')
-                ->join('students', 'inbox.receiver_id', '=', 'students.user_id')
                 ->where('inbox.id', $id)
                 ->select(
                     'inbox.id',
@@ -146,19 +222,18 @@ class InboxService
                     'inbox.body',
                     'letter_types.name as letter_type',
                     'sender.name as sender_name',
+                    'sender.role as sender_role',
                     'sender.username as sender_username',
                     'receiver.name as receiver_name',
-                    'students.student_id as student_id',
-                    'students.fullname as student_name',
                     'receiver.username as receiver_username',
+                    'lecturers.fullname as lecturer_name',
+                    'lecturers.lecturer_id as lecturer_id',
                     'inbox.status',
                     'inbox.attachment',
                     'inbox.letter_number'
                 )
                 ->first();
             return $incomingLetter;
-        } elseif ($check_role->role == 'lecturer') {
-            # code...
         }
     }
 

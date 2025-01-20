@@ -101,18 +101,21 @@
                                     <span class="text-danger">{{ $message }}</span>
                                 @enderror
                             </div>
-                            <div class="form-group mb-3">
-                                <label class="form-label" for="lecture">Dosen<span class="text-danger">*</span></label>
-                                <select class="form-control js-example-basic-single" name="lecture">
-                                    <option selected disabled>Pilih Dosen</option>
-                                    @foreach ($lectures as $item)
-                                        <option value="{{ $item->id }}">{{ $item->name }}</option>
-                                    @endforeach
-                                </select>
-                                @error('lecture')
-                                    <span class="text-danger">{{ $message }}</span>
-                                @enderror
-                            </div>
+                            @if (auth('web')->user()->role != 'lecturer')
+                                <div class="form-group mb-3">
+                                    <label class="form-label" for="lecture">Dosen<span class="text-danger">*</span></label>
+                                    <select class="form-control js-example-basic-single" name="lecture">
+                                        <option selected disabled>Pilih Dosen</option>
+                                        @foreach ($lectures as $item)
+                                            <option value="{{ $item->id }}">{{ $item->name }}</option>
+                                        @endforeach
+                                    </select>
+                                    @error('lecture')
+                                        <span class="text-danger">{{ $message }}</span>
+                                    @enderror
+                                </div>
+                            @endif
+
                             <div class="form-group mb-3">
                                 <label class="form-label" for="subject">Perihal</label>
                                 <input type="text" class="form-control" name="subject" id="subject"

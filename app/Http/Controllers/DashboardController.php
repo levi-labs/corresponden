@@ -22,7 +22,7 @@ class DashboardController extends Controller
         if (count($countActivity) == 0) {
             $recentActivity = $this->activity = RecentActivity::where('user_id', auth('web')->user()->id)->get();
         } else {
-            $recentActivity = $this->activity = RecentActivity::where('user_id', auth('web')->user()->id)->limit(20)->get();
+            $recentActivity = $this->activity = RecentActivity::where('user_id', auth('web')->user()->id)->limit(10)->get();
         }
         if (auth('web')->user()->role == 'admin' || auth('web')->user()->role == 'staff') {
             $report =  $this->activitiesPerDay = RecentActivity::selectRaw('DATE(created_at) as date, COUNT(*) as activity_count')

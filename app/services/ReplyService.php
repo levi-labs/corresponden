@@ -7,6 +7,7 @@ use App\Models\Inbox;
 use App\Models\Notification;
 use App\Models\Reply;
 use App\Models\Sent;
+use App\Models\User;
 use Illuminate\Support\Facades\DB;
 
 use function Laravel\Prompts\select;
@@ -57,6 +58,8 @@ class ReplyService
                 ];
 
                 $sent = Sent::create($sent_data);
+                $check_role = User::where('id', $inbox->sender_id)->first();
+                $is_staff = $check_role->role == 'lecturer' ? false : true;
 
                 $new_inbox = Inbox::create([
                     'receiver_id' => $inbox->sender_id,
@@ -67,7 +70,12 @@ class ReplyService
                     'body' => 'Dikembalikan ke ' . $inbox->sender_name,
                     'date' => date('Y-m-d'),
                     'sent_id' => $sent->id,
+                    'is_staff' => $is_staff,
                     'attachment' => $path
+                ]);
+                Notification::create([
+                    'receiver_id' => $inbox->sender_id,
+                    'inbox_id' => $new_inbox->id
                 ]);
                 Reply::create([
                     'id_letter' => $data['id_letter'],
@@ -93,6 +101,8 @@ class ReplyService
 
                 ];
                 $sent = Sent::create($sent_data);
+                $check_role = User::where('id', $inbox->sender_id)->first();
+                $is_staff = $check_role->role == 'lecturer' ? false : true;
 
                 $new_inbox = Inbox::create([
                     'receiver_id' => $inbox->sender_id,
@@ -102,6 +112,7 @@ class ReplyService
                     'subject' => $inbox->subject,
                     'body' => 'Dikembalikan ke ' . $inbox->sender_name,
                     'date' => date('Y-m-d'),
+                    'is_staff' => $is_staff,
                     'sent_id' => $sent->id,
 
                 ]);

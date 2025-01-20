@@ -35,10 +35,20 @@
                         <div class="row justify-content-between">
                             <div class="col-md-9">
                                 <p class="text-sm ms-5">Dari:&nbsp;
+
                                     {{ $incomingLetter->sender_name }} <span
                                         class="small">{{ '<username: ' . $incomingLetter->sender_username . '>' }}</span>
-                                    @if (Auth::user()->role === 'admin' || Auth::user()->role === 'staff' || Auth::user()->role === 'lecturer')
-                                        <span>| NIM:{{ $incomingLetter->student_id }}</span>
+                                    @if ($incomingLetter->sender_role == 'student')
+                                        <span>| {{ 'NIM:' . $incomingLetter->student_id ?? '' }}</span>
+                                    @endif
+                                    @if ($incomingLetter->sender_role == 'staff')
+                                        {{-- @php
+                                            dd($incomingLetter);
+                                        @endphp --}}
+                                        <span>| {{ 'NIP:' . $incomingLetter->staff_id ?? '' }}</span>
+                                    @endif
+                                    @if ($incomingLetter->sender_role == 'lecturer')
+                                        <span>| {{ 'NIP:' . $incomingLetter->lecturer_id ?? '' }}</span>
                                     @endif
 
                                 </p>
@@ -119,6 +129,9 @@
                 </div>
             </div>
         </div>
+        {{-- @php
+            dd($incomingLetter);
+        @endphp --}}
 
     </section>
     @include('components.modal.approve', ['incomingLetter' => $incomingLetter])

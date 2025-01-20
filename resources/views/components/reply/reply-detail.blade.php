@@ -20,6 +20,8 @@
                         $reply = \App\Models\Reply::where('id_letter', $incomingLetter->id)->first();
                     } elseif (auth('web')->user()->role == 'student') {
                         $reply = \App\Models\Reply::where('inbox_id', $incomingLetter->id)->first();
+                    } elseif (auth('web')->user()->role == 'lecturer') {
+                        $reply = \App\Models\Reply::where('inbox_id', $incomingLetter->id)->first();
                     }
 
                     if ($reply->file !== null) {
@@ -28,6 +30,10 @@
                                 ->where('file', '!=', '')
                                 ->first();
                         } elseif (auth('web')->user()->role == 'student') {
+                            $file = \App\Models\Reply::where('inbox_id', $incomingLetter->id)
+                                ->where('file', '!=', '')
+                                ->first();
+                        } elseif (auth('web')->user()->role == 'lecturer') {
                             $file = \App\Models\Reply::where('inbox_id', $incomingLetter->id)
                                 ->where('file', '!=', '')
                                 ->first();

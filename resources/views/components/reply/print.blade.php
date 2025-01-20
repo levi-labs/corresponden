@@ -49,9 +49,17 @@
     <!-- Tanda Tangan -->
     <div class="signature">
         <p>Mengetahui,</p>
-        <p>Koordinator Kampus {{ $reply->campus ?? '' }}</p>
-        <br><br><br>
-        <p><strong>{{ $reply->receiver_name }}</strong></p>
+        @if ($reply->sender_role == 'student')
+            <p>Koordinator Kampus {{ $reply->campus ?? '' }}</p>
+            <br><br><br>
+            <p><strong>{{ $reply->receiver_name }}</strong></p>
+        @elseif ($reply->sender_role == 'lecturer')
+            <p>Staff Kampus {{ $reply->campus ?? '' }}</p>
+            <br><br><br>
+            <p><strong>{{ $reply->receiver_name }}</strong></p>
+        @endif
+
+
     </div>
 
     <script>

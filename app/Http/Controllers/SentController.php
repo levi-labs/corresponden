@@ -50,13 +50,17 @@ class SentController extends Controller
         $data = $request->validated();
         try {
             $sender = auth('web')->user()->id;
+            $auth = auth('web')->user()->role;
+            if ($auth == 'lecturer') {
+                $receiver = User::where('role', 'staff')->first();
+            }
             $letter_number = date('Y') . '/' . 'USNI' . '/' . str_pad($sender, 3, '0', STR_PAD_LEFT) . rand(0, 999);
             $data = [
                 'subject' => $data['subject'],
                 'body' => $data['body'],
                 'letter_type_id' => $data['letter_type'],
                 'sender_id' => auth('web')->user()->id,
-                'receiver_id' => $data['lecture'],
+                'receiver_id' => auth('web')->user()->role == 'lecturer' ? $receiver->id : $data['lecture'],
                 'letter_number' => $letter_number,
                 'date' => date('Y-m-d'),
                 'status' => 'unread',

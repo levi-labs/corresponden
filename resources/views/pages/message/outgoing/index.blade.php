@@ -30,7 +30,10 @@
                     </div>
                     <div class="card-body">
                         <h5 class="card-title">
-                            <a href="{{ route('outgoing-letter.create') }}" class="btn btn-primary btn-sm">Add</a>
+                            @if (auth('web')->user()->role !== 'admin' && auth('web')->user()->role !== 'staff')
+                                <a href="{{ route('outgoing-letter.create') }}" class="btn btn-primary btn-sm">Add</a>
+                            @endif
+
                         </h5>
 
 
