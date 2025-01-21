@@ -30,7 +30,7 @@
                     </div>
                     <div class="card-body">
                         <h5 class="card-title">
-                            <a href="{{ route('archive-outgoing-letter.search') }}" class="btn btn-primary btn-sm">Add</a>
+                            <a href="{{ route('archive-outgoing-letter.create') }}" class="btn btn-primary btn-sm">Add</a>
                         </h5>
                         <div class="float-end">
                             <form class="search-form d-flex align-items-center" method="POST"

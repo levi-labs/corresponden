@@ -26,6 +26,11 @@
                                 <h4 class="alert-heading">Error!</h4>
                                 <p>{{ session('error') }}</p>
                             </div>
+                        @elseif(session('info'))
+                            <div class="alert alert-info" role="alert">
+                                <h4 class="alert-heading">Info!</h4>
+                                <p>{{ session('info') }}</p>
+                            </div>
                         @endif
                     </div>
                     <div class="card-body">
@@ -63,7 +68,7 @@
                                         <td class="text-center align-middle">
                                             {{-- <a href="{{ route('letter-type.edit', $item->id) }}"
                                                 class="btn btn-warning btn-sm">Edit</a> --}}
-                                            <form action="{{ route('letter-type.destroy', $item->id) }}" method="POST"
+                                            <form action="{{ route('outgoing-letter.destroy', $item->id) }}" method="POST"
                                                 style="display:inline">
                                                 @csrf
                                                 @method('DELETE')

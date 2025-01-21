@@ -111,6 +111,15 @@ class InboxController extends Controller
         }
     }
 
+    public function destroy(Inbox $incomingLetter)
+    {
+        try {
+            $incomingLetter->delete();
+            return redirect()->back()->with('success', 'Message deleted successfully');
+        } catch (\Throwable $th) {
+            return redirect()->back()->with('error', $th->getMessage());
+        }
+    }
     public function downloadReply($IdLetter, Request $request)
     {
         try {
@@ -198,13 +207,31 @@ class InboxController extends Controller
             ->join('users as receiver', 'receiver.id', '=', 'inbox.receiver_id')
             ->select('receiver.role')
             ->first();
-
-
-
+        // dd($checkRole);
         try {
             $title = 'Preview Balasan';
             // $reply = Reply::find($idReply);
             if ($checkRole->role == 'student') {
+                // dd($checkRole);
+                $reply = Reply::join('inbox', 'inbox.id', '=', 'replies.id_letter')
+                    ->join('letter_types', 'inbox.letter_type_id', '=', 'letter_types.id')
+                    ->join('users as sender', 'inbox.sender_id', '=', 'sender.id')
+                    ->join('users as receiver', 'inbox.receiver_id', '=', 'receiver.id')
+                    ->join('students', 'inbox.receiver_id', '=', 'students.user_id')
+                    ->select(
+                        'replies.*',
+                        'inbox.letter_number as letter_number',
+                        'letter_types.name as letter_type',
+                        'sender.role as sender_role',
+                        'sender.name as sender_name',
+                        'receiver.name as receiver_name',
+                        'students.fullname as student_name',
+                        'students.student_id'
+                    )
+                    ->where('replies.id', $idReply)
+                    ->first();
+                // dd($reply);
+            } elseif ($checkRole->role == 'lecturer') {
                 $reply = Reply::join('inbox', 'inbox.id', '=', 'replies.id_letter')
                     ->join('letter_types', 'inbox.letter_type_id', '=', 'letter_types.id')
                     ->join('users as sender', 'inbox.sender_id', '=', 'sender.id')
@@ -218,28 +245,14 @@ class InboxController extends Controller
                         'sender.name as sender_name',
                         'receiver.name as receiver_name',
                         'students.fullname as student_name',
-                        'students.student_id'
+                        'students.student_id as student_id'
+                        // 'lecturers.fullname as student_name',
+                        // 'lecturers.lecturer_id as student_id'
                     )
                     ->where('replies.id', $idReply)
                     ->first();
-            } elseif ($checkRole->role == 'lecturer') {
-                $reply = Reply::join('inbox', 'inbox.id', '=', 'replies.id_letter')
-                    ->join('letter_types', 'inbox.letter_type_id', '=', 'letter_types.id')
-                    ->join('users as sender', 'inbox.sender_id', '=', 'sender.id')
-                    ->join('users as receiver', 'inbox.receiver_id', '=', 'receiver.id')
-                    ->join('lecturers', 'inbox.sender_id', '=', 'lecturers.user_id')
-                    ->select(
-                        'replies.*',
-                        'inbox.letter_number as letter_number',
-                        'letter_types.name as letter_type',
-                        'sender.role as sender_role',
-                        'sender.name as sender_name',
-                        'receiver.name as receiver_name',
-                        'lecturers.fullname as student_name',
-                        'lecturers.lecturer_id as student_id'
-                    )
-                    ->where('replies.id', $idReply)
-                    ->first();
+
+                // dd($reply);
             }
 
             // dd($reply);

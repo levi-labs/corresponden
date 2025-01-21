@@ -111,6 +111,14 @@ class SentController extends Controller
      */
     public function destroy(Sent $outgoingLetter)
     {
-        //
+        try {
+            $outgoingLetter->delete();
+            return redirect()->back()->with('success', 'Message deleted successfully');
+        } catch (\Throwable $th) {
+            if ($th->getCode() == 23000) {
+                return redirect()->back()->with('info', 'Message cannot be deleted because it has been processed');
+            }
+            return redirect()->back()->with('error', $th->getMessage());
+        }
     }
 }
