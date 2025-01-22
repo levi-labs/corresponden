@@ -79,15 +79,7 @@
                         <form action="{{ route('outgoing-letter.store') }}" method="post" enctype="multipart/form-data">
                             @csrf
                             <!-- Quill Editor Default -->
-                            <div class="form-group mb-3">
-                                <label class="form-label" for="name">Nama<span class="text-danger">*</span></label>
-                                <input type="text" class="form-control" name="name" id="name"
-                                    value="{{ old('name') ?? auth('web')->user()->name }}"
-                                    @if (auth('web')->user()->role !== 'admin' || auth('web')->user()->role !== 'staff') readonly @endif>
-                                @error('name')
-                                    <span class="text-danger">{{ $message }}</span>
-                                @enderror
-                            </div>
+
                             <div class="form-group mb-3">
                                 <label class="form-label" for="letter_type">Jenis Surat<span
                                         class="text-danger">*</span></label>
@@ -101,7 +93,7 @@
                                     <span class="text-danger">{{ $message }}</span>
                                 @enderror
                             </div>
-                            @if (auth('web')->user()->role != 'lecturer')
+                            @if (auth('web')->user()->role == 'test')
                                 <div class="form-group mb-3">
                                     <label class="form-label" for="lecture">Dosen<span class="text-danger">*</span></label>
                                     <select class="form-control js-example-basic-single" name="lecture">
@@ -115,7 +107,6 @@
                                     @enderror
                                 </div>
                             @endif
-
                             <div class="form-group mb-3">
                                 <label class="form-label" for="subject">Perihal</label>
                                 <input type="text" class="form-control" name="subject" id="subject"

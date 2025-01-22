@@ -11,18 +11,6 @@
                     method="POST">
                     @csrf
                     <input type="hidden" name="id_letter" id="id_letter" value="{{ $incomingLetter->id }}">
-
-                    <div class="form-group mb-3">
-                        <label class="form-label" for="email">Source</label>
-                        <select name="source" id="source" class="form-control" required>
-                            <option value="" selected disabled>Select Source</option>
-                            <option value="create">Buat Sendiri</option>
-                            <option value="from_computer">Upload Dari Komputer</option>
-                        </select>
-                        @error('source')
-                            <span class="text-danger">{{ $message }}</span>
-                        @enderror
-                    </div>
                     <div class="create-letter">
                         <div class="form-group mb-3">
                             <label class="form-label" for="greeting">Greeting</label>
@@ -46,20 +34,22 @@
                         </div>
                         @if ($incomingLetter->sender_role == 'student')
                             <div class="form-group mb-3">
-                                <label class="form-label" for="student_id">NIM Mahasiswa</label>
-                                <input type="text" class="form-control" name="student_id" id="student_id" readonly
+                                <label class="form-label" for="student_id">NIM Mahasiswa :
+                                    {{ $incomingLetter->student_id }}</label>
+                                {{-- <input type="text" class="form-control" name="student_id" id="student_id" readonly
                                     value="{{ $incomingLetter->student_id }}">
                                 @error('student_id')
                                     <span class="text-danger">{{ $message }}</span>
-                                @enderror
+                                @enderror --}}
                             </div>
                             <div class="form-group mb-3">
-                                <label class="form-label" for="student_name">Nama Mahasiswa</label>
-                                <input type="text" class="form-control" name="student_name" id="student_name"
-                                    readonly value="{{ $incomingLetter->student_name }}">
-                                @error('student_name')
+                                <label class="form-label" for="student_name">Nama Mahasiswa :
+                                    {{ $incomingLetter->student_name }}</label>
+                                {{-- <input type="text" class="form-control" name="student_name" id="student_name"
+                                    readonly value="{{ $incomingLetter->student_name }}"> --}}
+                                {{-- @error('student_name')
                                     <span class="text-danger">{{ $message }}</span>
-                                @enderror
+                                @enderror --}}
                             </div>
                         @else
                             <div class="form-group mb-3">
@@ -107,20 +97,10 @@
         let upload = document.querySelector('.upload-file');
         let form_approve = document.getElementById('form_approve');
 
-        create.style.display = 'none';
+
         upload.style.display = 'none';
 
-        source.addEventListener('change', function() {
-            if (source.value == 'create') {
 
-                create.style.display = 'block';
-                upload.style.display = 'none';
-
-            } else {
-                create.style.display = 'none';
-                upload.style.display = 'block';
-            }
-        })
 
         let greeting = new Quill('#greeting', {
             theme: 'snow',
@@ -264,3 +244,15 @@
         }
     });
 </script>
+
+{{-- <div class="form-group mb-3">
+    <label class="form-label" for="email">Source</label>
+    <select name="source" id="source" class="form-control" required>
+        <option value="" selected disabled>Select Source</option>
+        <option value="create">Buat Sendiri</option>
+        <option value="from_computer">Upload Dari Komputer</option>
+    </select>
+    @error('source')
+        <span class="text-danger">{{ $message }}</span>
+    @enderror
+</div> --}}

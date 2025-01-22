@@ -57,8 +57,33 @@ class InboxController extends Controller
 
         return view('pages.message.incoming.detail', compact('title', 'incomingLetter'));
     }
-
     public function approve(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'greeting' => 'required',
+            'closing' => 'required',
+        ]);
+        if ($validator->fails()) {
+            return response()->json(['error' => $validator->errors()->toArray()], 422);
+        }
+        $data = $request->all();
+
+        DB::beginTransaction();
+        try {
+            $this->replyService->approve($data);
+            $this->recentActivityService->create(auth('web')->user()->id, 'reply-message');
+            DB::commit();
+            session()->flash('success', 'Letter approved successfully');
+            return response()->json([
+                'success' => true,
+                'message' => 'Letter approved successfully',
+            ], 201);
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            return response()->json(['error' => $th->getMessage()], 500);
+        }
+    }
+    public function approves(Request $request)
     {
         $title = 'Approve Pesan Masuk';
 
@@ -74,6 +99,7 @@ class InboxController extends Controller
                 return response()->json(['error' => $validator->errors()->toArray()], 422);
             }
             $data = $request->all();
+
             DB::beginTransaction();
             try {
                 $this->replyService->approve($data);

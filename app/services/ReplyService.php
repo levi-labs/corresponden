@@ -41,7 +41,6 @@ class ReplyService
         $letter_number = date('Y') . '/' . 'USNI' . '/' . str_pad($sender, 3, '0', STR_PAD_LEFT) . rand(0, 999);
         DB::beginTransaction();
         if ($file != null) {
-
             try {
                 $name = $file->getClientOriginalName();
                 $path = $file->storeAs('outgoing_letters', $name, 'public');

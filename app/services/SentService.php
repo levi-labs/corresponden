@@ -55,6 +55,7 @@ class SentService
                 'sent.attachment',
                 'sent.letter_number'
             )
+            ->orderBy('sent.created_at', 'desc')
             ->paginate(25);
         return $data;
     }

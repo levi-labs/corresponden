@@ -70,7 +70,7 @@
                                     <div class="card-body">
                                         <p class="small text-sm">{!! $outgoingLetter->body !!}</p>
                                         <hr>
-                                        @if ($outgoingLetter->attachment === null)
+                                        @if ($outgoingLetter->attachment !== null)
                                             <p class="small">Attachment:&nbsp;<a class="ms-2 btn btn-secondary btn-sm"
                                                     href="{{ asset('storage/' . $outgoingLetter->attachment) }}"><i
                                                         class="bi bi-download"></i> Download</a>
