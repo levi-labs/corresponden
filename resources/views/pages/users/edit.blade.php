@@ -29,13 +29,22 @@
                             </div>
                             <div class="col-12">
                                 <label for="role" class="form-label">Role</label>
-                                <select class="form-select" aria-label="Default select example" name="role">
+                                <select id="role" class="form-select" aria-label="Default select example"
+                                    name="role">
                                     <option selected>Open this select roles</option>
                                     @foreach ($roles as $role)
                                         <option {{ $user->role === $role ? 'selected' : '' }} value="{{ $role }}">
                                             {{ $role }}</option>
                                     @endforeach
                                 </select>
+                            </div>
+                            <div class="col-12 is_koordinator">
+                                <legend class="col-form-label col-sm-2 pt-0">Koordinator</legend>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="gridCheck1" name="is_koordinator"
+                                        value="1" {{ $user->is_koordinator ? 'checked' : '' }}>
+                                    <label for="gridCheck1" class="form-label">Yes/No</label>
+                                </div>
                             </div>
                             <div class="text-end">
                                 <button type="submit" class="btn btn-primary">Submit</button>
@@ -48,4 +57,24 @@
             </div>
         </div>
     </section>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+
+            let role = document.getElementById('role');
+
+            let koordinator = document.querySelector('.is_koordinator');
+            koordinator.style.display = 'none';
+            if (role.value == 'lecturer') {
+                koordinator.style.display = 'block';
+
+            }
+            role.addEventListener('change', function() {
+                if (this.value == 'lecturer') {
+                    koordinator.style.display = 'block';
+                } else {
+                    koordinator.style.display = 'none';
+                }
+            });
+        });
+    </script>
 @endsection

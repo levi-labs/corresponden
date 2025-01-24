@@ -23,7 +23,8 @@ class UserRequest extends FormRequest
     {
         $rules = [
             'name' => 'required|string|max:255',
-            'role' => 'required|string|in:admin,staff,lecturer,student'
+            'role' => 'required|string|in:admin,staff,lecturer,student,rector,vice rector',
+            'is_koordinator' => 'nullable',
         ];
 
         if ($this->method() === 'PUT') {

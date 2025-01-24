@@ -4,8 +4,10 @@ namespace app\services;
 
 use App\Models\User;
 use App\services\LectureService;
+use App\Services\RectorService;
 use App\services\StaffService;
 use App\services\StudentService;
+use App\Services\ViceRectorService;
 use Illuminate\Support\Facades\DB;
 
 class UserService
@@ -13,16 +15,23 @@ class UserService
     protected $studentService;
     protected $lectureService;
     protected $staffService;
+    protected $viceRectorService;
+    protected $rectorService;
 
     public function __construct(
         StudentService $studentService,
         LectureService $lectureService,
-        StaffService $staffService
+        StaffService $staffService,
+        ViceRectorService $viceRectorService,
+        RectorService $rectorService
+
 
     ) {
         $this->studentService = $studentService;
         $this->lectureService = $lectureService;
         $this->staffService = $staffService;
+        $this->viceRectorService = $viceRectorService;
+        $this->rectorService = $rectorService;
     }
 
 
@@ -37,9 +46,10 @@ class UserService
 
     public function create($data)
     {
+        // dd($data);
         try {
             DB::transaction(function () use ($data) {
-                // dd($data);
+                // $data['is_koordinator'] = ;
                 $user = User::create($data);
                 $data['user_id'] = $user->id;
                 if ($data['role'] == 'student') {
@@ -48,6 +58,10 @@ class UserService
                     $this->lectureService->createLectureFromUser($data);
                 } elseif ($data['role'] == 'staff') {
                     $this->staffService->createStaffFromUser($data);
+                } elseif ($data['role'] == 'rector') {
+                    $this->rectorService->createRectorFromUser($data);
+                } elseif ($data['role'] == 'vice rector') {
+                    $this->viceRectorService->craeteViceRectorFromUser($data);
                 }
             });
         } catch (\Throwable $th) {
@@ -57,6 +71,7 @@ class UserService
 
     public function update(User $user, $data)
     {
+
         $user->update($data);
     }
 
