@@ -116,4 +116,28 @@ Route::group(['middleware' => 'auth:'], function () {
             Route::get('/outgoing', 'archiveOutgoingForm')->name('report.archive-outgoing');
             Route::post('/outgoing', 'outgoingPrint')->name('report.print-outgoing');
         });
+    Route::controller(App\Http\Controllers\FacultyController::class)
+        ->prefix('faculties')
+        ->middleware(['auth', 'roles:admin'])
+        ->group(function () {
+            Route::get('/', 'index')->name('faculties.index');
+            Route::get('/create', 'create')->name('faculties.create');
+            Route::post('/', 'store')->name('faculties.store');
+            Route::get('/{faculty}', 'show')->name('faculties.show');
+            Route::get('/{faculty}/edit', 'edit')->name('faculties.edit');
+            Route::put('/{faculty}', 'update')->name('faculties.update');
+            Route::delete('/{faculty}', 'destroy')->name('faculties.destroy');
+        });
+    Route::controller(App\Http\Controllers\DepartmentController::class)
+        ->prefix('departments')
+        ->middleware(['auth', 'roles:admin'])
+        ->group(function () {
+            Route::get('/', 'index')->name('departments.index');
+            Route::get('/create', 'create')->name('departments.create');
+            Route::post('/', 'store')->name('departments.store');
+            Route::get('/{department}', 'show')->name('departments.show');
+            Route::get('/{department}/edit', 'edit')->name('departments.edit');
+            Route::put('/{department}', 'update')->name('departments.update');
+            Route::delete('/{department}', 'destroy')->name('departments.destroy');
+        });
 });

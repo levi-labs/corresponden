@@ -41,7 +41,8 @@ class FacultyController extends Controller
     public function edit(Faculty $faculty)
     {
         $title = 'Edit Fakultas';
-        return view('pages.faculty.edit', compact('title', 'faculty'));
+        $data = $this->facultyService->getById($faculty->id);
+        return view('pages.faculty.edit', compact('title', 'data'));
     }
 
     public function update(Faculty $faculty, Request $request)

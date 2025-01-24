@@ -17,6 +17,22 @@
                 </a>
             </li>
         @endif
+        @if (Auth::user()->role == 'admin')
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="{{ route('faculties.index') }}">
+                    <i class="bi bi-building"></i>
+                    <span>Fakultas</span>
+                </a>
+            </li>
+        @endif
+        @if (Auth::user()->role == 'admin')
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="{{ route('departments.index') }}">
+                    <i class="bi bi-calendar4-range"></i>
+                    <span>Jurusan</span>
+                </a>
+            </li>
+        @endif
         <!-- End Letter Type Nav -->
         @if (Auth::user()->role !== 'admin')
             <li class="nav-item">
@@ -38,43 +54,44 @@
             </li>
         @endif
 
+
         <!-- End Components Nav -->
         @if (Auth::user()->role == 'admin' || Auth::user()->role == 'staff')
-            <li class="nav-item"></li>
-            <a class="nav-link collapsed" data-bs-target="#forms-nav" data-bs-toggle="collapse" href="#">
-                <i class="bi bi-journal-text"></i><span>Arsip </span><i class="bi bi-chevron-down ms-auto"></i>
-            </a>
-            <ul id="forms-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
-                <li>
-                    <a href="{{ route('archive-incoming-letter.index') }}">
-                        <i class="bi bi-circle"></i><span>Surat Masuk</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="{{ route('archive-outgoing-letter.index') }}">
-                        <i class="bi bi-circle"></i><span>Surat Keluar</span>
-                    </a>
-                </li>
-            </ul>
+            <li class="nav-item">
+                <a class="nav-link collapsed" data-bs-target="#forms-nav" data-bs-toggle="collapse" href="#">
+                    <i class="bi bi-journal-text"></i><span>Arsip </span><i class="bi bi-chevron-down ms-auto"></i>
+                </a>
+                <ul id="forms-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+                    <li>
+                        <a href="{{ route('archive-incoming-letter.index') }}">
+                            <i class="bi bi-circle"></i><span>Surat Masuk</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ route('archive-outgoing-letter.index') }}">
+                            <i class="bi bi-circle"></i><span>Surat Keluar</span>
+                        </a>
+                    </li>
+                </ul>
             </li>
         @endif
         @if (Auth::user()->role == 'admin' || Auth::user()->role == 'staff')
-            <li class="nav-item"></li>
-            <a class="nav-link collapsed" data-bs-target="#forms-report" data-bs-toggle="collapse" href="#">
-                <i class="bi bi-file-earmark"></i><span>Report </span><i class="bi bi-chevron-down ms-auto"></i>
-            </a>
-            <ul id="forms-report" class="nav-content collapse " data-bs-parent="#sidebar-nav">
-                <li>
-                    <a href="{{ route('report.archive-incoming') }}">
-                        <i class="bi bi-circle"></i><span>Surat Masuk</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="{{ route('report.archive-outgoing') }}">
-                        <i class="bi bi-circle"></i><span>Surat Keluar</span>
-                    </a>
-                </li>
-            </ul>
+            <li class="nav-item">
+                <a class="nav-link collapsed" data-bs-target="#forms-report" data-bs-toggle="collapse" href="#">
+                    <i class="bi bi-file-earmark"></i><span>Report </span><i class="bi bi-chevron-down ms-auto"></i>
+                </a>
+                <ul id="forms-report" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+                    <li>
+                        <a href="{{ route('report.archive-incoming') }}">
+                            <i class="bi bi-circle"></i><span>Surat Masuk</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ route('report.archive-outgoing') }}">
+                            <i class="bi bi-circle"></i><span>Surat Keluar</span>
+                        </a>
+                    </li>
+                </ul>
             </li>
         @endif
 
