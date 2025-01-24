@@ -49,14 +49,18 @@
     <!-- Tanda Tangan -->
     <div class="signature">
         <p>Mengetahui,</p>
-        @if ($reply->sender_role == 'student')
+        @if ($reply->tertanda_role == 'lecturer')
             <p>Koordinator Kampus {{ $reply->campus ?? '' }}</p>
             <br><br><br>
-            <p><strong>{{ $reply->receiver_name }}</strong></p>
-        @elseif ($reply->sender_role == 'lecturer')
-            <p>Staff Kampus {{ $reply->campus ?? '' }}</p>
+            <p><strong>{{ $reply->tertanda_name }}</strong></p>
+        @elseif ($reply->sender_role !== 'vice rector')
+            <p>Wakil Rektor {{ $reply->campus ?? '' }}</p>
             <br><br><br>
-            <p><strong>{{ $reply->receiver_name }}</strong></p>
+            <p><strong>{{ $reply->tertanda_name }}</strong></p>
+        @elseif($reply->tertanda_role == 'rector')
+            <p>Rektor {{ $reply->campus ?? '' }}</p>
+            <br><br><br>
+            <p><strong>{{ $reply->tertanda_name }}</strong></p>
         @endif
 
 

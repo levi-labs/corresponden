@@ -108,7 +108,7 @@
                                             data-bs-target="#largeModal">
                                             Approve
                                         </button>
-                                        <div class="btn btn-light btn-sm">Reject</div>
+                                        {{-- <div class="btn btn-light btn-sm">Reject</div> --}}
                                     </div>
                                 </div>
                             @endif

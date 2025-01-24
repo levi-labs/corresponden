@@ -66,20 +66,12 @@
                             </div>
                         @else
                             <div class="form-group mb-3">
-                                <label class="form-label" for="student_id">NIP Dosen</label>
-                                <input type="text" class="form-control" name="student_id" id="student_id" readonly
-                                    value="{{ $incomingLetter->lecturer_id }}">
-                                @error('student_id')
-                                    <span class="text-danger">{{ $message }}</span>
-                                @enderror
+                                <label class="form-label" for="student_id">NIP Dosen :
+                                    {{ $incomingLetter->lecturer_id }}</label>
                             </div>
                             <div class="form-group mb-3">
-                                <label class="form-label" for="student_name">Nama Dosen</label>
-                                <input type="text" class="form-control" name="student_name" id="student_name"
-                                    readonly value="{{ $incomingLetter->lecturer_name }}">
-                                @error('student_name')
-                                    <span class="text-danger">{{ $message }}</span>
-                                @enderror
+                                <label class="form-label" for="student_name">Nama Dosen :
+                                    {{ $incomingLetter->lecturer_name }}</label>
                             </div>
                         @endif
 
