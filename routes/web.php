@@ -52,6 +52,7 @@ Route::group(['middleware' => 'auth:'], function () {
             Route::get('/{outgoingLetter}/edit', 'edit')->name('outgoing-letter.edit');
             Route::put('/{outgoingLetter}', 'update')->name('outgoing-letter.update');
             Route::delete('/{outgoingLetter}', 'destroy')->name('outgoing-letter.destroy');
+            Route::get('/get-faculties/{id}', 'getFaculties')->name('get-faculties');
         });
     Route::controller(App\Http\Controllers\InboxController::class)
         ->prefix('incoming-letter')
@@ -60,6 +61,7 @@ Route::group(['middleware' => 'auth:'], function () {
             Route::get('/', 'index')->name('incoming-letter.index');
             Route::get('/create', 'create')->name('incoming-letter.create');
             Route::post('/approve', 'approve')->name('incoming-letter.approve');
+            Route::post('/approve-updates/{id}', 'approveUpdate')->name('incoming-letter.approveUpdates');
             Route::get('/{incomingLetter}', 'show')->name('incoming-letter.show');
             Route::get('/{incomingLetter}/edit', 'edit')->name('incoming-letter.edit');
             Route::put('/{incomingLetter}', 'update')->name('incoming-letter.update');

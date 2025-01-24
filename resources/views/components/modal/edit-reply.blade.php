@@ -1,43 +1,44 @@
-<div class="modal fade" id="largeModal" data-bs-backdrop="false" tabindex="-1" aria-hidden="true" style="display: none;">
+<div class="modal fade" id="largeModals" data-bs-backdrop="false" tabindex="-1" aria-hidden="true" style="display: none;">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Form Approve</h5>
+                <h5 class="modal-title">Form Edit Approve</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 <div class="my-alert"></div>
-                <form id="form_approve" action="{{ route('incoming-letter.approve') }}" enctype="multipart/form-data"
+                <form id="form_approve-edit" action="{{ route('incoming-letter.approveUpdates', $reply->id) }}"
                     method="POST">
                     @csrf
                     <input type="hidden" name="id_letter" id="id_letter" value="{{ $incomingLetter->id }}">
                     <div class="create-letter">
                         <div class="form-group mb-3">
-                            <label class="form-label" for="greeting">Greeting</label>
-                            <div id="greeting" style="height: 100px">
+                            <label class="form-label" for="greeting-edit">Greeting</label>
+                            <div id="greeting-edit" style="height: 100px">
                                 <p>Dengan hormat,</p>
                             </div>
-                            <textarea rows="3" class="mb-3 d-none" name="greeting" id="quill-editor-area-greeting"></textarea>
-                            @error('greeting')
+                            <textarea rows="3" class="mb-3 d-none" name="greetings" id="quill-editor-area-greeting-edit">{{ $reply->greeting }}</textarea>
+                            @error('greetings')
                                 <span class="text-danger">{{ $message }}</span>
                             @enderror
                         </div>
                         <div class="form-group mb-3">
                             <label class="form-label" for="closing">Closing</label>
-                            <div id="closing" style="height: 100px">
+                            <div id="closing-edit" style="height: 100px">
                                 <p>Demikian surat ini kami sampaikan,</p>
                             </div>
-                            <textarea rows="3" class="mb-3 d-none" name="closing" id="quill-editor-area-closing"></textarea>
-                            @error('closing')
+                            <textarea rows="3" class="mb-3 d-none" name="closings" id="quill-editor-area-closing-edit">{{ $reply->closing }}</textarea>
+                            @error('closings')
                                 <span class="text-danger">{{ $message }}</span>
                             @enderror
                         </div>
                         <div class="form-group mb-3">
                             <label class="form-label" for="closing">Tertanda</label>
-                            <select class="form-control" name="sincerely_id" id="sincerely_id">
+                            <select class="form-control" name="sincerelys_id" id="sincerely_id">
                                 <option selected disabled>Pilih Tertanda</option>
                                 @foreach ($sincerelys as $item)
-                                    <option value="{{ $item->id }}">{{ $item->name . ' - ' . $item->role }}
+                                    <option{{ $item->id == $reply->sincerely_id ? ' selected' : '' }}
+                                        value="{{ $item->id }}">{{ $item->name . ' - ' . $item->role }}
                                         {{ $item->is_koordinator == 1 ? ' | Koordinator' : '' }}</option>
                                 @endforeach
                             </select>
@@ -108,14 +109,9 @@
         let create = document.querySelector('.create-letter');
         let source = document.getElementById('source');
         let upload = document.querySelector('.upload-file');
-        let form_approve = document.getElementById('form_approve');
-
-
+        let form_approveEdit = document.getElementById('form_approve-edit');
         upload.style.display = 'none';
-
-
-
-        let greeting = new Quill('#greeting', {
+        let greetingEdit = new Quill('#greeting-edit', {
             theme: 'snow',
             modules: {
                 toolbar: [
@@ -140,26 +136,30 @@
             }
         });
 
-        let closing = new Quill('#closing', {
+        let closingEdit = new Quill('#closing-edit', {
             theme: 'snow'
         });
-        let gree = document.getElementById('quill-editor-area-greeting');
-        let clos = document.getElementById('quill-editor-area-closing');
+        let greeEdit = document.getElementById('quill-editor-area-greeting-edit');
+        let closEdit = document.getElementById('quill-editor-area-closing-edit');
 
-        greeting.on('text-change', function(delta, oldDelta, source) {
-            gree.value = greeting.root.innerHTML;
+
+        greetingEdit.root.innerHTML = greeEdit.value;
+        closingEdit.root.innerHTML = closEdit.value;
+
+        greetingEdit.on('text-change', function(delta, oldDelta, source) {
+            greeEdit.value = greetingEdit.root.innerHTML;
         });
 
-        closing.on('text-change', function(delta, oldDelta, source) {
-            clos.value = closing.root.innerHTML;
+        closingEdit.on('text-change', function(delta, oldDelta, source) {
+            closEdit.value = closingEdit.root.innerHTML;
         });
 
-        gree.addEventListener('input', function() {
-            greeting.root.innerHTML = gree.value
+        greeEdit.addEventListener('input', function() {
+            greetingEdit.root.innerHTML = greeEdit.value
         });
 
-        clos.addEventListener('input', function() {
-            closing.root.innerHTML = clos.value
+        closEdit.addEventListener('input', function() {
+            closingEdit.root.innerHTML = closEdit.value
         });
         const attachmentInput = document.getElementById('attachment');
         attachmentInput.addEventListener('change', function() {
@@ -174,49 +174,51 @@
                 }
             }
         });
-        if (form_approve) {
-            form_approve.addEventListener('submit', function(e) {
+        if (form_approveEdit) {
+            form_approveEdit.addEventListener('submit', function(e) {
                 e.preventDefault();
-                const formData = new FormData(form_approve);
+                const formDatas = new FormData(form_approveEdit);
                 console.log(attachmentInput.files[0]);
 
                 if (attachmentInput.files.length > 0) {
-                    formData.set('attachment', attachmentInput.files[
+                    formDatas.set('attachment', attachmentInput.files[
                         0]); // Tambahkan file ke FormData
                 }
                 // console.log([...formData.entries()]); // O
-                const xhr = new XMLHttpRequest();
-                xhr.open('POST', form_approve.action);
-                xhr.setRequestHeader('X-CSRF-TOKEN', document.querySelector('meta[name="csrf-token"]')
+                console.log(form_approveEdit.action);
+                alert(form_approveEdit.method);
+                const xhrs = new XMLHttpRequest();
+                xhrs.open(form_approveEdit.method, form_approveEdit.action);
+                xhrs.setRequestHeader('X-CSRF-TOKEN', document.querySelector('meta[name="csrf-token"]')
                     .getAttribute('content'));
-                xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+                xhrs.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
 
-                xhr.send(formData);
+                xhrs.send(formDatas);
 
-                xhr.onreadystatechange = function() {
-                    if (xhr.readyState == 4) {
-                        console.log('ini status', xhr.status);
+                xhrs.onreadystatechange = function() {
+                    if (xhrs.readyState == 4) {
+                        console.log('ini status', xhrs.status);
 
-                        if (xhr.status == 200 && xhr.status < 300) {
+                        if (xhrs.status == 200 && xhrs.status < 300) {
                             window.location.reload();
-                        } else if (xhr.status == 201) {
+                        } else if (xhrs.status == 201) {
                             window.location.reload();
 
-                        } else if (xhr.status == 202) {
+                        } else if (xhrs.status == 202) {
                             window.location.reload();
-                        } else if (xhr.status == 422) {
-                            const response = JSON.parse(xhr.responseText);
-                            handleErrors(response.error);
-                            let modal = document.getElementById('largeModal');
-                            modal.style.display = 'block';
+                        } else if (xhrs.status == 422) {
+                            const responses = JSON.parse(xhrs.responseText);
+                            handleErrors(responses.error);
+                            let modals = document.getElementById('largeModals');
+                            modals.style.display = 'block';
 
-                        } else if (xhr.status == 413) {
-                            let alert = document.querySelector('.my-alert');
-                            alert.innerHTML = `<div class="alert alert-danger" role="alert">File size
+                        } else if (xhrs.status == 413) {
+                            let alerts = document.querySelector('.my-alert');
+                            alerts.innerHTML = `<div class="alert alert-danger" role="alert">File size
                             melebihi 5MB</div>`;
 
-                        } else if (xhr.status == 500) {
-                            let alert = document.querySelector('.my-alert');
+                        } else if (xhrs.status == 500) {
+                            let alerts = document.querySelector('.my-alert');
                             alert.innerHTML = `<div class="alert alert-danger" role="alert">Something
                             went wrong</div>`;
 
@@ -230,8 +232,8 @@
 
         function handleErrors(errors) {
             // Menghapus pesan error sebelumnya
-            const errorMessages = document.querySelectorAll('.text-danger');
-            errorMessages.forEach(function(msg) {
+            const errorMessagess = document.querySelectorAll('.text-danger');
+            errorMessagess.forEach(function(msg) {
                 msg.remove();
             });
             console.log(errors);

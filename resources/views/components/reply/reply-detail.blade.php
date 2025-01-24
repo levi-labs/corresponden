@@ -82,8 +82,13 @@
 @if (auth('web')->user()->role == 'admin' || auth('web')->user()->role == 'staff')
     <div class="row justify-content-center">
         <div class="col-md-10 text-end">
+            <button type="button" class="btn btn-warning btn-sm" data-bs-toggle="modal"
+                data-bs-target="#largeModals">Edit</button>
             <a href="{{ route('reply-letter.destroy', $reply->id) }}" class="btn btn-danger btn-sm"
                 onclick="return confirm('Are you sure?')">Delete</a>
+
         </div>
     </div>
 @endif
+
+@include('components.modal.edit-reply', ['reply' => $reply])

@@ -123,13 +123,27 @@ class ReplyService
                     'id_letter' => $data['id_letter'],
                     'greeting' => $data['greeting'],
                     'closing' => $data['closing'],
-                    'inbox_id' => $new_inbox->id
+                    'inbox_id' => $new_inbox->id,
+                    'sincerely_id' => $data['sincerely_id']
                 ]);
                 DB::commit();
             } catch (\Throwable $th) {
                 DB::rollBack();
                 throw $th;
             }
+        }
+    }
+    public function update($id, $data)
+    {
+        try {
+            $reply =  Reply::where('id', $id)->first();
+            $reply->update([
+                'greeting' => $data['greetings'],
+                'closing' => $data['closings'],
+                'sincerely_id' => $data['sincerelys_id']
+            ]);
+        } catch (\Throwable $th) {
+            throw $th;
         }
     }
 }

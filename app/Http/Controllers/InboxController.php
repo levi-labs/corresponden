@@ -51,17 +51,22 @@ class InboxController extends Controller
 
         $title = 'Detail Pesan Masuk';
         $notif = Notification::where('inbox_id', $incomingLetter->id)->update(['status' => 'read']);
+        $sincerelys = User::where('role', 'lecturer')
+            ->orWhere('role', 'vice rector')
+            ->orWhere('role', 'rector')
+            ->get();
 
         $this->incomingLetterService->updateStatus($incomingLetter->id);
         $incomingLetter = $this->incomingLetterService->getIncomingLetterById($incomingLetter->id);
 
-        return view('pages.message.incoming.detail', compact('title', 'incomingLetter'));
+        return view('pages.message.incoming.detail', compact('title', 'incomingLetter', 'sincerelys'));
     }
     public function approve(Request $request)
     {
         $validator = Validator::make($request->all(), [
             'greeting' => 'required',
             'closing' => 'required',
+            'sincerely_id' => 'required',
         ]);
         if ($validator->fails()) {
             return response()->json(['error' => $validator->errors()->toArray()], 422);
@@ -83,6 +88,29 @@ class InboxController extends Controller
             return response()->json(['error' => $th->getMessage()], 500);
         }
     }
+    public function approveUpdate(Request $request, $id)
+    {
+
+        // $validator = Validator::make($request->all(), [
+        //     'greetings' => 'required',
+        //     'closings' => 'required',
+        //     'sincerelys_id' => 'required',
+        // ]);
+        // if ($validator->fails()) {
+        //     return response()->json(['error' => $validator->errors()->toArray()], 422);
+        // }
+        $data = $request->all();
+        try {
+            $this->replyService->update($id, $data);
+            session()->flash('success', 'Letter approved successfully');
+            return response()->json([
+                'success' => true,
+                'message' => 'Letter approved-update successfully',
+            ], 201);
+        } catch (\Throwable $th) {
+            return response()->json(['error' => $th->getMessage()], 500);
+        }
+    }
     public function approves(Request $request)
     {
         $title = 'Approve Pesan Masuk';
@@ -92,13 +120,14 @@ class InboxController extends Controller
         // dd($choice_source);
         if ($choice_source === 'create') {
             $validator = Validator::make($request->all(), [
-                'greeting' => 'required',
-                'closing' => 'required',
+                'greetings' => 'required',
+                'closinggs' => 'required',
             ]);
             if ($validator->fails()) {
                 return response()->json(['error' => $validator->errors()->toArray()], 422);
             }
             $data = $request->all();
+
 
             DB::beginTransaction();
             try {

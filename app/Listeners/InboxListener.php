@@ -36,6 +36,8 @@ class InboxListener
                     'date' => $outgoingLetter->date,
                     'subject' => $outgoingLetter->subject,
                     'body' => $outgoingLetter->body,
+                    'faculty_id' => $outgoingLetter->faculty_id,
+                    'department_id' => $outgoingLetter->department_id,
                     'attachment' => $outgoingLetter->attachment,
                     'status' => 'unread',
                     'sent_id' => $outgoingLetter->id

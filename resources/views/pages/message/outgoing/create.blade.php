@@ -93,6 +93,30 @@
                                     <span class="text-danger">{{ $message }}</span>
                                 @enderror
                             </div>
+                            <div class="form-group mb-3">
+                                <label class="form-label" for="faculty_id">Fakultas<span
+                                        class="text-danger">*</span></label>
+                                <select class="form-control" name="faculty_id" id="faculty_id">
+                                    <option selected disabled>Pilih Fakultas</option>
+                                    @foreach ($faculties as $faculty)
+                                        <option value="{{ $faculty->id }}">{{ $faculty->name }}</option>
+                                    @endforeach
+                                </select>
+                                @error('faculty_id')
+                                    <span class="text-danger">{{ $message }}</span>
+                                @enderror
+                            </div>
+                            <div class="form-group mb-3">
+                                <label class="form-label" for="department_id">Jurusan<span
+                                        class="text-danger">*</span></label>
+                                <select class="form-control" name="department_id" id="department_id">
+                                    <option selected disabled>Pilih Jurusan</option>
+
+                                </select>
+                                @error('faculty_id')
+                                    <span class="text-danger">{{ $message }}</span>
+                                @enderror
+                            </div>
                             @if (auth('web')->user()->role == 'test')
                                 <div class="form-group mb-3">
                                     <label class="form-label" for="lecture">Dosen<span class="text-danger">*</span></label>
@@ -145,6 +169,32 @@
     <script>
         document.addEventListener("DOMContentLoaded", function() {
 
+            let ajax = new XMLHttpRequest();
+            let faculties = document.getElementById('faculty_id');
+            let department_id = document.getElementById('department_id');
+            let id = faculties.value;
+            faculties.addEventListener('change', function() {
+                let id = faculties.value;
+                let url = "{{ route('get-faculties', ':id') }}".replace(':id', id);
+                ajax.onreadystatechange = function() {
+                    if (this.readyState == 4 && this.status == 200) {
+
+                        let data = JSON.parse(this.responseText);
+                        let html = '<option selected disabled>Pilih Jurusan</option>';
+                        data.forEach(department => {
+                            html +=
+                                `<option value="${department.id}">${department.name}</option>`
+                        })
+                        department_id.innerHTML = html
+                    }
+                }
+                ajax.open("GET", url, true);
+                ajax.send();
+
+
+            })
+
+
             let quill = new Quill('#editor', {
                 theme: 'snow'
             });
@@ -153,6 +203,8 @@
             quill.on('text-change', function(delta, oldDelta, source) {
                 decs.value = quill.root.innerHTML;
             });
+
+
 
             // desc.addEventListener('input', function() {
             //     quill.root.innerHTML = desc.value

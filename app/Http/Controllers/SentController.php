@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\OutgoingLetterRequest;
+use App\Models\Department;
+use App\Models\Faculty;
 use App\Models\OutgoingLetter;
 use App\Models\Sent;
 use App\Models\User;
@@ -38,8 +40,15 @@ class SentController extends Controller
     {
         $title = 'Form Pesan Keluar';
         $letterTypes = $this->letterTypeService->getLetterTypeAsRole();
+        $faculties = Faculty::all();
         $lectures = User::where('role', 'lecturer')->get();
-        return view('pages.message.outgoing.create', compact('title', 'letterTypes', 'lectures'));
+        return view('pages.message.outgoing.create', compact('title', 'letterTypes', 'lectures', 'faculties'));
+    }
+
+    public function getFaculties($id)
+    {
+        $jurusan = Department::where('faculty_id', $id)->get();
+        return response()->json($jurusan, 200);
     }
 
     /**
@@ -63,6 +72,8 @@ class SentController extends Controller
                 'receiver_id' => $receiver->id,
                 'letter_number' => $letter_number,
                 'date' => date('Y-m-d'),
+                'faculty_id' => $request->faculty_id,
+                'department_id' => $request->department_id,
                 'status' => 'unread',
             ];
             if ($request->hasFile('attachment')) {
