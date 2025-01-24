@@ -20,8 +20,9 @@ class DepartmentController extends Controller
 
     public function index()
     {
-        $departments = $this->departmentService->getAllDepartments();
-        return view('pages.department.index', compact('departments'));
+        $title = 'Daftar Jurusan';
+        $data = $this->departmentService->getAllDepartments();
+        return view('pages.department.index', compact('title', 'data'));
     }
 
     public function create()
