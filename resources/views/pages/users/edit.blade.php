@@ -32,10 +32,19 @@
                                 <select id="role" class="form-select" aria-label="Default select example"
                                     name="role">
                                     <option selected>Open this select roles</option>
-                                    @foreach ($roles as $role)
+                                    <option {{ $user->role === 'admin' ? 'selected' : '' }} value="admin">Admin</option>
+                                    <option {{ $user->role === 'staff' ? 'selected' : '' }} value="staff">Staff</option>
+                                    <option {{ $user->role === 'lecturer' ? 'selected' : '' }} value="lecturer">Dosen
+                                    </option>
+                                    <option {{ $user->role === 'student' ? 'selected' : '' }} value="student">Mahasiswa
+                                    </option>
+                                    <option {{ $user->role === 'rector' ? 'selected' : '' }} value="rector">Rektor</option>
+                                    <option {{ $user->role === 'vice rector' ? 'selected' : '' }} value="vice rector">Wakil
+                                        Rektor</option>
+                                    {{-- @foreach ($roles as $role)
                                         <option {{ $user->role === $role ? 'selected' : '' }} value="{{ $role }}">
                                             {{ $role }}</option>
-                                    @endforeach
+                                    @endforeach --}}
                                 </select>
                             </div>
                             <div class="col-12 is_koordinator">

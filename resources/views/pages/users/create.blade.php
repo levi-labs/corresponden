@@ -50,9 +50,15 @@
                                 <select id="role" class="form-select" aria-label="Default select example"
                                     name="role">
                                     <option selected>Open this select roles</option>
-                                    @foreach ($roles as $role)
+                                    <option value="admin">Admin</option>
+                                    <option value="staff">Staff</option>
+                                    <option value="lecturer">Dosen</option>
+                                    <option value="student">Mahasiswa</option>
+                                    <option value="rector">Rektor</option>
+                                    <option value="vice rector">Wakil Rektor</option>
+                                    {{-- @foreach ($roles as $role)
                                         <option value="{{ $role }}">{{ $role }}</option>
-                                    @endforeach
+                                    @endforeach --}}
                                 </select>
                                 @error('role')
                                     <span class="text-danger">{{ $message }}</span>
