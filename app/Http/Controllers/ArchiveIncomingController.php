@@ -80,7 +80,7 @@ class ArchiveIncomingController extends Controller
             ];
 
             $this->archiveIncomingLetter->create($data);
-            return redirect()->route('archive-incoming.index')->with('success', 'Archive Incoming Letter Created Successfully');
+            return redirect()->route('archive-incoming-letter.index')->with('success', 'Archive Incoming Letter Created Successfully');
         } catch (\Throwable $th) {
             return redirect()->back()->with('error', $th->getMessage());
         }
@@ -126,7 +126,7 @@ class ArchiveIncomingController extends Controller
                 'attachment' => $request->attachment === null ? $check->attachment : $path,
             ];
             $this->archiveIncomingLetter->update($id, $data);
-            return redirect()->route('archive-incoming.index')->with('success', 'Archive Incoming Letter Updated successfully');
+            return redirect()->route('archive-incoming-letter.index')->with('success', 'Archive Incoming Letter Updated successfully');
         } catch (\Throwable $th) {
             return redirect()->back()->with('error', $th->getMessage());
         }
