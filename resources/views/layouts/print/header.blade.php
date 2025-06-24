@@ -1,5 +1,5 @@
 <div class="kop-surat-container">
-    <img src="{{ asset('assets/img/usni.png') }}" alt="Logo Universitas">
+    <img src="{{ asset('assets/logo-new.png') }}" alt="Logo Universitas">
     <div class="kop-surat-text">
         <h1>UNIVERSITAS SATYA NEGARA INDONESIA (USNI)</h1>
         <h2>■ Fakultas Teknik ■ Fakultas Ekonomi</h2>

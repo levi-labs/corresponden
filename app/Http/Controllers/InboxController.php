@@ -172,6 +172,15 @@ class InboxController extends Controller
             $incomingLetter->delete();
             return redirect()->back()->with('success', 'Message deleted successfully');
         } catch (\Throwable $th) {
+            if ($th->getCode() == 23000) {
+                return redirect()->back()->with('info', 'Surat tidak dapat dihapus karena sudah diproses');
+            }
+            if ($th->getCode() == 500) {
+                return redirect()->back()->with('error', 'Surat tidak dapat dihapus karena sudah memiliki data terkait');
+            }
+            if ($th->getCode() == 404) {
+                return redirect()->back()->with('error', 'Surat tidak ditemukan');
+            }
             return redirect()->back()->with('error', $th->getMessage());
         }
     }
@@ -320,9 +329,18 @@ class InboxController extends Controller
             if ($reply) {
                 return view('components.reply.print', compact('reply', 'title'));
             } else {
-                return redirect()->back()->with('error', 'Reply not found');
+                return redirect()->back()->with('error', 'Surat balasan tidak ditemukan');
             }
         } catch (\Throwable $th) {
+            if ($th->getCode() == 23000) {
+                return redirect()->back()->with('info', 'Surat tidak dapat dihapus karena sudah memiliki data terkait');
+            }
+            if ($th->getCode() == 500) {
+                return redirect()->back()->with('error', 'Surat tidak dapat dihapus karena sudah memiliki data terkait');
+            }
+            if ($th->getCode() == 404) {
+                return redirect()->back()->with('error', 'Surat tidak ditemukan');
+            }
             return redirect()->back()->with('error', $th->getMessage());
         }
     }

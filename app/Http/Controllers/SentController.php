@@ -28,7 +28,7 @@ class SentController extends Controller
      */
     public function index()
     {
-        $title = 'Pesan Keluar';
+        $title = 'Surat Keluar';
         $data = $this->outgoingLetterService->getAllOutgoingLettersByUser();
         return view('pages.message.outgoing.index', compact('title', 'data'));
     }
@@ -38,7 +38,7 @@ class SentController extends Controller
      */
     public function create()
     {
-        $title = 'Form Pesan Keluar';
+        $title = 'Form Pengajuan Surat';
         $letterTypes = $this->letterTypeService->getLetterTypeAsRole();
         $faculties = Faculty::all();
         $lectures = User::where('role', 'lecturer')->get();
@@ -96,7 +96,7 @@ class SentController extends Controller
      */
     public function show(Sent $outgoingLetter)
     {
-        $title = 'Detail Pesan Keluar';
+        $title = 'Detail Surat Keluar';
         $outgoingLetter = $this->outgoingLetterService->getOutgoingLetterById($outgoingLetter->id);
         return view('pages.message.outgoing.detail', compact('title', 'outgoingLetter'));
     }
@@ -127,7 +127,13 @@ class SentController extends Controller
             return redirect()->back()->with('success', 'Message deleted successfully');
         } catch (\Throwable $th) {
             if ($th->getCode() == 23000) {
-                return redirect()->back()->with('info', 'Message cannot be deleted because it has been processed');
+                return redirect()->back()->with('info', 'Surat tidak dapat dihapus karena sudah diproses');
+            }
+            if ($th->getCode() == 500) {
+                return redirect()->back()->with('error', 'Surat tidak dapat dihapus karena sudah memiliki data terkait');
+            }
+            if ($th->getCode() == 404) {
+                return redirect()->back()->with('error', 'Surat tidak ditemukan');
             }
             return redirect()->back()->with('error', $th->getMessage());
         }

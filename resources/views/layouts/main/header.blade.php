@@ -7,18 +7,13 @@
             height: 40% !important;
         }
     </style>
-    <div class="d-flex align-items-center justify-content-between">
+    <div class="d-flex align-items-center justify-content-start">
 
-        <img class="my-logos" src="{{ asset('assets/img/usni.png') }}" alt="">
+        <img class="my-logos" src="{{ asset('assets/logo-new.png') }}" alt="">
         {{-- <p class="text-sm">Correspondence System</p> --}}
         <div class="col-5 text-center">
             <i class="bi bi-list toggle-sidebar-btn"></i>
         </div>
-
-
-
-
-
 
     </div><!-- End Logo -->
 

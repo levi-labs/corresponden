@@ -52,14 +52,15 @@
                         <div class="col-lg-4 col-md-6 d-flex flex-column align-items-center justify-content-center">
                             <style>
                                 .my-images {
-                                    width: 100px !important;
-                                    height: 100px !important;
+                                    width: 350px !important;
+                                    height: 20% !important;
                                 }
                             </style>
-                            <div class="d-flex align-items-center justify-content-center py-4">
+                            <div class="d-flex align-items-center justify-content-center">
 
                                 <a href="/" class="d-flex align-items-center w-auto">
-                                    <img class="my-images" src="assets/img/usni.png" alt="">
+                                    {{-- <img src="assets/img/logo.png" alt=""> --}}
+                                    <img class="my-images" src="assets/logo-new.png" alt="">
                                     {{-- <span class="d-none d-lg-block">{{ $title ?? 'Login' }}</span> --}}
                                 </a>
                             </div><!-- End Logo -->

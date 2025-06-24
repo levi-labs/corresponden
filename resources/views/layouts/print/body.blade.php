@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Surat Permohonan Riset</title>
+    <title>Report Surat Keluar/Masuk</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -27,7 +27,7 @@
         /* Logo */
         .kop-surat-container img {
             margin-top: -5%;
-            width: 10%;
+            width: 25%;
             float: right;
             /* Ukuran logo */
             margin-right: -10%;

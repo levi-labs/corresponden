@@ -26,6 +26,11 @@
                                 <h4 class="alert-heading">Error!</h4>
                                 <p>{{ session('error') }}</p>
                             </div>
+                        @elseif (session('info'))
+                            <div class="alert alert-info" role="alert">
+                                <h4 class="alert-heading">Info!</h4>
+                                <p>{{ session('info') }}</p>
+                            </div>
                         @endif
                     </div>
                     <div class="card-body">

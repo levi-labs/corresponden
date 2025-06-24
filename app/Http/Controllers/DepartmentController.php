@@ -65,6 +65,15 @@ class DepartmentController extends Controller
             $this->departmentService->destroy($department);
             return redirect()->back()->with('success', 'Department deleted successfully');
         } catch (\Throwable $th) {
+            if ($th->getCode() == 23000) {
+                return redirect()->back()->with('info', 'Fakultas tidak dapat dihapus karena sudah memiliki data terkait');
+            }
+            if ($th->getCode() == 500) {
+                return redirect()->back()->with('error', 'Fakultas tidak dapat dihapus karena sudah memiliki data terkait');
+            }
+            if ($th->getCode() == 404) {
+                return redirect()->back()->with('error', 'Fakultas tidak ditemukan');
+            }
             return redirect()->back()->with('error', $th->getMessage());
         }
     }

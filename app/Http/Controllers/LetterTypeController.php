@@ -82,7 +82,21 @@ class LetterTypeController extends Controller
      */
     public function destroy(LetterType $letterType)
     {
-        $this->LetterTypeService->destroy($letterType);
-        return redirect()->route('letter-type.index')->with('success', 'Letter Type Deleted Successfully');
+        try {
+            $this->LetterTypeService->destroy($letterType);
+            return redirect()->route('letter-type.index')->with('success', 'Letter Type Deleted Successfully');
+        } catch (\Throwable $th) {
+
+            if ($th->getCode() == 23000) {
+                return redirect()->back()->with('info', 'Fakultas tidak dapat dihapus karena sudah memiliki data terkait');
+            }
+            if ($th->getCode() == 500) {
+                return redirect()->back()->with('error', 'Fakultas tidak dapat dihapus karena sudah memiliki data terkait');
+            }
+            if ($th->getCode() == 404) {
+                return redirect()->back()->with('error', 'Fakultas tidak ditemukan');
+            }
+            return redirect()->back()->with('error', $th->getMessage());
+        }
     }
 }

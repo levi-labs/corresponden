@@ -62,7 +62,20 @@ class UserController extends Controller
 
     public function destroy(User $user)
     {
-        $this->userService->destroy($user);
-        return redirect()->route('user.index')->with('success', 'User deleted successfully');
+        try {
+            $this->userService->destroy($user);
+            return redirect()->route('user.index')->with('success', 'User deleted successfully');
+        } catch (\Throwable $th) {
+            if ($th->getCode() == 23000) {
+                return redirect()->back()->with('info', 'Surat tidak dapat dihapus karena sudah memiliki data terkait');
+            }
+            if ($th->getCode() == 500) {
+                return redirect()->back()->with('error', 'Surat tidak dapat dihapus karena sudah memiliki data terkait');
+            }
+            if ($th->getCode() == 404) {
+                return redirect()->back()->with('error', 'Surat tidak ditemukan');
+            }
+            return redirect()->back()->with('error', $th->getMessage());
+        }
     }
 }
