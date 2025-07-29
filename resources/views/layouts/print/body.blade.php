@@ -30,13 +30,21 @@
             width: 25%;
             float: right;
             /* Ukuran logo */
-            margin-right: -10%;
+            /* margin-right: -10%; */
             /* Kurangi jarak antara logo dan teks */
         }
 
+
         /* Teks Kop Surat */
         .kop-surat-text {
+            margin: auto;
             flex: 1;
+            /* Membuat teks mengisi ruang yang tersedia */
+
+            text-align: left;
+            /* Untuk mengatur teks di tengah */
+            margin-left: 10px;
+            /* background: blanchedalmond; */
         }
 
         .kop-surat-text h1 {
@@ -45,7 +53,48 @@
         }
 
         .kop-surat-text h2 {
-            margin: 5px 0;
+            margin: 2px 0;
+            font-size: 12px;
+        }
+
+        .kop-surat-text .header-row {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            /* Untuk mengatur teks di tengah */
+            /* Untuk mengatur teks di tengah */
+            flex-wrap: wrap;
+            gap: 10px;
+            /* background: cornsilk; */
+        }
+
+        .mt-2 {
+            margin-top: 1%;
+        }
+
+        .kop-surat-text .header-row .col-fakultas {
+            flex: 1;
+            flex-direction: column;
+            justify-content: center;
+
+        }
+
+        .kop-surat-text .header-row .col-fakultas>p {
+            text-align: left;
+            margin: 0;
+            font-size: 10px;
+
+        }
+
+        .kop-surat-text .header-row li {
+            list-style: none;
+            margin: 0 10px;
+        }
+
+
+        .kop-surat-text .header-row h2 {
+            display: inline-block;
+            margin: 0 5px;
             font-size: 12px;
         }
 
@@ -86,23 +135,32 @@
         }
 
         @media print {
+            body {
+                margin: 0;
+                padding: 10px;
+                font-size: 10px;
+                /* Ukuran font lebih kecil saat dicetak */
+            }
 
             /* Container Kop Surat */
             .kop-surat-container {
                 display: flex;
-                justify-content: center;
+                justify-content: space-between;
                 align-items: center;
                 width: 100%;
-                text-align: center;
+                text-align: left;
                 border-bottom: 3px solid black;
                 padding-bottom: 15px;
-                margin-bottom: 30px;
+                margin-bottom: 20px;
+                /* background: yellow; */
             }
 
             /* Logo */
             .kop-surat-container img {
-                margin-top: -20%;
-                width: 15%;
+                margin-top: -5%;
+                width: 20%;
+                height: 120px;
+                ;
                 /* Ukuran logo */
                 margin-right: 10px;
                 /* Kurangi jarak antara logo dan teks */
@@ -119,7 +177,7 @@
             }
 
             .kop-surat-text h2 {
-                margin: 5px 0;
+                margin: 2px 0;
                 font-size: 12px;
             }
 

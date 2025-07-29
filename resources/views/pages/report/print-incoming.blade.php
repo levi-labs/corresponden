@@ -66,7 +66,7 @@
 
         th {
             background-color: #2844d0;
-            color: white;
+            color: rgb(255, 255, 255);
             font-weight: bold;
         }
 
@@ -88,6 +88,11 @@
 @section('content')
     <div class="content">
         <button class="my-button no-print" onclick="window.print()">Print</button>
+        {{-- location date --}}
+        @php
+            $tanggal = \Carbon\Carbon::now()->locale('id')->translatedFormat('d F Y');
+        @endphp
+        <p style="float: right">Bekasi, {{ $tanggal }}</p>
         <table cellspacing="2" cellpadding="2" border="1">
             <thead>
                 <tr>
@@ -121,9 +126,9 @@
         </table>
     </div>
 
-    <script>
+    {{-- <script>
         document.addEventListener("DOMContentLoaded", function() {
             window.print();
         });
-    </script>
+    </script> --}}
 @endsection
