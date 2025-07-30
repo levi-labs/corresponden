@@ -4,7 +4,7 @@
     <!-- Isi Surat -->
     <div class="content">
         <p class="text-end">
-            <strong>{{ \Carbon\Carbon::parse($reply->created_at)->locale('id')->translatedFormat('d F Y') }}</strong>
+            <strong>{{ 'Bekasi, ' . \Carbon\Carbon::parse($reply->created_at)->locale('id')->translatedFormat('d F Y') }}</strong>
         </p>
 
         <p>No: {{ $reply->letter_number }}<br>
